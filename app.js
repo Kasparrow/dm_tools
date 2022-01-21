@@ -5602,61 +5602,44 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$footer = _VirtualDom_node('footer');
-var $author$project$DmTools$getRaceBonus = function (race) {
-	switch (race.$) {
-		case 'Dragonborn':
+var $author$project$DmTools$getClassProficiencySave = function (_class) {
+	switch (_class.$) {
+		case 'Barbarian':
 			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Strength, 2),
-					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
-				]);
-		case 'Dwarf':
+				[$author$project$DmTools$Strength, $author$project$DmTools$Constitution]);
+		case 'Bard':
 			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Constitution, 2)
-				]);
-		case 'Elf':
+				[$author$project$DmTools$Dexterity, $author$project$DmTools$Charisma]);
+		case 'Cleric':
 			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Dexterity, 2)
-				]);
-		case 'Gnome':
+				[$author$project$DmTools$Wisdom, $author$project$DmTools$Charisma]);
+		case 'Druid':
 			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Intelligence, 2)
-				]);
-		case 'HalfElf':
+				[$author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom]);
+		case 'Fighter':
 			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Charisma, 2)
-				]);
-		case 'Halfling':
+				[$author$project$DmTools$Strength, $author$project$DmTools$Constitution]);
+		case 'Monk':
 			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Dexterity, 2)
-				]);
-		case 'HalfOrc':
+				[$author$project$DmTools$Strength, $author$project$DmTools$Dexterity]);
+		case 'Paladin':
 			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Strength, 2),
-					_Utils_Tuple2($author$project$DmTools$Constitution, 1)
-				]);
-		case 'Human':
+				[$author$project$DmTools$Wisdom, $author$project$DmTools$Charisma]);
+		case 'Ranger':
 			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Strength, 1),
-					_Utils_Tuple2($author$project$DmTools$Dexterity, 1),
-					_Utils_Tuple2($author$project$DmTools$Constitution, 1),
-					_Utils_Tuple2($author$project$DmTools$Intelligence, 1),
-					_Utils_Tuple2($author$project$DmTools$Wisdom, 1),
-					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
-				]);
-		case 'Tiefling':
+				[$author$project$DmTools$Strength, $author$project$DmTools$Dexterity]);
+		case 'Rogue':
 			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Intelligence, 1),
-					_Utils_Tuple2($author$project$DmTools$Charisma, 2)
-				]);
+				[$author$project$DmTools$Dexterity, $author$project$DmTools$Intelligence]);
+		case 'Sorcerer':
+			return _List_fromArray(
+				[$author$project$DmTools$Constitution, $author$project$DmTools$Charisma]);
+		case 'Warlock':
+			return _List_fromArray(
+				[$author$project$DmTools$Wisdom, $author$project$DmTools$Charisma]);
+		case 'Wizard':
+			return _List_fromArray(
+				[$author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom]);
 		default:
 			return _List_Nil;
 	}
@@ -5696,70 +5679,6 @@ var $author$project$DmTools$getStatValue = F2(
 		} else {
 			return 0;
 		}
-	});
-var $author$project$DmTools$getSubRaceBonus = function (subRace) {
-	switch (subRace.$) {
-		case 'HillsDwarf':
-			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Wisdom, 1)
-				]);
-		case 'MountainsDwarf':
-			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Strength, 2)
-				]);
-		case 'Drow':
-			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
-				]);
-		case 'WoodElf':
-			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Wisdom, 1)
-				]);
-		case 'HighElf':
-			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Intelligence, 1)
-				]);
-		case 'DeepGnome':
-			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Dexterity, 1)
-				]);
-		case 'RockGnome':
-			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Constitution, 1)
-				]);
-		case 'LightfootHalfling':
-			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
-				]);
-		case 'StoutHalfling':
-			return _List_fromArray(
-				[
-					_Utils_Tuple2($author$project$DmTools$Constitution, 1)
-				]);
-		default:
-			return _List_Nil;
-	}
-};
-var $author$project$DmTools$getFinalStatValue = F2(
-	function (model, statName) {
-		var subRaceBonusStat = A2(
-			$author$project$DmTools$getStatValue,
-			$author$project$DmTools$getSubRaceBonus(model.subRace),
-			statName);
-		var rolledStat = A2($author$project$DmTools$getStatValue, model.rolledStats, statName);
-		var raceBonusStat = A2(
-			$author$project$DmTools$getStatValue,
-			$author$project$DmTools$getRaceBonus(model.race),
-			statName);
-		return (rolledStat + raceBonusStat) + subRaceBonusStat;
 	});
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$html$Html$Attributes$href = function (url) {
@@ -5866,7 +5785,7 @@ var $author$project$DmTools$viewClassOption = function (_class) {
 		case 'Sorcerer':
 			return $author$project$DmTools$viewOption('Sorcerer');
 		case 'Warlock':
-			return $author$project$DmTools$viewOption('Warloc');
+			return $author$project$DmTools$viewOption('Warlock');
 		case 'Wizard':
 			return $author$project$DmTools$viewOption('Wizard');
 		default:
@@ -6148,6 +6067,159 @@ var $author$project$DmTools$computeModifier = function (value) {
 			[-5, -5, -4, -4, -3, -3, -2, -2, -1, -1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10]));
 	return A2($elm$core$Array$get, value, modifiers);
 };
+var $author$project$DmTools$getRaceBonus = function (race) {
+	switch (race.$) {
+		case 'Dragonborn':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Strength, 2),
+					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
+				]);
+		case 'Dwarf':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Constitution, 2)
+				]);
+		case 'Elf':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Dexterity, 2)
+				]);
+		case 'Gnome':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Intelligence, 2)
+				]);
+		case 'HalfElf':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Charisma, 2)
+				]);
+		case 'Halfling':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Dexterity, 2)
+				]);
+		case 'HalfOrc':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Strength, 2),
+					_Utils_Tuple2($author$project$DmTools$Constitution, 1)
+				]);
+		case 'Human':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Strength, 1),
+					_Utils_Tuple2($author$project$DmTools$Dexterity, 1),
+					_Utils_Tuple2($author$project$DmTools$Constitution, 1),
+					_Utils_Tuple2($author$project$DmTools$Intelligence, 1),
+					_Utils_Tuple2($author$project$DmTools$Wisdom, 1),
+					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
+				]);
+		case 'Tiefling':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Intelligence, 1),
+					_Utils_Tuple2($author$project$DmTools$Charisma, 2)
+				]);
+		default:
+			return _List_Nil;
+	}
+};
+var $author$project$DmTools$getSubRaceBonus = function (subRace) {
+	switch (subRace.$) {
+		case 'HillsDwarf':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Wisdom, 1)
+				]);
+		case 'MountainsDwarf':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Strength, 2)
+				]);
+		case 'Drow':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
+				]);
+		case 'WoodElf':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Wisdom, 1)
+				]);
+		case 'HighElf':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Intelligence, 1)
+				]);
+		case 'DeepGnome':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Dexterity, 1)
+				]);
+		case 'RockGnome':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Constitution, 1)
+				]);
+		case 'LightfootHalfling':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
+				]);
+		case 'StoutHalfling':
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Constitution, 1)
+				]);
+		default:
+			return _List_Nil;
+	}
+};
+var $author$project$DmTools$getFinalStatValue = F2(
+	function (model, statName) {
+		var subRaceBonusStat = A2(
+			$author$project$DmTools$getStatValue,
+			$author$project$DmTools$getSubRaceBonus(model.subRace),
+			statName);
+		var rolledStat = A2($author$project$DmTools$getStatValue, model.rolledStats, statName);
+		var raceBonusStat = A2(
+			$author$project$DmTools$getStatValue,
+			$author$project$DmTools$getRaceBonus(model.race),
+			statName);
+		return (rolledStat + raceBonusStat) + subRaceBonusStat;
+	});
+var $elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var $elm$core$List$member = F2(
+	function (x, xs) {
+		return A2(
+			$elm$core$List$any,
+			function (a) {
+				return _Utils_eq(a, x);
+			},
+			xs);
+	});
 var $author$project$DmTools$printWithSign = function (value) {
 	if (value.$ === 'Just') {
 		var _int = value.a;
@@ -6156,8 +6228,26 @@ var $author$project$DmTools$printWithSign = function (value) {
 		return '?';
 	}
 };
-var $author$project$DmTools$viewStatReader = F2(
-	function (statName, value) {
+var $author$project$DmTools$statNameToString = function (statName) {
+	switch (statName.$) {
+		case 'Strength':
+			return 'STR';
+		case 'Dexterity':
+			return 'DEX';
+		case 'Constitution':
+			return 'CON';
+		case 'Intelligence':
+			return 'INT';
+		case 'Wisdom':
+			return 'WIS';
+		default:
+			return 'CHA';
+	}
+};
+var $author$project$DmTools$viewStatReader = F3(
+	function (statName, model, proficiencySaves) {
+		var value = A2($author$project$DmTools$getFinalStatValue, model, statName);
+		var hasProficiencySave = A2($elm$core$List$member, statName, proficiencySaves);
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -6174,7 +6264,8 @@ var $author$project$DmTools$viewStatReader = F2(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(statName)
+							$elm$html$Html$text(
+							$author$project$DmTools$statNameToString(statName))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -6212,7 +6303,14 @@ var $author$project$DmTools$viewStatReader = F2(
 											$author$project$DmTools$printWithSign(
 												$author$project$DmTools$computeModifier(value)))
 										])),
-									A2($elm$html$Html$span, _List_Nil, _List_Nil)
+									A2(
+									$elm$html$Html$span,
+									_List_Nil,
+									_List_fromArray(
+										[
+											$elm$html$Html$text(
+											hasProficiencySave ? 'M' : '')
+										]))
 								]))
 						]))
 				]));
@@ -6306,8 +6404,7 @@ var $author$project$DmTools$viewSubRaceInput = function (currentRace) {
 		A2($elm$core$List$map, $author$project$DmTools$viewSubRaceOption, subRaces)) : $elm$html$Html$text('');
 };
 var $author$project$DmTools$view = function (model) {
-	var subRaceBonus = $author$project$DmTools$getSubRaceBonus(model.subRace);
-	var raceBonus = $author$project$DmTools$getRaceBonus(model.race);
+	var classProficiencySaves = $author$project$DmTools$getClassProficiencySave(model._class);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -6435,30 +6532,12 @@ var $author$project$DmTools$view = function (model) {
 							]),
 						_List_fromArray(
 							[
-								A2(
-								$author$project$DmTools$viewStatReader,
-								'STR',
-								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Strength)),
-								A2(
-								$author$project$DmTools$viewStatReader,
-								'DEX',
-								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Dexterity)),
-								A2(
-								$author$project$DmTools$viewStatReader,
-								'CON',
-								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Constitution)),
-								A2(
-								$author$project$DmTools$viewStatReader,
-								'INT',
-								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Intelligence)),
-								A2(
-								$author$project$DmTools$viewStatReader,
-								'WIS',
-								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Wisdom)),
-								A2(
-								$author$project$DmTools$viewStatReader,
-								'CHA',
-								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Charisma))
+								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Strength, model, classProficiencySaves),
+								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Dexterity, model, classProficiencySaves),
+								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Constitution, model, classProficiencySaves),
+								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Intelligence, model, classProficiencySaves),
+								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Wisdom, model, classProficiencySaves),
+								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Charisma, model, classProficiencySaves)
 							]))
 					])),
 				A2(

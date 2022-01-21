@@ -165,8 +165,7 @@ type alias Model =
 view: Model -> Html Msg
 view model =
     let
-        raceBonus = (getRaceBonus model.race)
-        subRaceBonus = (getSubRaceBonus model.subRace)
+        classProficiencySaves = getClassProficiencySave model.class
     in
     div [ class "main-container" ]
         [ nav []
@@ -192,12 +191,12 @@ view model =
               , br [] []
               , h3 [] [ text "Computed stats" ]
               , div [ class "flex-row" ]
-                    [ viewStatReader "STR" (getFinalStatValue model Strength)
-                    , viewStatReader "DEX" (getFinalStatValue model Dexterity)
-                    , viewStatReader "CON" (getFinalStatValue model Constitution)
-                    , viewStatReader "INT" (getFinalStatValue model Intelligence)
-                    , viewStatReader "WIS" (getFinalStatValue model Wisdom)
-                    , viewStatReader "CHA" (getFinalStatValue model Charisma)
+                    [ viewStatReader Strength model classProficiencySaves
+                    , viewStatReader Dexterity model classProficiencySaves
+                    , viewStatReader Constitution model classProficiencySaves
+                    , viewStatReader Intelligence model classProficiencySaves
+                    , viewStatReader Wisdom model classProficiencySaves
+                    , viewStatReader Charisma model classProficiencySaves
                     ]
               ]
         , footer []
@@ -245,7 +244,7 @@ viewClassOption class =
         Ranger -> viewOption "Ranger"
         Rogue -> viewOption "Rogue"
         Sorcerer -> viewOption "Sorcerer"
-        Warlock -> viewOption "Warloc"
+        Warlock -> viewOption "Warlock"
         Wizard -> viewOption "Wizard"
         NoClass -> option [ value "" ] [ text "Select a class" ]
 
@@ -294,15 +293,19 @@ viewStatInput statName value incrementMsg decrementMsg =
               ]
         ]
 
-viewStatReader: String -> Int -> Html Msg
-viewStatReader statName value =
+viewStatReader: StatName -> Model -> List StatName -> Html Msg
+viewStatReader statName model proficiencySaves =
+    let
+        hasProficiencySave = List.member statName proficiencySaves
+        value = getFinalStatValue model statName
+    in
     div [ class "stat-reader" ]
-        [ span [ class "stat-reader-title" ] [ text statName ]
+        [ span [ class "stat-reader-title" ] [ text (statNameToString statName) ]
         , div [ class "stat-reader-body" ]
               [ span [ class "stat-reader-value" ] [ text (String.fromInt value) ]
               , div [ class "stat-reader-bonus" ]
                     [ span [] [ text (printWithSign (computeModifier value)) ]
-                    , span [] []
+                    , span [] [ text (if hasProficiencySave then "M" else "")]
                     ]
               ]
         ]
@@ -407,6 +410,16 @@ computeModifier value =
         modifiers = (Array.fromList [-5, -5, -4, -4, -3, -3, -2, -2, -1, -1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10 ])
     in
     Array.get value modifiers
+
+statNameToString: StatName -> String
+statNameToString statName =
+    case statName of
+        Strength -> "STR"
+        Dexterity -> "DEX"
+        Constitution -> "CON"
+        Intelligence -> "INT"
+        Wisdom -> "WIS"
+        Charisma -> "CHA"
 
 raceToString: Race -> String
 raceToString race =
@@ -535,6 +548,23 @@ getSubRaceBonus subRace =
         LightfootHalfling -> [ (Charisma, 1) ]
         StoutHalfling -> [ (Constitution, 1) ]
         _ -> []
+
+getClassProficiencySave: Class -> List StatName
+getClassProficiencySave class =
+    case class of
+        Barbarian -> [ Strength, Constitution ]
+        Bard -> [ Dexterity, Charisma ]
+        Cleric -> [ Wisdom, Charisma ]
+        Druid -> [ Intelligence, Wisdom ]
+        Fighter -> [ Strength, Constitution ]
+        Monk -> [ Strength, Dexterity ]
+        Paladin -> [ Wisdom, Charisma ]
+        Ranger -> [ Strength, Dexterity ]
+        Rogue -> [ Dexterity, Intelligence ]
+        Sorcerer -> [ Constitution, Charisma ]
+        Warlock -> [ Wisdom, Charisma ]
+        Wizard -> [ Intelligence, Wisdom ]
+        NoClass -> []
 
 computeStatCost: Int -> Int
 computeStatCost value =
