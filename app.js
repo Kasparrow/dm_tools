@@ -80,271 +80,6 @@ function A9(fun, a, b, c, d, e, f, g, h, i) {
 console.warn('Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.1/optimize for better performance and smaller assets.');
 
 
-// EQUALITY
-
-function _Utils_eq(x, y)
-{
-	for (
-		var pair, stack = [], isEqual = _Utils_eqHelp(x, y, 0, stack);
-		isEqual && (pair = stack.pop());
-		isEqual = _Utils_eqHelp(pair.a, pair.b, 0, stack)
-		)
-	{}
-
-	return isEqual;
-}
-
-function _Utils_eqHelp(x, y, depth, stack)
-{
-	if (x === y)
-	{
-		return true;
-	}
-
-	if (typeof x !== 'object' || x === null || y === null)
-	{
-		typeof x === 'function' && _Debug_crash(5);
-		return false;
-	}
-
-	if (depth > 100)
-	{
-		stack.push(_Utils_Tuple2(x,y));
-		return true;
-	}
-
-	/**/
-	if (x.$ === 'Set_elm_builtin')
-	{
-		x = $elm$core$Set$toList(x);
-		y = $elm$core$Set$toList(y);
-	}
-	if (x.$ === 'RBNode_elm_builtin' || x.$ === 'RBEmpty_elm_builtin')
-	{
-		x = $elm$core$Dict$toList(x);
-		y = $elm$core$Dict$toList(y);
-	}
-	//*/
-
-	/**_UNUSED/
-	if (x.$ < 0)
-	{
-		x = $elm$core$Dict$toList(x);
-		y = $elm$core$Dict$toList(y);
-	}
-	//*/
-
-	for (var key in x)
-	{
-		if (!_Utils_eqHelp(x[key], y[key], depth + 1, stack))
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-var _Utils_equal = F2(_Utils_eq);
-var _Utils_notEqual = F2(function(a, b) { return !_Utils_eq(a,b); });
-
-
-
-// COMPARISONS
-
-// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
-// the particular integer values assigned to LT, EQ, and GT.
-
-function _Utils_cmp(x, y, ord)
-{
-	if (typeof x !== 'object')
-	{
-		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
-	}
-
-	/**/
-	if (x instanceof String)
-	{
-		var a = x.valueOf();
-		var b = y.valueOf();
-		return a === b ? 0 : a < b ? -1 : 1;
-	}
-	//*/
-
-	/**_UNUSED/
-	if (typeof x.$ === 'undefined')
-	//*/
-	/**/
-	if (x.$[0] === '#')
-	//*/
-	{
-		return (ord = _Utils_cmp(x.a, y.a))
-			? ord
-			: (ord = _Utils_cmp(x.b, y.b))
-				? ord
-				: _Utils_cmp(x.c, y.c);
-	}
-
-	// traverse conses until end of a list or a mismatch
-	for (; x.b && y.b && !(ord = _Utils_cmp(x.a, y.a)); x = x.b, y = y.b) {} // WHILE_CONSES
-	return ord || (x.b ? /*GT*/ 1 : y.b ? /*LT*/ -1 : /*EQ*/ 0);
-}
-
-var _Utils_lt = F2(function(a, b) { return _Utils_cmp(a, b) < 0; });
-var _Utils_le = F2(function(a, b) { return _Utils_cmp(a, b) < 1; });
-var _Utils_gt = F2(function(a, b) { return _Utils_cmp(a, b) > 0; });
-var _Utils_ge = F2(function(a, b) { return _Utils_cmp(a, b) >= 0; });
-
-var _Utils_compare = F2(function(x, y)
-{
-	var n = _Utils_cmp(x, y);
-	return n < 0 ? $elm$core$Basics$LT : n ? $elm$core$Basics$GT : $elm$core$Basics$EQ;
-});
-
-
-// COMMON VALUES
-
-var _Utils_Tuple0_UNUSED = 0;
-var _Utils_Tuple0 = { $: '#0' };
-
-function _Utils_Tuple2_UNUSED(a, b) { return { a: a, b: b }; }
-function _Utils_Tuple2(a, b) { return { $: '#2', a: a, b: b }; }
-
-function _Utils_Tuple3_UNUSED(a, b, c) { return { a: a, b: b, c: c }; }
-function _Utils_Tuple3(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
-
-function _Utils_chr_UNUSED(c) { return c; }
-function _Utils_chr(c) { return new String(c); }
-
-
-// RECORDS
-
-function _Utils_update(oldRecord, updatedFields)
-{
-	var newRecord = {};
-
-	for (var key in oldRecord)
-	{
-		newRecord[key] = oldRecord[key];
-	}
-
-	for (var key in updatedFields)
-	{
-		newRecord[key] = updatedFields[key];
-	}
-
-	return newRecord;
-}
-
-
-// APPEND
-
-var _Utils_append = F2(_Utils_ap);
-
-function _Utils_ap(xs, ys)
-{
-	// append Strings
-	if (typeof xs === 'string')
-	{
-		return xs + ys;
-	}
-
-	// append Lists
-	if (!xs.b)
-	{
-		return ys;
-	}
-	var root = _List_Cons(xs.a, ys);
-	xs = xs.b
-	for (var curr = root; xs.b; xs = xs.b) // WHILE_CONS
-	{
-		curr = curr.b = _List_Cons(xs.a, ys);
-	}
-	return root;
-}
-
-
-
-var _List_Nil_UNUSED = { $: 0 };
-var _List_Nil = { $: '[]' };
-
-function _List_Cons_UNUSED(hd, tl) { return { $: 1, a: hd, b: tl }; }
-function _List_Cons(hd, tl) { return { $: '::', a: hd, b: tl }; }
-
-
-var _List_cons = F2(_List_Cons);
-
-function _List_fromArray(arr)
-{
-	var out = _List_Nil;
-	for (var i = arr.length; i--; )
-	{
-		out = _List_Cons(arr[i], out);
-	}
-	return out;
-}
-
-function _List_toArray(xs)
-{
-	for (var out = []; xs.b; xs = xs.b) // WHILE_CONS
-	{
-		out.push(xs.a);
-	}
-	return out;
-}
-
-var _List_map2 = F3(function(f, xs, ys)
-{
-	for (var arr = []; xs.b && ys.b; xs = xs.b, ys = ys.b) // WHILE_CONSES
-	{
-		arr.push(A2(f, xs.a, ys.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_map3 = F4(function(f, xs, ys, zs)
-{
-	for (var arr = []; xs.b && ys.b && zs.b; xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
-	{
-		arr.push(A3(f, xs.a, ys.a, zs.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_map4 = F5(function(f, ws, xs, ys, zs)
-{
-	for (var arr = []; ws.b && xs.b && ys.b && zs.b; ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
-	{
-		arr.push(A4(f, ws.a, xs.a, ys.a, zs.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_map5 = F6(function(f, vs, ws, xs, ys, zs)
-{
-	for (var arr = []; vs.b && ws.b && xs.b && ys.b && zs.b; vs = vs.b, ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
-	{
-		arr.push(A5(f, vs.a, ws.a, xs.a, ys.a, zs.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_sortBy = F2(function(f, xs)
-{
-	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
-		return _Utils_cmp(f(a), f(b));
-	}));
-});
-
-var _List_sortWith = F2(function(f, xs)
-{
-	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
-		var ord = A2(f, a, b);
-		return ord === $elm$core$Basics$EQ ? 0 : ord === $elm$core$Basics$LT ? -1 : 1;
-	}));
-});
-
-
-
 var _JsArray_empty = [];
 
 function _JsArray_singleton(value)
@@ -790,6 +525,271 @@ function _Debug_regionToString(region)
 	}
 	return 'on lines ' + region.start.line + ' through ' + region.end.line;
 }
+
+
+
+// EQUALITY
+
+function _Utils_eq(x, y)
+{
+	for (
+		var pair, stack = [], isEqual = _Utils_eqHelp(x, y, 0, stack);
+		isEqual && (pair = stack.pop());
+		isEqual = _Utils_eqHelp(pair.a, pair.b, 0, stack)
+		)
+	{}
+
+	return isEqual;
+}
+
+function _Utils_eqHelp(x, y, depth, stack)
+{
+	if (x === y)
+	{
+		return true;
+	}
+
+	if (typeof x !== 'object' || x === null || y === null)
+	{
+		typeof x === 'function' && _Debug_crash(5);
+		return false;
+	}
+
+	if (depth > 100)
+	{
+		stack.push(_Utils_Tuple2(x,y));
+		return true;
+	}
+
+	/**/
+	if (x.$ === 'Set_elm_builtin')
+	{
+		x = $elm$core$Set$toList(x);
+		y = $elm$core$Set$toList(y);
+	}
+	if (x.$ === 'RBNode_elm_builtin' || x.$ === 'RBEmpty_elm_builtin')
+	{
+		x = $elm$core$Dict$toList(x);
+		y = $elm$core$Dict$toList(y);
+	}
+	//*/
+
+	/**_UNUSED/
+	if (x.$ < 0)
+	{
+		x = $elm$core$Dict$toList(x);
+		y = $elm$core$Dict$toList(y);
+	}
+	//*/
+
+	for (var key in x)
+	{
+		if (!_Utils_eqHelp(x[key], y[key], depth + 1, stack))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+var _Utils_equal = F2(_Utils_eq);
+var _Utils_notEqual = F2(function(a, b) { return !_Utils_eq(a,b); });
+
+
+
+// COMPARISONS
+
+// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
+// the particular integer values assigned to LT, EQ, and GT.
+
+function _Utils_cmp(x, y, ord)
+{
+	if (typeof x !== 'object')
+	{
+		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
+	}
+
+	/**/
+	if (x instanceof String)
+	{
+		var a = x.valueOf();
+		var b = y.valueOf();
+		return a === b ? 0 : a < b ? -1 : 1;
+	}
+	//*/
+
+	/**_UNUSED/
+	if (typeof x.$ === 'undefined')
+	//*/
+	/**/
+	if (x.$[0] === '#')
+	//*/
+	{
+		return (ord = _Utils_cmp(x.a, y.a))
+			? ord
+			: (ord = _Utils_cmp(x.b, y.b))
+				? ord
+				: _Utils_cmp(x.c, y.c);
+	}
+
+	// traverse conses until end of a list or a mismatch
+	for (; x.b && y.b && !(ord = _Utils_cmp(x.a, y.a)); x = x.b, y = y.b) {} // WHILE_CONSES
+	return ord || (x.b ? /*GT*/ 1 : y.b ? /*LT*/ -1 : /*EQ*/ 0);
+}
+
+var _Utils_lt = F2(function(a, b) { return _Utils_cmp(a, b) < 0; });
+var _Utils_le = F2(function(a, b) { return _Utils_cmp(a, b) < 1; });
+var _Utils_gt = F2(function(a, b) { return _Utils_cmp(a, b) > 0; });
+var _Utils_ge = F2(function(a, b) { return _Utils_cmp(a, b) >= 0; });
+
+var _Utils_compare = F2(function(x, y)
+{
+	var n = _Utils_cmp(x, y);
+	return n < 0 ? $elm$core$Basics$LT : n ? $elm$core$Basics$GT : $elm$core$Basics$EQ;
+});
+
+
+// COMMON VALUES
+
+var _Utils_Tuple0_UNUSED = 0;
+var _Utils_Tuple0 = { $: '#0' };
+
+function _Utils_Tuple2_UNUSED(a, b) { return { a: a, b: b }; }
+function _Utils_Tuple2(a, b) { return { $: '#2', a: a, b: b }; }
+
+function _Utils_Tuple3_UNUSED(a, b, c) { return { a: a, b: b, c: c }; }
+function _Utils_Tuple3(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
+
+function _Utils_chr_UNUSED(c) { return c; }
+function _Utils_chr(c) { return new String(c); }
+
+
+// RECORDS
+
+function _Utils_update(oldRecord, updatedFields)
+{
+	var newRecord = {};
+
+	for (var key in oldRecord)
+	{
+		newRecord[key] = oldRecord[key];
+	}
+
+	for (var key in updatedFields)
+	{
+		newRecord[key] = updatedFields[key];
+	}
+
+	return newRecord;
+}
+
+
+// APPEND
+
+var _Utils_append = F2(_Utils_ap);
+
+function _Utils_ap(xs, ys)
+{
+	// append Strings
+	if (typeof xs === 'string')
+	{
+		return xs + ys;
+	}
+
+	// append Lists
+	if (!xs.b)
+	{
+		return ys;
+	}
+	var root = _List_Cons(xs.a, ys);
+	xs = xs.b
+	for (var curr = root; xs.b; xs = xs.b) // WHILE_CONS
+	{
+		curr = curr.b = _List_Cons(xs.a, ys);
+	}
+	return root;
+}
+
+
+
+var _List_Nil_UNUSED = { $: 0 };
+var _List_Nil = { $: '[]' };
+
+function _List_Cons_UNUSED(hd, tl) { return { $: 1, a: hd, b: tl }; }
+function _List_Cons(hd, tl) { return { $: '::', a: hd, b: tl }; }
+
+
+var _List_cons = F2(_List_Cons);
+
+function _List_fromArray(arr)
+{
+	var out = _List_Nil;
+	for (var i = arr.length; i--; )
+	{
+		out = _List_Cons(arr[i], out);
+	}
+	return out;
+}
+
+function _List_toArray(xs)
+{
+	for (var out = []; xs.b; xs = xs.b) // WHILE_CONS
+	{
+		out.push(xs.a);
+	}
+	return out;
+}
+
+var _List_map2 = F3(function(f, xs, ys)
+{
+	for (var arr = []; xs.b && ys.b; xs = xs.b, ys = ys.b) // WHILE_CONSES
+	{
+		arr.push(A2(f, xs.a, ys.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map3 = F4(function(f, xs, ys, zs)
+{
+	for (var arr = []; xs.b && ys.b && zs.b; xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A3(f, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map4 = F5(function(f, ws, xs, ys, zs)
+{
+	for (var arr = []; ws.b && xs.b && ys.b && zs.b; ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A4(f, ws.a, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map5 = F6(function(f, vs, ws, xs, ys, zs)
+{
+	for (var arr = []; vs.b && ws.b && xs.b && ys.b && zs.b; vs = vs.b, ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A5(f, vs.a, ws.a, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_sortBy = F2(function(f, xs)
+{
+	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
+		return _Utils_cmp(f(a), f(b));
+	}));
+});
+
+var _List_sortWith = F2(function(f, xs)
+{
+	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
+		var ord = A2(f, a, b);
+		return ord === $elm$core$Basics$EQ ? 0 : ord === $elm$core$Basics$LT ? -1 : 1;
+	}));
+});
 
 
 
@@ -4392,20 +4392,31 @@ var _Bitwise_shiftRightZfBy = F2(function(offset, a)
 {
 	return a >>> offset;
 });
-var $author$project$DmTools$NoClass = {$: 'NoClass'};
-var $author$project$DmTools$NoRace = {$: 'NoRace'};
-var $author$project$DmTools$NoSubRace = {$: 'NoSubRace'};
-var $author$project$DmTools$init = {
-	_class: $author$project$DmTools$NoClass,
-	race: $author$project$DmTools$NoRace,
-	remainingPoints: 27,
-	rolledStats: {charisma: 8, constitution: 8, dexterity: 8, intelligence: 8, strength: 8, wisdom: 8},
-	subRace: $author$project$DmTools$NoSubRace
-};
-var $elm$core$Basics$EQ = {$: 'EQ'};
-var $elm$core$Basics$GT = {$: 'GT'};
-var $elm$core$Basics$LT = {$: 'LT'};
 var $elm$core$List$cons = _List_cons;
+var $elm$core$Elm$JsArray$foldr = _JsArray_foldr;
+var $elm$core$Array$foldr = F3(
+	function (func, baseCase, _v0) {
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var helper = F2(
+			function (node, acc) {
+				if (node.$ === 'SubTree') {
+					var subTree = node.a;
+					return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
+				} else {
+					var values = node.a;
+					return A3($elm$core$Elm$JsArray$foldr, func, acc, values);
+				}
+			});
+		return A3(
+			$elm$core$Elm$JsArray$foldr,
+			helper,
+			A3($elm$core$Elm$JsArray$foldr, func, baseCase, tail),
+			tree);
+	});
+var $elm$core$Array$toList = function (array) {
+	return A3($elm$core$Array$foldr, $elm$core$List$cons, _List_Nil, array);
+};
 var $elm$core$Dict$foldr = F3(
 	function (func, acc, t) {
 		foldr:
@@ -4458,29 +4469,32 @@ var $elm$core$Set$toList = function (_v0) {
 	var dict = _v0.a;
 	return $elm$core$Dict$keys(dict);
 };
-var $elm$core$Elm$JsArray$foldr = _JsArray_foldr;
-var $elm$core$Array$foldr = F3(
-	function (func, baseCase, _v0) {
-		var tree = _v0.c;
-		var tail = _v0.d;
-		var helper = F2(
-			function (node, acc) {
-				if (node.$ === 'SubTree') {
-					var subTree = node.a;
-					return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
-				} else {
-					var values = node.a;
-					return A3($elm$core$Elm$JsArray$foldr, func, acc, values);
-				}
-			});
-		return A3(
-			$elm$core$Elm$JsArray$foldr,
-			helper,
-			A3($elm$core$Elm$JsArray$foldr, func, baseCase, tail),
-			tree);
-	});
-var $elm$core$Array$toList = function (array) {
-	return A3($elm$core$Array$foldr, $elm$core$List$cons, _List_Nil, array);
+var $elm$core$Basics$EQ = {$: 'EQ'};
+var $elm$core$Basics$GT = {$: 'GT'};
+var $elm$core$Basics$LT = {$: 'LT'};
+var $author$project$DmTools$Charisma = {$: 'Charisma'};
+var $author$project$DmTools$Constitution = {$: 'Constitution'};
+var $author$project$DmTools$Dexterity = {$: 'Dexterity'};
+var $author$project$DmTools$Intelligence = {$: 'Intelligence'};
+var $author$project$DmTools$NoClass = {$: 'NoClass'};
+var $author$project$DmTools$NoRace = {$: 'NoRace'};
+var $author$project$DmTools$NoSubRace = {$: 'NoSubRace'};
+var $author$project$DmTools$Strength = {$: 'Strength'};
+var $author$project$DmTools$Wisdom = {$: 'Wisdom'};
+var $author$project$DmTools$init = {
+	_class: $author$project$DmTools$NoClass,
+	race: $author$project$DmTools$NoRace,
+	remainingPoints: 27,
+	rolledStats: _List_fromArray(
+		[
+			_Utils_Tuple2($author$project$DmTools$Strength, 8),
+			_Utils_Tuple2($author$project$DmTools$Dexterity, 8),
+			_Utils_Tuple2($author$project$DmTools$Constitution, 8),
+			_Utils_Tuple2($author$project$DmTools$Intelligence, 8),
+			_Utils_Tuple2($author$project$DmTools$Wisdom, 8),
+			_Utils_Tuple2($author$project$DmTools$Charisma, 8)
+		]),
+	subRace: $author$project$DmTools$NoSubRace
 };
 var $elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
@@ -5235,9 +5249,40 @@ var $author$project$DmTools$computeStatCost = function (value) {
 			return 0;
 	}
 };
-var $author$project$DmTools$computeRemainingPoints = function (stats) {
-	return (((($author$project$DmTools$computeStatCost(stats.strength) + $author$project$DmTools$computeStatCost(stats.dexterity)) + $author$project$DmTools$computeStatCost(stats.constitution)) + $author$project$DmTools$computeStatCost(stats.intelligence)) + $author$project$DmTools$computeStatCost(stats.wisdom)) + $author$project$DmTools$computeStatCost(stats.charisma);
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
 };
+var $elm$core$List$sum = function (numbers) {
+	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
+};
+var $author$project$DmTools$computeRemainingPoints = function (stats) {
+	return $elm$core$List$sum(
+		A2(
+			$elm$core$List$map,
+			function (stat) {
+				return $author$project$DmTools$computeStatCost(stat.b);
+			},
+			stats));
+};
+var $author$project$DmTools$decrementStat = F2(
+	function (stats, statName) {
+		return A2(
+			$elm$core$List$map,
+			function (stat) {
+				return _Utils_eq(stat.a, statName) ? _Utils_Tuple2(statName, stat.b - 1) : stat;
+			},
+			stats);
+	});
+var $author$project$DmTools$incrementStat = F2(
+	function (stats, statName) {
+		return A2(
+			$elm$core$List$map,
+			function (stat) {
+				return _Utils_eq(stat.a, statName) ? _Utils_Tuple2(statName, stat.b + 1) : stat;
+			},
+			stats);
+	});
 var $author$project$DmTools$Barbarian = {$: 'Barbarian'};
 var $author$project$DmTools$Bard = {$: 'Bard'};
 var $author$project$DmTools$Cleric = {$: 'Cleric'};
@@ -5386,9 +5431,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{strength: model.rolledStats.strength + 1})
+							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Strength)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5398,9 +5441,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{strength: model.rolledStats.strength - 1})
+							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Strength)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5410,9 +5451,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{dexterity: model.rolledStats.dexterity + 1})
+							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Dexterity)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5422,9 +5461,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{dexterity: model.rolledStats.dexterity - 1})
+							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Dexterity)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5434,9 +5471,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{constitution: model.rolledStats.constitution + 1})
+							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Constitution)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5446,9 +5481,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{constitution: model.rolledStats.constitution - 1})
+							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Constitution)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5458,9 +5491,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{intelligence: model.rolledStats.intelligence + 1})
+							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Intelligence)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5470,9 +5501,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{intelligence: model.rolledStats.intelligence - 1})
+							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Intelligence)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5482,9 +5511,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{wisdom: model.rolledStats.wisdom + 1})
+							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Wisdom)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5494,9 +5521,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{wisdom: model.rolledStats.wisdom - 1})
+							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Wisdom)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5506,9 +5531,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{charisma: model.rolledStats.charisma + 1})
+							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Charisma)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5518,9 +5541,7 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: _Utils_update(
-								rolledStats,
-								{charisma: model.rolledStats.charisma - 1})
+							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Charisma)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5584,51 +5605,162 @@ var $elm$html$Html$footer = _VirtualDom_node('footer');
 var $author$project$DmTools$getRaceBonus = function (race) {
 	switch (race.$) {
 		case 'Dragonborn':
-			return {charisma: 1, constitution: 0, dexterity: 0, intelligence: 0, strength: 2, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Strength, 2),
+					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
+				]);
 		case 'Dwarf':
-			return {charisma: 0, constitution: 2, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Constitution, 2)
+				]);
 		case 'Elf':
-			return {charisma: 0, constitution: 0, dexterity: 2, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Dexterity, 2)
+				]);
 		case 'Gnome':
-			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 2, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Intelligence, 2)
+				]);
 		case 'HalfElf':
-			return {charisma: 2, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Charisma, 2)
+				]);
 		case 'Halfling':
-			return {charisma: 0, constitution: 0, dexterity: 2, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Dexterity, 2)
+				]);
 		case 'HalfOrc':
-			return {charisma: 0, constitution: 1, dexterity: 0, intelligence: 0, strength: 2, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Strength, 2),
+					_Utils_Tuple2($author$project$DmTools$Constitution, 1)
+				]);
 		case 'Human':
-			return {charisma: 1, constitution: 1, dexterity: 1, intelligence: 1, strength: 1, wisdom: 1};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Strength, 1),
+					_Utils_Tuple2($author$project$DmTools$Dexterity, 1),
+					_Utils_Tuple2($author$project$DmTools$Constitution, 1),
+					_Utils_Tuple2($author$project$DmTools$Intelligence, 1),
+					_Utils_Tuple2($author$project$DmTools$Wisdom, 1),
+					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
+				]);
 		case 'Tiefling':
-			return {charisma: 2, constitution: 0, dexterity: 0, intelligence: 1, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Intelligence, 1),
+					_Utils_Tuple2($author$project$DmTools$Charisma, 2)
+				]);
 		default:
-			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_Nil;
 	}
 };
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(x);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$DmTools$getStatValue = F2(
+	function (stats, statName) {
+		var selectedStats = A2(
+			$elm$core$List$filter,
+			function (stat) {
+				return _Utils_eq(stat.a, statName);
+			},
+			stats);
+		var tail = $elm$core$List$head(selectedStats);
+		if (tail.$ === 'Just') {
+			var stat = tail.a;
+			return stat.b;
+		} else {
+			return 0;
+		}
+	});
 var $author$project$DmTools$getSubRaceBonus = function (subRace) {
 	switch (subRace.$) {
 		case 'HillsDwarf':
-			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 1};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Wisdom, 1)
+				]);
 		case 'MountainsDwarf':
-			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 0, strength: 2, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Strength, 2)
+				]);
 		case 'Drow':
-			return {charisma: 1, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
+				]);
 		case 'WoodElf':
-			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 1};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Wisdom, 1)
+				]);
 		case 'HighElf':
-			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 1, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Intelligence, 1)
+				]);
 		case 'DeepGnome':
-			return {charisma: 0, constitution: 0, dexterity: 1, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Dexterity, 1)
+				]);
 		case 'RockGnome':
-			return {charisma: 0, constitution: 1, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Constitution, 1)
+				]);
 		case 'LightfootHalfling':
-			return {charisma: 1, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Charisma, 1)
+				]);
 		case 'StoutHalfling':
-			return {charisma: 0, constitution: 1, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_fromArray(
+				[
+					_Utils_Tuple2($author$project$DmTools$Constitution, 1)
+				]);
 		default:
-			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+			return _List_Nil;
 	}
 };
+var $author$project$DmTools$getFinalStatValue = F2(
+	function (model, statName) {
+		var subRaceBonusStat = A2(
+			$author$project$DmTools$getStatValue,
+			$author$project$DmTools$getSubRaceBonus(model.subRace),
+			statName);
+		var rolledStat = A2($author$project$DmTools$getStatValue, model.rolledStats, statName);
+		var raceBonusStat = A2(
+			$author$project$DmTools$getStatValue,
+			$author$project$DmTools$getRaceBonus(model.race),
+			statName);
+		return (rolledStat + raceBonusStat) + subRaceBonusStat;
+	});
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$html$Html$Attributes$href = function (url) {
 	return A2(
@@ -6021,12 +6153,11 @@ var $author$project$DmTools$printWithSign = function (value) {
 		var _int = value.a;
 		return (_int >= 0) ? ('+' + $elm$core$String$fromInt(_int)) : $elm$core$String$fromInt(_int);
 	} else {
-		return 'Stat value cannot be parsed';
+		return '?';
 	}
 };
-var $author$project$DmTools$viewStatReader = F4(
-	function (statName, rolledValue, raceBonusValue, subRaceBonusValue) {
-		var totalStatValue = (rolledValue + raceBonusValue) + subRaceBonusValue;
+var $author$project$DmTools$viewStatReader = F2(
+	function (statName, value) {
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -6062,7 +6193,7 @@ var $author$project$DmTools$viewStatReader = F4(
 							_List_fromArray(
 								[
 									$elm$html$Html$text(
-									$elm$core$String$fromInt(totalStatValue))
+									$elm$core$String$fromInt(value))
 								])),
 							A2(
 							$elm$html$Html$div,
@@ -6079,7 +6210,7 @@ var $author$project$DmTools$viewStatReader = F4(
 										[
 											$elm$html$Html$text(
 											$author$project$DmTools$printWithSign(
-												$author$project$DmTools$computeModifier(totalStatValue)))
+												$author$project$DmTools$computeModifier(value)))
 										])),
 									A2($elm$html$Html$span, _List_Nil, _List_Nil)
 								]))
@@ -6250,12 +6381,42 @@ var $author$project$DmTools$view = function (model) {
 							]),
 						_List_fromArray(
 							[
-								A4($author$project$DmTools$viewStatInput, 'STR', model.rolledStats.strength, $author$project$DmTools$IncrementStrength, $author$project$DmTools$DecrementStrength),
-								A4($author$project$DmTools$viewStatInput, 'DEX', model.rolledStats.dexterity, $author$project$DmTools$IncrementDexterity, $author$project$DmTools$DecrementDexterity),
-								A4($author$project$DmTools$viewStatInput, 'CON', model.rolledStats.constitution, $author$project$DmTools$IncrementConstitution, $author$project$DmTools$DecrementConstitution),
-								A4($author$project$DmTools$viewStatInput, 'INT', model.rolledStats.intelligence, $author$project$DmTools$IncrementIntelligence, $author$project$DmTools$DecrementIntelligence),
-								A4($author$project$DmTools$viewStatInput, 'WIS', model.rolledStats.wisdom, $author$project$DmTools$IncrementWisdom, $author$project$DmTools$DecrementWisdom),
-								A4($author$project$DmTools$viewStatInput, 'CHA', model.rolledStats.charisma, $author$project$DmTools$IncrementCharisma, $author$project$DmTools$DecrementCharisma),
+								A4(
+								$author$project$DmTools$viewStatInput,
+								'STR',
+								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Strength),
+								$author$project$DmTools$IncrementStrength,
+								$author$project$DmTools$DecrementStrength),
+								A4(
+								$author$project$DmTools$viewStatInput,
+								'DEX',
+								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Dexterity),
+								$author$project$DmTools$IncrementDexterity,
+								$author$project$DmTools$DecrementDexterity),
+								A4(
+								$author$project$DmTools$viewStatInput,
+								'CON',
+								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Constitution),
+								$author$project$DmTools$IncrementConstitution,
+								$author$project$DmTools$DecrementConstitution),
+								A4(
+								$author$project$DmTools$viewStatInput,
+								'INT',
+								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Intelligence),
+								$author$project$DmTools$IncrementIntelligence,
+								$author$project$DmTools$DecrementIntelligence),
+								A4(
+								$author$project$DmTools$viewStatInput,
+								'WIS',
+								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Wisdom),
+								$author$project$DmTools$IncrementWisdom,
+								$author$project$DmTools$DecrementWisdom),
+								A4(
+								$author$project$DmTools$viewStatInput,
+								'CHA',
+								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Charisma),
+								$author$project$DmTools$IncrementCharisma,
+								$author$project$DmTools$DecrementCharisma),
 								$author$project$DmTools$viewRemainingPoints(model.remainingPoints)
 							])),
 						A2($elm$html$Html$br, _List_Nil, _List_Nil),
@@ -6274,12 +6435,30 @@ var $author$project$DmTools$view = function (model) {
 							]),
 						_List_fromArray(
 							[
-								A4($author$project$DmTools$viewStatReader, 'STR', model.rolledStats.strength, raceBonus.strength, subRaceBonus.strength),
-								A4($author$project$DmTools$viewStatReader, 'DEX', model.rolledStats.dexterity, raceBonus.dexterity, subRaceBonus.dexterity),
-								A4($author$project$DmTools$viewStatReader, 'CON', model.rolledStats.constitution, raceBonus.constitution, subRaceBonus.constitution),
-								A4($author$project$DmTools$viewStatReader, 'INT', model.rolledStats.intelligence, raceBonus.intelligence, subRaceBonus.intelligence),
-								A4($author$project$DmTools$viewStatReader, 'WIS', model.rolledStats.wisdom, raceBonus.wisdom, subRaceBonus.wisdom),
-								A4($author$project$DmTools$viewStatReader, 'CHA', model.rolledStats.charisma, raceBonus.charisma, subRaceBonus.charisma)
+								A2(
+								$author$project$DmTools$viewStatReader,
+								'STR',
+								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Strength)),
+								A2(
+								$author$project$DmTools$viewStatReader,
+								'DEX',
+								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Dexterity)),
+								A2(
+								$author$project$DmTools$viewStatReader,
+								'CON',
+								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Constitution)),
+								A2(
+								$author$project$DmTools$viewStatReader,
+								'INT',
+								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Intelligence)),
+								A2(
+								$author$project$DmTools$viewStatReader,
+								'WIS',
+								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Wisdom)),
+								A2(
+								$author$project$DmTools$viewStatReader,
+								'CHA',
+								A2($author$project$DmTools$getFinalStatValue, model, $author$project$DmTools$Charisma))
 							]))
 					])),
 				A2(

@@ -27,13 +27,13 @@ type Msg
 init: Model
 init = 
     { rolledStats = 
-        { strength = 8
-        , dexterity = 8
-        , constitution = 8
-        , intelligence = 8
-        , wisdom = 8
-        , charisma = 8
-        }
+        [ (Strength, 8)
+        , (Dexterity, 8)
+        , (Constitution, 8)
+        , (Intelligence, 8)
+        , (Wisdom, 8)
+        , (Charisma, 8)
+        ]
     , race = NoRace
     , subRace = NoSubRace
     , class = NoClass
@@ -42,14 +42,16 @@ init =
 
 -- MODEL
 
-type alias Stats =
-    { strength: Int
-    , dexterity: Int
-    , constitution: Int
-    , intelligence: Int
-    , wisdom: Int
-    , charisma: Int
-    }
+type StatName
+    = Strength
+    | Dexterity
+    | Constitution
+    | Intelligence
+    | Wisdom
+    | Charisma
+
+type alias Stat = (StatName, Int)
+type alias Stats = List Stat
 
 type Race 
     = Dragonborn
@@ -179,23 +181,23 @@ view model =
               , viewClassInput
               , h3 [] [ text "Rolled stats" ]
               , div [ class "flex-row" ]
-                    [ viewStatInput "STR" model.rolledStats.strength IncrementStrength DecrementStrength
-                    , viewStatInput "DEX" model.rolledStats.dexterity IncrementDexterity DecrementDexterity
-                    , viewStatInput "CON" model.rolledStats.constitution IncrementConstitution DecrementConstitution
-                    , viewStatInput "INT" model.rolledStats.intelligence IncrementIntelligence DecrementIntelligence
-                    , viewStatInput "WIS" model.rolledStats.wisdom IncrementWisdom DecrementWisdom
-                    , viewStatInput "CHA" model.rolledStats.charisma IncrementCharisma DecrementCharisma
+                    [ viewStatInput "STR" (getStatValue model.rolledStats Strength) IncrementStrength DecrementStrength
+                    , viewStatInput "DEX" (getStatValue model.rolledStats Dexterity) IncrementDexterity DecrementDexterity
+                    , viewStatInput "CON" (getStatValue model.rolledStats Constitution) IncrementConstitution DecrementConstitution
+                    , viewStatInput "INT" (getStatValue model.rolledStats Intelligence) IncrementIntelligence DecrementIntelligence
+                    , viewStatInput "WIS" (getStatValue model.rolledStats Wisdom) IncrementWisdom DecrementWisdom
+                    , viewStatInput "CHA" (getStatValue model.rolledStats Charisma) IncrementCharisma DecrementCharisma
                     , viewRemainingPoints model.remainingPoints
                     ]
               , br [] []
               , h3 [] [ text "Computed stats" ]
               , div [ class "flex-row" ]
-                    [ viewStatReader "STR" model.rolledStats.strength raceBonus.strength subRaceBonus.strength
-                    , viewStatReader "DEX" model.rolledStats.dexterity raceBonus.dexterity subRaceBonus.dexterity
-                    , viewStatReader "CON" model.rolledStats.constitution raceBonus.constitution subRaceBonus.constitution
-                    , viewStatReader "INT" model.rolledStats.intelligence raceBonus.intelligence subRaceBonus.intelligence
-                    , viewStatReader "WIS" model.rolledStats.wisdom raceBonus.wisdom subRaceBonus.wisdom
-                    , viewStatReader "CHA" model.rolledStats.charisma raceBonus.charisma subRaceBonus.charisma
+                    [ viewStatReader "STR" (getFinalStatValue model Strength)
+                    , viewStatReader "DEX" (getFinalStatValue model Dexterity)
+                    , viewStatReader "CON" (getFinalStatValue model Constitution)
+                    , viewStatReader "INT" (getFinalStatValue model Intelligence)
+                    , viewStatReader "WIS" (getFinalStatValue model Wisdom)
+                    , viewStatReader "CHA" (getFinalStatValue model Charisma)
                     ]
               ]
         , footer []
@@ -292,17 +294,14 @@ viewStatInput statName value incrementMsg decrementMsg =
               ]
         ]
 
-viewStatReader: String -> Int -> Int -> Int -> Html Msg
-viewStatReader statName rolledValue raceBonusValue subRaceBonusValue =
-    let
-        totalStatValue = rolledValue + raceBonusValue + subRaceBonusValue
-    in
+viewStatReader: String -> Int -> Html Msg
+viewStatReader statName value =
     div [ class "stat-reader" ]
         [ span [ class "stat-reader-title" ] [ text statName ]
         , div [ class "stat-reader-body" ]
-              [ span [ class "stat-reader-value" ] [ text (String.fromInt totalStatValue) ]
+              [ span [ class "stat-reader-value" ] [ text (String.fromInt value) ]
               , div [ class "stat-reader-bonus" ]
-                    [ span [] [ text (printWithSign (computeModifier totalStatValue)) ]
+                    [ span [] [ text (printWithSign (computeModifier value)) ]
                     , span [] []
                     ]
               ]
@@ -319,33 +318,41 @@ viewRemainingPoints remainingPoints =
 
 -- UPDATE
 
+incrementStat: Stats -> StatName -> Stats
+incrementStat stats statName =
+    List.map (\stat -> if Tuple.first stat == statName then (statName, (Tuple.second stat + 1)) else stat) stats
+
+decrementStat: Stats -> StatName -> Stats
+decrementStat stats statName =
+    List.map (\stat -> if Tuple.first stat == statName then (statName, (Tuple.second stat - 1)) else stat) stats
+
 update: Msg -> Model -> Model
 update msg ({rolledStats} as model) =
         case msg of
             IncrementStrength -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | strength = (model.rolledStats.strength + 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Strength) }
             DecrementStrength -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | strength = (model.rolledStats.strength - 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Strength) }
             IncrementDexterity -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | dexterity = (model.rolledStats.dexterity + 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Dexterity) }
             DecrementDexterity -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | dexterity = (model.rolledStats.dexterity - 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Dexterity) }
             IncrementConstitution -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | constitution = (model.rolledStats.constitution + 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Constitution) }
             DecrementConstitution ->
-               update UpdateRemainingPoints { model | rolledStats = { rolledStats | constitution = (model.rolledStats.constitution - 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Constitution) }
             IncrementIntelligence -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | intelligence = (model.rolledStats.intelligence + 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Intelligence) }
             DecrementIntelligence -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | intelligence = (model.rolledStats.intelligence - 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Intelligence) }
             IncrementWisdom -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | wisdom = (model.rolledStats.wisdom + 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Wisdom) }
             DecrementWisdom -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | wisdom = (model.rolledStats.wisdom - 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Wisdom) }
             IncrementCharisma -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | charisma = (model.rolledStats.charisma + 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Charisma) }
             DecrementCharisma -> 
-                update UpdateRemainingPoints { model | rolledStats = { rolledStats | charisma = (model.rolledStats.charisma - 1) } }
+                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Charisma) }
 
             UpdateRemainingPoints ->
                 { model | remainingPoints = (27 - (computeRemainingPoints model.rolledStats)) }
@@ -358,6 +365,25 @@ update msg ({rolledStats} as model) =
 
 -- HELPERS
 
+getFinalStatValue: Model -> StatName -> Int
+getFinalStatValue model statName =
+    let
+        rolledStat = getStatValue model.rolledStats statName
+        raceBonusStat = getStatValue (getRaceBonus model.race) statName
+        subRaceBonusStat = getStatValue (getSubRaceBonus model.subRace) statName
+    in
+    rolledStat + raceBonusStat + subRaceBonusStat
+
+getStatValue: Stats -> StatName -> Int
+getStatValue stats statName =
+    let
+        selectedStats = List.filter (\stat -> Tuple.first stat == statName) stats
+        tail = List.head selectedStats
+    in
+    case tail of
+        Just stat -> Tuple.second stat
+        Nothing -> 0
+
 printWithSign: Maybe Int -> String
 printWithSign value =
     case value of
@@ -367,13 +393,12 @@ printWithSign value =
             else
                 String.fromInt int
         Nothing ->
-            "Stat value cannot be parsed"
+            "?"
 
 
 computeRemainingPoints: Stats -> Int
 computeRemainingPoints stats =
-    (computeStatCost stats.strength + computeStatCost stats.dexterity + computeStatCost stats.constitution +
-    computeStatCost stats.intelligence + computeStatCost stats.wisdom + computeStatCost stats.charisma)
+    List.sum (List.map (\stat -> computeStatCost (Tuple.second stat)) stats)
 
 computeModifier: Int -> Maybe Int
 computeModifier value =
@@ -479,171 +504,37 @@ stringToClass string =
 getRaceBonus: Race -> Stats
 getRaceBonus race =
     case race of
-        Dragonborn ->
-            { strength = 2
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 1
-            }
-        Dwarf ->
-            { strength = 0
-            , constitution = 2
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 0
-            }
-        Elf ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 2
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 0
-            }
-        Gnome ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 2
-            , wisdom = 0
-            , charisma = 0
-            }
-        HalfElf ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 2
-            }
-        Halfling ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 2
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 0
-            }
-        HalfOrc ->
-            { strength = 2
-            , constitution = 1
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 0
-            }
-        Human ->
-            { strength = 1
-            , constitution = 1
-            , dexterity = 1
-            , intelligence = 1
-            , wisdom = 1
-            , charisma = 1
-            }
-        Tiefling ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 1
-            , wisdom = 0
-            , charisma = 2
-            }
-        NoRace ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 0
-            }
-
+        Dragonborn -> [ (Strength, 2), (Charisma, 1) ]
+        Dwarf -> [ (Constitution, 2) ]
+        Elf -> [ (Dexterity, 2)]
+        Gnome -> [ (Intelligence, 2) ]
+        HalfElf -> [ (Charisma, 2) ]
+        Halfling -> [ (Dexterity, 2) ]
+        HalfOrc -> [ (Strength, 2), (Constitution, 1) ]
+        Human -> 
+            [ (Strength, 1)
+            , (Dexterity, 1)
+            , (Constitution, 1)
+            , (Intelligence, 1)
+            , (Wisdom, 1)
+            , (Charisma, 1)
+            ]
+        Tiefling -> [ (Intelligence, 1), (Charisma, 2) ]
+        NoRace -> []
 
 getSubRaceBonus: SubRace -> Stats
 getSubRaceBonus subRace =
     case subRace of
-        HillsDwarf ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 1
-            , charisma = 0
-            }
-        MountainsDwarf ->
-            { strength = 2
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 0
-            }
-        Drow ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 1
-            }
-        WoodElf ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 1
-            , charisma = 0
-            }
-        HighElf ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 1
-            , wisdom = 0
-            , charisma = 0
-            }
-        DeepGnome ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 1
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 0
-            }
-        RockGnome ->
-            { strength = 0
-            , constitution = 1
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 0
-            }
-        LightfootHalfling ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 1
-            }
-        StoutHalfling ->
-            { strength = 0
-            , constitution = 1
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 0
-            }
-        _ ->
-            { strength = 0
-            , constitution = 0
-            , dexterity = 0
-            , intelligence = 0
-            , wisdom = 0
-            , charisma = 0
-            }
+        HillsDwarf -> [ (Wisdom, 1) ]
+        MountainsDwarf -> [ (Strength, 2) ]
+        Drow -> [ (Charisma, 1) ]
+        WoodElf -> [ (Wisdom, 1) ]
+        HighElf -> [ (Intelligence , 1) ]
+        DeepGnome -> [ (Dexterity, 1) ]
+        RockGnome -> [ (Constitution, 1) ]
+        LightfootHalfling -> [ (Charisma, 1) ]
+        StoutHalfling -> [ (Constitution, 1) ]
+        _ -> []
 
 computeStatCost: Int -> Int
 computeStatCost value =
