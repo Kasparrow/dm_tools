@@ -4392,9 +4392,11 @@ var _Bitwise_shiftRightZfBy = F2(function(offset, a)
 {
 	return a >>> offset;
 });
+var $author$project$DmTools$NoClass = {$: 'NoClass'};
 var $author$project$DmTools$NoRace = {$: 'NoRace'};
 var $author$project$DmTools$NoSubRace = {$: 'NoSubRace'};
 var $author$project$DmTools$init = {
+	_class: $author$project$DmTools$NoClass,
 	race: $author$project$DmTools$NoRace,
 	remainingPoints: 27,
 	rolledStats: {charisma: 8, constitution: 8, dexterity: 8, intelligence: 8, strength: 8, wisdom: 8},
@@ -5236,38 +5238,139 @@ var $author$project$DmTools$computeStatCost = function (value) {
 var $author$project$DmTools$computeRemainingPoints = function (stats) {
 	return (((($author$project$DmTools$computeStatCost(stats.strength) + $author$project$DmTools$computeStatCost(stats.dexterity)) + $author$project$DmTools$computeStatCost(stats.constitution)) + $author$project$DmTools$computeStatCost(stats.intelligence)) + $author$project$DmTools$computeStatCost(stats.wisdom)) + $author$project$DmTools$computeStatCost(stats.charisma);
 };
+var $author$project$DmTools$Barbarian = {$: 'Barbarian'};
+var $author$project$DmTools$Bard = {$: 'Bard'};
+var $author$project$DmTools$Cleric = {$: 'Cleric'};
+var $author$project$DmTools$Druid = {$: 'Druid'};
+var $author$project$DmTools$Fighter = {$: 'Fighter'};
+var $author$project$DmTools$Monk = {$: 'Monk'};
+var $author$project$DmTools$Paladin = {$: 'Paladin'};
+var $author$project$DmTools$Ranger = {$: 'Ranger'};
+var $author$project$DmTools$Rogue = {$: 'Rogue'};
+var $author$project$DmTools$Warlock = {$: 'Warlock'};
+var $author$project$DmTools$Wizard = {$: 'Wizard'};
+var $author$project$DmTools$stringToClass = function (string) {
+	switch (string) {
+		case 'Barbarian':
+			return $author$project$DmTools$Barbarian;
+		case 'Bard':
+			return $author$project$DmTools$Bard;
+		case 'Cleric':
+			return $author$project$DmTools$Cleric;
+		case 'Druid':
+			return $author$project$DmTools$Druid;
+		case 'Fighter':
+			return $author$project$DmTools$Fighter;
+		case 'Monk':
+			return $author$project$DmTools$Monk;
+		case 'Paladin':
+			return $author$project$DmTools$Paladin;
+		case 'Ranger':
+			return $author$project$DmTools$Ranger;
+		case 'Rogue':
+			return $author$project$DmTools$Rogue;
+		case 'Sorcerer':
+			return $author$project$DmTools$Rogue;
+		case 'Warlock':
+			return $author$project$DmTools$Warlock;
+		case 'Wizard':
+			return $author$project$DmTools$Wizard;
+		default:
+			return $author$project$DmTools$NoClass;
+	}
+};
+var $author$project$DmTools$Dragonborn = {$: 'Dragonborn'};
 var $author$project$DmTools$Dwarf = {$: 'Dwarf'};
 var $author$project$DmTools$Elf = {$: 'Elf'};
+var $author$project$DmTools$Gnome = {$: 'Gnome'};
+var $author$project$DmTools$HalfElf = {$: 'HalfElf'};
+var $author$project$DmTools$HalfOrc = {$: 'HalfOrc'};
+var $author$project$DmTools$Halfling = {$: 'Halfling'};
 var $author$project$DmTools$Human = {$: 'Human'};
+var $author$project$DmTools$Tiefling = {$: 'Tiefling'};
 var $author$project$DmTools$stringToRace = function (string) {
 	switch (string) {
-		case 'Human':
-			return $author$project$DmTools$Human;
-		case 'Elf':
-			return $author$project$DmTools$Elf;
+		case 'Dragonborn':
+			return $author$project$DmTools$Dragonborn;
 		case 'Dwarf':
 			return $author$project$DmTools$Dwarf;
+		case 'Elf':
+			return $author$project$DmTools$Elf;
+		case 'Gnome':
+			return $author$project$DmTools$Gnome;
+		case 'HalfElf':
+			return $author$project$DmTools$HalfElf;
+		case 'Halfling':
+			return $author$project$DmTools$Halfling;
+		case 'HalfOrc':
+			return $author$project$DmTools$HalfOrc;
+		case 'Human':
+			return $author$project$DmTools$Human;
+		case 'Tiefling':
+			return $author$project$DmTools$Tiefling;
 		default:
 			return $author$project$DmTools$NoRace;
 	}
 };
+var $author$project$DmTools$BlackDragonborn = {$: 'BlackDragonborn'};
+var $author$project$DmTools$BlueDragonborn = {$: 'BlueDragonborn'};
+var $author$project$DmTools$BrassDragonborn = {$: 'BrassDragonborn'};
+var $author$project$DmTools$BronzeDragonborn = {$: 'BronzeDragonborn'};
+var $author$project$DmTools$CopperDragonborn = {$: 'CopperDragonborn'};
+var $author$project$DmTools$DeepGnome = {$: 'DeepGnome'};
 var $author$project$DmTools$Drow = {$: 'Drow'};
+var $author$project$DmTools$GoldDragonborn = {$: 'GoldDragonborn'};
+var $author$project$DmTools$GreenDragonborn = {$: 'GreenDragonborn'};
 var $author$project$DmTools$HighElf = {$: 'HighElf'};
 var $author$project$DmTools$HillsDwarf = {$: 'HillsDwarf'};
+var $author$project$DmTools$LightfootHalfling = {$: 'LightfootHalfling'};
 var $author$project$DmTools$MountainsDwarf = {$: 'MountainsDwarf'};
+var $author$project$DmTools$RedDragonborn = {$: 'RedDragonborn'};
+var $author$project$DmTools$RockGnome = {$: 'RockGnome'};
+var $author$project$DmTools$SilverDragonborn = {$: 'SilverDragonborn'};
+var $author$project$DmTools$StoutHalfling = {$: 'StoutHalfling'};
+var $author$project$DmTools$WhiteDragonborn = {$: 'WhiteDragonborn'};
 var $author$project$DmTools$WoodElf = {$: 'WoodElf'};
 var $author$project$DmTools$stringToSubRace = function (string) {
 	switch (string) {
+		case 'BlackDragonborn':
+			return $author$project$DmTools$BlackDragonborn;
+		case 'BlueDragonborn':
+			return $author$project$DmTools$BlueDragonborn;
+		case 'BrassDragonborn':
+			return $author$project$DmTools$BrassDragonborn;
+		case 'BronzeDragonborn':
+			return $author$project$DmTools$BronzeDragonborn;
+		case 'CopperDragonborn':
+			return $author$project$DmTools$CopperDragonborn;
+		case 'GoldDragonborn':
+			return $author$project$DmTools$GoldDragonborn;
+		case 'GreenDragonborn':
+			return $author$project$DmTools$GreenDragonborn;
+		case 'RedDragonborn':
+			return $author$project$DmTools$RedDragonborn;
+		case 'SilverDragonborn':
+			return $author$project$DmTools$SilverDragonborn;
+		case 'WhiteDragonborn':
+			return $author$project$DmTools$WhiteDragonborn;
 		case 'HillsDwarf':
 			return $author$project$DmTools$HillsDwarf;
 		case 'MountainsDwarf':
 			return $author$project$DmTools$MountainsDwarf;
+		case 'Drow':
+			return $author$project$DmTools$Drow;
 		case 'HighElf':
 			return $author$project$DmTools$HighElf;
 		case 'WoodElf':
 			return $author$project$DmTools$WoodElf;
-		case 'Drow':
-			return $author$project$DmTools$Drow;
+		case 'DeepGnome':
+			return $author$project$DmTools$DeepGnome;
+		case 'RockGnome':
+			return $author$project$DmTools$RockGnome;
+		case 'LightfootHalfling':
+			return $author$project$DmTools$LightfootHalfling;
+		case 'StoutHalfling':
+			return $author$project$DmTools$StoutHalfling;
 		default:
 			return $author$project$DmTools$NoSubRace;
 	}
@@ -5436,12 +5539,19 @@ var $author$project$DmTools$update = F2(
 							race: $author$project$DmTools$stringToRace(value),
 							subRace: $author$project$DmTools$NoSubRace
 						});
-				default:
+				case 'UpdateSubRace':
 					var value = msg.a;
 					return _Utils_update(
 						model,
 						{
 							subRace: $author$project$DmTools$stringToSubRace(value)
+						});
+				default:
+					var value = msg.a;
+					return _Utils_update(
+						model,
+						{
+							_class: $author$project$DmTools$stringToClass(value)
 						});
 			}
 		}
@@ -5473,12 +5583,24 @@ var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$footer = _VirtualDom_node('footer');
 var $author$project$DmTools$getRaceBonus = function (race) {
 	switch (race.$) {
+		case 'Dragonborn':
+			return {charisma: 1, constitution: 0, dexterity: 0, intelligence: 0, strength: 2, wisdom: 0};
 		case 'Dwarf':
 			return {charisma: 0, constitution: 2, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
 		case 'Elf':
 			return {charisma: 0, constitution: 0, dexterity: 2, intelligence: 0, strength: 0, wisdom: 0};
+		case 'Gnome':
+			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 2, strength: 0, wisdom: 0};
+		case 'HalfElf':
+			return {charisma: 2, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+		case 'Halfling':
+			return {charisma: 0, constitution: 0, dexterity: 2, intelligence: 0, strength: 0, wisdom: 0};
+		case 'HalfOrc':
+			return {charisma: 0, constitution: 1, dexterity: 0, intelligence: 0, strength: 2, wisdom: 0};
 		case 'Human':
 			return {charisma: 1, constitution: 1, dexterity: 1, intelligence: 1, strength: 1, wisdom: 1};
+		case 'Tiefling':
+			return {charisma: 2, constitution: 0, dexterity: 0, intelligence: 1, strength: 0, wisdom: 0};
 		default:
 			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
 	}
@@ -5495,6 +5617,14 @@ var $author$project$DmTools$getSubRaceBonus = function (subRace) {
 			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 1};
 		case 'HighElf':
 			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 1, strength: 0, wisdom: 0};
+		case 'DeepGnome':
+			return {charisma: 0, constitution: 0, dexterity: 1, intelligence: 0, strength: 0, wisdom: 0};
+		case 'RockGnome':
+			return {charisma: 0, constitution: 1, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+		case 'LightfootHalfling':
+			return {charisma: 1, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
+		case 'StoutHalfling':
+			return {charisma: 0, constitution: 1, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
 		default:
 			return {charisma: 0, constitution: 0, dexterity: 0, intelligence: 0, strength: 0, wisdom: 0};
 	}
@@ -5511,11 +5641,12 @@ var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$DmTools$UpdateRace = function (a) {
-	return {$: 'UpdateRace', a: a};
+var $author$project$DmTools$UpdateClass = function (a) {
+	return {$: 'UpdateClass', a: a};
 };
-var $author$project$DmTools$enumRace = _List_fromArray(
-	[$author$project$DmTools$NoRace, $author$project$DmTools$Human, $author$project$DmTools$Dwarf, $author$project$DmTools$Elf]);
+var $author$project$DmTools$Sorcerer = {$: 'Sorcerer'};
+var $author$project$DmTools$enumClass = _List_fromArray(
+	[$author$project$DmTools$NoClass, $author$project$DmTools$Barbarian, $author$project$DmTools$Cleric, $author$project$DmTools$Druid, $author$project$DmTools$Fighter, $author$project$DmTools$Monk, $author$project$DmTools$Paladin, $author$project$DmTools$Ranger, $author$project$DmTools$Rogue, $author$project$DmTools$Sorcerer, $author$project$DmTools$Warlock, $author$project$DmTools$Wizard]);
 var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
@@ -5553,41 +5684,104 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 var $elm$html$Html$select = _VirtualDom_node('select');
 var $elm$html$Html$option = _VirtualDom_node('option');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $elm$core$String$replace = F3(
+	function (before, after, string) {
+		return A2(
+			$elm$core$String$join,
+			after,
+			A2($elm$core$String$split, before, string));
+	});
+var $author$project$DmTools$stringToId = function (string) {
+	return A3(
+		$elm$core$String$replace,
+		'-',
+		'',
+		A3($elm$core$String$replace, ' ', '', string));
+};
+var $author$project$DmTools$viewOption = function (label) {
+	return A2(
+		$elm$html$Html$option,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$value(
+				$author$project$DmTools$stringToId(label))
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text(label)
+			]));
+};
+var $author$project$DmTools$viewClassOption = function (_class) {
+	switch (_class.$) {
+		case 'Barbarian':
+			return $author$project$DmTools$viewOption('Barbarian');
+		case 'Bard':
+			return $author$project$DmTools$viewOption('Bard');
+		case 'Cleric':
+			return $author$project$DmTools$viewOption('Cleric');
+		case 'Druid':
+			return $author$project$DmTools$viewOption('Druid');
+		case 'Fighter':
+			return $author$project$DmTools$viewOption('Fighter');
+		case 'Monk':
+			return $author$project$DmTools$viewOption('Monk');
+		case 'Paladin':
+			return $author$project$DmTools$viewOption('Paladin');
+		case 'Ranger':
+			return $author$project$DmTools$viewOption('Ranger');
+		case 'Rogue':
+			return $author$project$DmTools$viewOption('Rogue');
+		case 'Sorcerer':
+			return $author$project$DmTools$viewOption('Sorcerer');
+		case 'Warlock':
+			return $author$project$DmTools$viewOption('Warloc');
+		case 'Wizard':
+			return $author$project$DmTools$viewOption('Wizard');
+		default:
+			return A2(
+				$elm$html$Html$option,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$value('')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Select a class')
+					]));
+	}
+};
+var $author$project$DmTools$viewClassInput = A2(
+	$elm$html$Html$select,
+	_List_fromArray(
+		[
+			$elm$html$Html$Events$onInput($author$project$DmTools$UpdateClass)
+		]),
+	A2($elm$core$List$map, $author$project$DmTools$viewClassOption, $author$project$DmTools$enumClass));
+var $author$project$DmTools$UpdateRace = function (a) {
+	return {$: 'UpdateRace', a: a};
+};
+var $author$project$DmTools$enumRace = _List_fromArray(
+	[$author$project$DmTools$NoRace, $author$project$DmTools$Dragonborn, $author$project$DmTools$Dwarf, $author$project$DmTools$Elf, $author$project$DmTools$Gnome, $author$project$DmTools$HalfElf, $author$project$DmTools$Halfling, $author$project$DmTools$HalfOrc, $author$project$DmTools$Human, $author$project$DmTools$Tiefling]);
 var $author$project$DmTools$viewRaceOption = function (race) {
 	switch (race.$) {
-		case 'Elf':
-			return A2(
-				$elm$html$Html$option,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$value('Elf')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Elf')
-					]));
+		case 'Dragonborn':
+			return $author$project$DmTools$viewOption('Dragonborn');
 		case 'Dwarf':
-			return A2(
-				$elm$html$Html$option,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$value('Dwarf')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Dwarf')
-					]));
+			return $author$project$DmTools$viewOption('Dwarf');
+		case 'Elf':
+			return $author$project$DmTools$viewOption('Elf');
+		case 'Gnome':
+			return $author$project$DmTools$viewOption('Gnome');
+		case 'HalfElf':
+			return $author$project$DmTools$viewOption('Half-Elf');
+		case 'Halfling':
+			return $author$project$DmTools$viewOption('Halfling');
+		case 'HalfOrc':
+			return $author$project$DmTools$viewOption('Half-Orc');
 		case 'Human':
-			return A2(
-				$elm$html$Html$option,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$value('Human')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Human')
-					]));
+			return $author$project$DmTools$viewOption('Human');
+		case 'Tiefling':
+			return $author$project$DmTools$viewOption('Tielfling');
 		default:
 			return A2(
 				$elm$html$Html$option,
@@ -5608,14 +5802,45 @@ var $author$project$DmTools$viewRaceInput = A2(
 			$elm$html$Html$Events$onInput($author$project$DmTools$UpdateRace)
 		]),
 	A2($elm$core$List$map, $author$project$DmTools$viewRaceOption, $author$project$DmTools$enumRace));
-var $author$project$DmTools$viewRemainingPoints = function (model) {
+var $author$project$DmTools$viewRemainingPoints = function (remainingPoints) {
 	return A2(
-		$elm$html$Html$span,
-		_List_Nil,
+		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$text(
-				'Remaining points : ' + $elm$core$String$fromInt(model.remainingPoints))
+				$elm$html$Html$Attributes$class('stat-reader')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('stat-reader-title')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('POINTS')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('stat-reader-body')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$span,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('stat-reader-value')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$elm$core$String$fromInt(remainingPoints))
+							]))
+					]))
 			]));
 };
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
@@ -5866,15 +6091,21 @@ var $author$project$DmTools$UpdateSubRace = function (a) {
 };
 var $author$project$DmTools$getSubRaces = function (race) {
 	switch (race.$) {
-		case 'Elf':
+		case 'Dragonborn':
 			return _List_fromArray(
-				[$author$project$DmTools$NoSubRace, $author$project$DmTools$Drow, $author$project$DmTools$WoodElf, $author$project$DmTools$HighElf]);
+				[$author$project$DmTools$NoSubRace, $author$project$DmTools$BlackDragonborn, $author$project$DmTools$BlueDragonborn, $author$project$DmTools$BrassDragonborn, $author$project$DmTools$BronzeDragonborn, $author$project$DmTools$CopperDragonborn, $author$project$DmTools$GoldDragonborn, $author$project$DmTools$GreenDragonborn, $author$project$DmTools$RedDragonborn, $author$project$DmTools$SilverDragonborn, $author$project$DmTools$WhiteDragonborn]);
 		case 'Dwarf':
 			return _List_fromArray(
 				[$author$project$DmTools$NoSubRace, $author$project$DmTools$HillsDwarf, $author$project$DmTools$MountainsDwarf]);
-		case 'Human':
+		case 'Elf':
 			return _List_fromArray(
-				[$author$project$DmTools$NoSubRace]);
+				[$author$project$DmTools$NoSubRace, $author$project$DmTools$Drow, $author$project$DmTools$WoodElf, $author$project$DmTools$HighElf]);
+		case 'Gnome':
+			return _List_fromArray(
+				[$author$project$DmTools$NoSubRace, $author$project$DmTools$DeepGnome, $author$project$DmTools$RockGnome]);
+		case 'Halfling':
+			return _List_fromArray(
+				[$author$project$DmTools$NoSubRace, $author$project$DmTools$LightfootHalfling, $author$project$DmTools$StoutHalfling]);
 		default:
 			return _List_fromArray(
 				[$author$project$DmTools$NoSubRace]);
@@ -5882,61 +6113,44 @@ var $author$project$DmTools$getSubRaces = function (race) {
 };
 var $author$project$DmTools$viewSubRaceOption = function (subRace) {
 	switch (subRace.$) {
+		case 'BlackDragonborn':
+			return $author$project$DmTools$viewOption('Black Dragonborn');
+		case 'BlueDragonborn':
+			return $author$project$DmTools$viewOption('Blue Dragonborn');
+		case 'BrassDragonborn':
+			return $author$project$DmTools$viewOption('Brass Dragonborn');
+		case 'BronzeDragonborn':
+			return $author$project$DmTools$viewOption('Bronze Dragonborn');
+		case 'CopperDragonborn':
+			return $author$project$DmTools$viewOption('Bronze Dragonborn');
+		case 'GoldDragonborn':
+			return $author$project$DmTools$viewOption('Gold Dragonborn');
+		case 'GreenDragonborn':
+			return $author$project$DmTools$viewOption('Green Dragonborn');
+		case 'RedDragonborn':
+			return $author$project$DmTools$viewOption('Red Dragonborn');
+		case 'SilverDragonborn':
+			return $author$project$DmTools$viewOption('Silver Dragonborn');
+		case 'WhiteDragonborn':
+			return $author$project$DmTools$viewOption('White Dragonborn');
 		case 'HillsDwarf':
-			return A2(
-				$elm$html$Html$option,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$value('HillsDwarf')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Hills Dwarf')
-					]));
+			return $author$project$DmTools$viewOption('Hills Dwarf');
 		case 'MountainsDwarf':
-			return A2(
-				$elm$html$Html$option,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$value('MountainsDwarf')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Mountains Dwarf')
-					]));
+			return $author$project$DmTools$viewOption('Mountains Dwarf');
 		case 'HighElf':
-			return A2(
-				$elm$html$Html$option,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$value('HighElf')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('High Elf')
-					]));
+			return $author$project$DmTools$viewOption('High Elf');
 		case 'WoodElf':
-			return A2(
-				$elm$html$Html$option,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$value('WoodElf')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Wood Elf')
-					]));
+			return $author$project$DmTools$viewOption('Wood Elf');
 		case 'Drow':
-			return A2(
-				$elm$html$Html$option,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$value('Drow')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Drow')
-					]));
+			return $author$project$DmTools$viewOption('Drow');
+		case 'DeepGnome':
+			return $author$project$DmTools$viewOption('Deep Gnome');
+		case 'RockGnome':
+			return $author$project$DmTools$viewOption('Rock Gnome');
+		case 'LightfootHalfling':
+			return $author$project$DmTools$viewOption('Lightfoot Halfling');
+		case 'StoutHalfling':
+			return $author$project$DmTools$viewOption('Stout Halfling');
 		default:
 			return A2(
 				$elm$html$Html$option,
@@ -5951,16 +6165,14 @@ var $author$project$DmTools$viewSubRaceOption = function (subRace) {
 	}
 };
 var $author$project$DmTools$viewSubRaceInput = function (currentRace) {
-	return A2(
+	var subRaces = $author$project$DmTools$getSubRaces(currentRace);
+	return ($elm$core$List$length(subRaces) > 1) ? A2(
 		$elm$html$Html$select,
 		_List_fromArray(
 			[
 				$elm$html$Html$Events$onInput($author$project$DmTools$UpdateSubRace)
 			]),
-		A2(
-			$elm$core$List$map,
-			$author$project$DmTools$viewSubRaceOption,
-			$author$project$DmTools$getSubRaces(currentRace)));
+		A2($elm$core$List$map, $author$project$DmTools$viewSubRaceOption, subRaces)) : $elm$html$Html$text('');
 };
 var $author$project$DmTools$view = function (model) {
 	var subRaceBonus = $author$project$DmTools$getSubRaceBonus(model.subRace);
@@ -6020,9 +6232,16 @@ var $author$project$DmTools$view = function (model) {
 						_List_Nil,
 						_List_fromArray(
 							[
+								$elm$html$Html$text('Class')
+							])),
+						$author$project$DmTools$viewClassInput,
+						A2(
+						$elm$html$Html$h3,
+						_List_Nil,
+						_List_fromArray(
+							[
 								$elm$html$Html$text('Rolled stats')
 							])),
-						$author$project$DmTools$viewRemainingPoints(model),
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(
@@ -6036,7 +6255,8 @@ var $author$project$DmTools$view = function (model) {
 								A4($author$project$DmTools$viewStatInput, 'CON', model.rolledStats.constitution, $author$project$DmTools$IncrementConstitution, $author$project$DmTools$DecrementConstitution),
 								A4($author$project$DmTools$viewStatInput, 'INT', model.rolledStats.intelligence, $author$project$DmTools$IncrementIntelligence, $author$project$DmTools$DecrementIntelligence),
 								A4($author$project$DmTools$viewStatInput, 'WIS', model.rolledStats.wisdom, $author$project$DmTools$IncrementWisdom, $author$project$DmTools$DecrementWisdom),
-								A4($author$project$DmTools$viewStatInput, 'CHA', model.rolledStats.charisma, $author$project$DmTools$IncrementCharisma, $author$project$DmTools$DecrementCharisma)
+								A4($author$project$DmTools$viewStatInput, 'CHA', model.rolledStats.charisma, $author$project$DmTools$IncrementCharisma, $author$project$DmTools$DecrementCharisma),
+								$author$project$DmTools$viewRemainingPoints(model.remainingPoints)
 							])),
 						A2($elm$html$Html$br, _List_Nil, _List_Nil),
 						A2(

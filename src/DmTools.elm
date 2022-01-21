@@ -10,6 +10,7 @@ type Msg
     = UpdateRemainingPoints
     | UpdateRace String
     | UpdateSubRace String
+    | UpdateClass String
     | IncrementStrength
     | DecrementStrength
     | IncrementDexterity
@@ -35,6 +36,7 @@ init =
         }
     , race = NoRace
     , subRace = NoSubRace
+    , class = NoClass
     , remainingPoints = 27
     }
 
@@ -50,38 +52,109 @@ type alias Stats =
     }
 
 type Race 
-    = Elf
-    | Human
+    = Dragonborn
     | Dwarf
+    | Elf
+    | Gnome
+    | HalfElf
+    | Halfling
+    | HalfOrc
+    | Human
+    | Tiefling
     | NoRace
 
 type SubRace
-    = HillsDwarf
+    = BlackDragonborn
+    | BlueDragonborn
+    | BrassDragonborn
+    | BronzeDragonborn
+    | CopperDragonborn
+    | GoldDragonborn
+    | GreenDragonborn
+    | RedDragonborn
+    | SilverDragonborn
+    | WhiteDragonborn
+    | HillsDwarf
     | MountainsDwarf
+    | Drow
     | HighElf
     | WoodElf
-    | Drow
+    | DeepGnome
+    | RockGnome
+    | LightfootHalfling
+    | StoutHalfling
     | NoSubRace
 
 enumRace = 
     [ NoRace
-    , Human
+    , Dragonborn
     , Dwarf
     , Elf
+    , Gnome
+    , HalfElf
+    , Halfling
+    , HalfOrc
+    , Human
+    , Tiefling
+    ]
+
+type Class
+    = Barbarian
+    | Bard
+    | Cleric
+    | Druid
+    | Fighter
+    | Monk
+    | Paladin
+    | Ranger
+    | Rogue
+    | Sorcerer
+    | Warlock
+    | Wizard
+    | NoClass
+
+enumClass =
+    [ NoClass
+    , Barbarian
+    , Cleric
+    , Druid
+    , Fighter
+    , Monk
+    , Paladin
+    , Ranger
+    , Rogue
+    , Sorcerer
+    , Warlock
+    , Wizard
     ]
 
 getSubRaces: Race -> List SubRace
 getSubRaces race =
     case race of
-        Elf -> [ NoSubRace, Drow, WoodElf, HighElf ]
+        Dragonborn -> 
+            [ NoSubRace
+            , BlackDragonborn
+            , BlueDragonborn
+            , BrassDragonborn
+            , BronzeDragonborn
+            , CopperDragonborn
+            , GoldDragonborn
+            , GreenDragonborn
+            , RedDragonborn
+            , SilverDragonborn
+            , WhiteDragonborn
+            ]
         Dwarf -> [ NoSubRace, HillsDwarf, MountainsDwarf ]
-        Human -> [ NoSubRace ]
-        NoRace -> [ NoSubRace ]
+        Elf -> [ NoSubRace, Drow, WoodElf, HighElf ]
+        Gnome -> [ NoSubRace, DeepGnome, RockGnome ]
+        Halfling -> [ NoSubRace, LightfootHalfling, StoutHalfling ]
+        _ -> [ NoSubRace ]
 
 type alias Model = 
     { rolledStats: Stats
     , race: Race
     , subRace: SubRace
+    , class: Class
     , remainingPoints: Int
     }
 
@@ -102,8 +175,9 @@ view model =
               [ h3 [] [ text "Race" ]
               , viewRaceInput 
               , viewSubRaceInput model.race
+              , h3 [] [ text "Class" ]
+              , viewClassInput
               , h3 [] [ text "Rolled stats" ]
-              , viewRemainingPoints model
               , div [ class "flex-row" ]
                     [ viewStatInput "STR" model.rolledStats.strength IncrementStrength DecrementStrength
                     , viewStatInput "DEX" model.rolledStats.dexterity IncrementDexterity DecrementDexterity
@@ -111,6 +185,7 @@ view model =
                     , viewStatInput "INT" model.rolledStats.intelligence IncrementIntelligence DecrementIntelligence
                     , viewStatInput "WIS" model.rolledStats.wisdom IncrementWisdom DecrementWisdom
                     , viewStatInput "CHA" model.rolledStats.charisma IncrementCharisma DecrementCharisma
+                    , viewRemainingPoints model.remainingPoints
                     ]
               , br [] []
               , h3 [] [ text "Computed stats" ]
@@ -122,12 +197,6 @@ view model =
                     , viewStatReader "WIS" model.rolledStats.wisdom raceBonus.wisdom subRaceBonus.wisdom
                     , viewStatReader "CHA" model.rolledStats.charisma raceBonus.charisma subRaceBonus.charisma
                     ]
---              , viewFinalStat "Strength" model.rolledStats.strength raceBonus.strength subRaceBonus.strength
---              , viewFinalStat "Dexerity" model.rolledStats.dexterity raceBonus.dexterity subRaceBonus.dexterity
---              , viewFinalStat "Constitution" model.rolledStats.constitution raceBonus.constitution subRaceBonus.constitution
---              , viewFinalStat "Intelligence" model.rolledStats.intelligence raceBonus.intelligence subRaceBonus.intelligence
---              , viewFinalStat "Wisdom" model.rolledStats.wisdom raceBonus.wisdom subRaceBonus.wisdom
---              , viewFinalStat "Charisma" model.rolledStats.charisma raceBonus.charisma subRaceBonus.charisma
               ]
         , footer []
                  [ p [] [ text "/[A-Z]IKWAN/" ] ]
@@ -138,37 +207,77 @@ viewRaceInput =
 
 viewRaceOption race =
     case race of
-        Elf -> option [ value "Elf" ] [ text "Elf" ]
-        Dwarf -> option [ value "Dwarf" ] [ text "Dwarf" ]
-        Human -> option [ value "Human" ] [ text "Human" ]
+        Dragonborn -> viewOption "Dragonborn"
+        Dwarf -> viewOption "Dwarf"
+        Elf -> viewOption "Elf"
+        Gnome -> viewOption "Gnome"
+        HalfElf -> viewOption "Half-Elf"
+        Halfling -> viewOption "Halfling"
+        HalfOrc -> viewOption "Half-Orc"
+        Human -> viewOption "Human"
+        Tiefling -> viewOption "Tielfling"
         NoRace -> option [ value "" ] [ text "Select a race" ]
 
 viewSubRaceInput: Race -> Html Msg
 viewSubRaceInput currentRace =
-    select [onInput UpdateSubRace] (List.map viewSubRaceOption (getSubRaces currentRace))
+    let 
+        subRaces = getSubRaces currentRace
+    in
+    if List.length subRaces > 1 then
+        select [onInput UpdateSubRace] (List.map viewSubRaceOption subRaces)
+    else
+       Html.text "" 
+
+viewClassInput =
+    select [ onInput UpdateClass ] (List.map viewClassOption enumClass)
+
+viewClassOption class =
+    case class of
+        Barbarian -> viewOption "Barbarian"
+        Bard -> viewOption "Bard"
+        Cleric -> viewOption "Cleric"
+        Druid -> viewOption "Druid"
+        Fighter -> viewOption "Fighter"
+        Monk -> viewOption "Monk"
+        Paladin -> viewOption "Paladin"
+        Ranger -> viewOption "Ranger"
+        Rogue -> viewOption "Rogue"
+        Sorcerer -> viewOption "Sorcerer"
+        Warlock -> viewOption "Warloc"
+        Wizard -> viewOption "Wizard"
+        NoClass -> option [ value "" ] [ text "Select a class" ]
 
 viewSubRaceOption: SubRace -> Html Msg
 viewSubRaceOption subRace =
     case subRace of
-        HillsDwarf -> option [ value "HillsDwarf" ] [ text "Hills Dwarf" ]
-        MountainsDwarf -> option [ value "MountainsDwarf" ] [ text "Mountains Dwarf" ]
-        HighElf -> option [ value "HighElf" ] [ text "High Elf" ]
-        WoodElf -> option [ value "WoodElf" ] [ text "Wood Elf" ]
-        Drow -> option [ value "Drow" ] [ text "Drow" ]
+        BlackDragonborn -> viewOption "Black Dragonborn"
+        BlueDragonborn -> viewOption "Blue Dragonborn"
+        BrassDragonborn -> viewOption "Brass Dragonborn"
+        BronzeDragonborn -> viewOption "Bronze Dragonborn"
+        CopperDragonborn -> viewOption "Bronze Dragonborn"
+        GoldDragonborn -> viewOption "Gold Dragonborn"
+        GreenDragonborn -> viewOption "Green Dragonborn"
+        RedDragonborn -> viewOption "Red Dragonborn"
+        SilverDragonborn -> viewOption "Silver Dragonborn"
+        WhiteDragonborn -> viewOption "White Dragonborn"
+        HillsDwarf -> viewOption "Hills Dwarf"
+        MountainsDwarf -> viewOption "Mountains Dwarf"
+        HighElf -> viewOption "High Elf"
+        WoodElf -> viewOption "Wood Elf"
+        Drow -> viewOption "Drow"
+        DeepGnome -> viewOption "Deep Gnome"
+        RockGnome -> viewOption "Rock Gnome"
+        LightfootHalfling -> viewOption "Lightfoot Halfling"
+        StoutHalfling -> viewOption "Stout Halfling"
         NoSubRace -> option [ value "" ] [ text "Select a subrace" ]
 
-viewCharacteristicInput: String -> Int -> (String -> msg) -> Html msg
-viewCharacteristicInput name val toMsg =
-    div [] 
-        [ label [] [ text name ]
-        , input [ type_ "number"
-                , Html.Attributes.min "8"
-                , Html.Attributes.max "15"
-                , placeholder name
-                , value (String.fromInt val) 
-                , onInput toMsg
-                ] []
-        ]
+viewOption: String -> Html Msg
+viewOption label =
+    option [ value (stringToId label) ] [ text label ]
+
+stringToId: String -> String
+stringToId string =
+    String.replace "-" "" (String.replace " " "" string)
 
 viewStatInput: String -> Int -> Msg -> Msg -> Html Msg
 viewStatInput statName value incrementMsg decrementMsg =
@@ -199,17 +308,14 @@ viewStatReader statName rolledValue raceBonusValue subRaceBonusValue =
               ]
         ]
 
-viewFinalStat: String -> Int -> Int -> Int ->  Html msg
-viewFinalStat name rolledValue raceBonus subRaceBonus =
-    let 
-        totalStatValue = rolledValue + raceBonus + subRaceBonus
-    in
-    div [] [ text (name ++ " " ++ (String.fromInt totalStatValue) ++ " (" ++ (printWithSign (computeModifier totalStatValue) ++ ")")) ]
-
-viewRemainingPoints: Model -> Html Msg
-viewRemainingPoints model =
-    span [] [ text ( "Remaining points : " ++ (String.fromInt model.remainingPoints) )]
-
+viewRemainingPoints: Int -> Html Msg
+viewRemainingPoints remainingPoints =
+    div [ class "stat-reader" ]
+        [ span [ class "stat-reader-title" ] [ text "POINTS" ]
+        , div [ class "stat-reader-body" ]
+              [ span [ class "stat-reader-value" ] [ text (String.fromInt remainingPoints) ]
+              ]
+        ]
 
 -- UPDATE
 
@@ -247,6 +353,8 @@ update msg ({rolledStats} as model) =
                 { model | race = (stringToRace value), subRace = NoSubRace }
             UpdateSubRace value ->
                 { model | subRace = (stringToSubRace value ) }
+            UpdateClass value ->
+                { model | class = (stringToClass value) }
 
 -- HELPERS
 
@@ -278,42 +386,107 @@ computeModifier value =
 raceToString: Race -> String
 raceToString race =
     case race of
-        Human -> "Human"
-        Elf -> "Elf"
+        Dragonborn -> "Dragonborn"
         Dwarf -> "Dwarf"
+        Elf -> "Elf"
+        Gnome -> "Gnome"
+        HalfElf -> "HalfElf"
+        Halfling -> "Halfling"
+        HalfOrc -> "HalfOrc"
+        Human -> "Human"
+        Tiefling -> "Tiefling"
         NoRace -> ""
 
 subRaceToString: SubRace -> String
 subRaceToString subRace =
     case subRace of
+        BlackDragonborn -> "BlackDragonborn"
+        BlueDragonborn -> "BlueDragonborn"
+        BrassDragonborn -> "BrassDragonborn"
+        BronzeDragonborn -> "BronzeDragonborn"
+        CopperDragonborn -> "CopperDragonborn"
+        GoldDragonborn -> "GoldDragonborn"
+        GreenDragonborn -> "GreenDragonborn"
+        RedDragonborn -> "RedDragonborn"
+        SilverDragonborn -> "SilverDragonborn"
+        WhiteDragonborn -> "WhiteDragonborn"
         HillsDwarf -> "HillsDwarf"
         MountainsDwarf -> "MountainsDwarf"
+        Drow -> "Drow"
         HighElf -> "HighElf"
         WoodElf -> "WoodElf"
-        Drow -> "Drow"
+        DeepGnome -> "DeepGnome"
+        RockGnome -> "RockGnome"
+        LightfootHalfling -> "LightfootHalfling"
+        StoutHalfling -> "StoutHalfling"
         NoSubRace -> ""
 
 stringToRace: String -> Race
 stringToRace string =
     case string of
-        "Human" -> Human
-        "Elf" -> Elf
+        "Dragonborn" -> Dragonborn
         "Dwarf" -> Dwarf
+        "Elf" -> Elf
+        "Gnome" -> Gnome
+        "HalfElf" -> HalfElf
+        "Halfling" -> Halfling
+        "HalfOrc" -> HalfOrc
+        "Human" -> Human
+        "Tiefling" -> Tiefling
         _ -> NoRace
 
 stringToSubRace: String -> SubRace
 stringToSubRace string =
     case string of
+        "BlackDragonborn" -> BlackDragonborn
+        "BlueDragonborn" -> BlueDragonborn
+        "BrassDragonborn" -> BrassDragonborn
+        "BronzeDragonborn" -> BronzeDragonborn
+        "CopperDragonborn" -> CopperDragonborn
+        "GoldDragonborn" -> GoldDragonborn
+        "GreenDragonborn" -> GreenDragonborn
+        "RedDragonborn" -> RedDragonborn
+        "SilverDragonborn" -> SilverDragonborn
+        "WhiteDragonborn" -> WhiteDragonborn
         "HillsDwarf" -> HillsDwarf
         "MountainsDwarf" -> MountainsDwarf
+        "Drow" -> Drow
         "HighElf" -> HighElf
         "WoodElf" -> WoodElf
-        "Drow" -> Drow
+        "DeepGnome" -> DeepGnome
+        "RockGnome" -> RockGnome
+        "LightfootHalfling" -> LightfootHalfling
+        "StoutHalfling" -> StoutHalfling
         _ -> NoSubRace
+
+stringToClass: String -> Class
+stringToClass string =
+    case string of
+        "Barbarian" -> Barbarian
+        "Bard" -> Bard
+        "Cleric" -> Cleric
+        "Druid" -> Druid
+        "Fighter" -> Fighter
+        "Monk" -> Monk
+        "Paladin" -> Paladin
+        "Ranger" -> Ranger
+        "Rogue" -> Rogue
+        "Sorcerer" -> Rogue
+        "Warlock" -> Warlock
+        "Wizard" -> Wizard
+        _ -> NoClass
 
 getRaceBonus: Race -> Stats
 getRaceBonus race =
     case race of
+        Dragonborn ->
+            { strength = 2
+            , constitution = 0
+            , dexterity = 0
+            , intelligence = 0
+            , wisdom = 0
+            , charisma = 1
+            }
         Dwarf ->
             { strength = 0
             , constitution = 2
@@ -330,6 +503,38 @@ getRaceBonus race =
             , wisdom = 0
             , charisma = 0
             }
+        Gnome ->
+            { strength = 0
+            , constitution = 0
+            , dexterity = 0
+            , intelligence = 2
+            , wisdom = 0
+            , charisma = 0
+            }
+        HalfElf ->
+            { strength = 0
+            , constitution = 0
+            , dexterity = 0
+            , intelligence = 0
+            , wisdom = 0
+            , charisma = 2
+            }
+        Halfling ->
+            { strength = 0
+            , constitution = 0
+            , dexterity = 2
+            , intelligence = 0
+            , wisdom = 0
+            , charisma = 0
+            }
+        HalfOrc ->
+            { strength = 2
+            , constitution = 1
+            , dexterity = 0
+            , intelligence = 0
+            , wisdom = 0
+            , charisma = 0
+            }
         Human ->
             { strength = 1
             , constitution = 1
@@ -337,6 +542,14 @@ getRaceBonus race =
             , intelligence = 1
             , wisdom = 1
             , charisma = 1
+            }
+        Tiefling ->
+            { strength = 0
+            , constitution = 0
+            , dexterity = 0
+            , intelligence = 1
+            , wisdom = 0
+            , charisma = 2
             }
         NoRace ->
             { strength = 0
@@ -346,6 +559,7 @@ getRaceBonus race =
             , wisdom = 0
             , charisma = 0
             }
+
 
 getSubRaceBonus: SubRace -> Stats
 getSubRaceBonus subRace =
@@ -390,7 +604,39 @@ getSubRaceBonus subRace =
             , wisdom = 0
             , charisma = 0
             }
-        NoSubRace ->
+        DeepGnome ->
+            { strength = 0
+            , constitution = 0
+            , dexterity = 1
+            , intelligence = 0
+            , wisdom = 0
+            , charisma = 0
+            }
+        RockGnome ->
+            { strength = 0
+            , constitution = 1
+            , dexterity = 0
+            , intelligence = 0
+            , wisdom = 0
+            , charisma = 0
+            }
+        LightfootHalfling ->
+            { strength = 0
+            , constitution = 0
+            , dexterity = 0
+            , intelligence = 0
+            , wisdom = 0
+            , charisma = 1
+            }
+        StoutHalfling ->
+            { strength = 0
+            , constitution = 1
+            , dexterity = 0
+            , intelligence = 0
+            , wisdom = 0
+            , charisma = 0
+            }
+        _ ->
             { strength = 0
             , constitution = 0
             , dexterity = 0
