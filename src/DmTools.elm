@@ -1,6 +1,6 @@
 module DmTools exposing (main)
 
-import Html exposing (Html, div, h1, img, span, text, label, input, select, option, br, a, nav, p, footer, h1, h2, h3, h4, h5, h6)
+import Html exposing (Html, div, h1, img, span, text, label, input, select, option, br, a, nav, p, footer, h3)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
 import Array
