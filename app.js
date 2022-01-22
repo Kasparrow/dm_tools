@@ -5265,24 +5265,6 @@ var $author$project$DmTools$computeRemainingPoints = function (stats) {
 			},
 			stats));
 };
-var $author$project$DmTools$decrementStat = F2(
-	function (stats, statName) {
-		return A2(
-			$elm$core$List$map,
-			function (stat) {
-				return _Utils_eq(stat.a, statName) ? _Utils_Tuple2(statName, stat.b - 1) : stat;
-			},
-			stats);
-	});
-var $author$project$DmTools$incrementStat = F2(
-	function (stats, statName) {
-		return A2(
-			$elm$core$List$map,
-			function (stat) {
-				return _Utils_eq(stat.a, statName) ? _Utils_Tuple2(statName, stat.b + 1) : stat;
-			},
-			stats);
-	});
 var $author$project$DmTools$Barbarian = {$: 'Barbarian'};
 var $author$project$DmTools$Bard = {$: 'Bard'};
 var $author$project$DmTools$Cleric = {$: 'Cleric'};
@@ -5425,123 +5407,43 @@ var $author$project$DmTools$update = F2(
 		update:
 		while (true) {
 			var rolledStats = model.rolledStats;
+			var incrementStat = F2(
+				function (stats, statName) {
+					return A2(
+						$elm$core$List$map,
+						function (stat) {
+							return _Utils_eq(stat.a, statName) ? _Utils_Tuple2(statName, stat.b + 1) : stat;
+						},
+						stats);
+				});
+			var decrementStat = F2(
+				function (stats, statName) {
+					return A2(
+						$elm$core$List$map,
+						function (stat) {
+							return _Utils_eq(stat.a, statName) ? _Utils_Tuple2(statName, stat.b - 1) : stat;
+						},
+						stats);
+				});
 			switch (msg.$) {
-				case 'IncrementStrength':
+				case 'IncrementStat':
+					var statName = msg.a;
 					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Strength)
+							rolledStats: A2(incrementStat, rolledStats, statName)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
 					continue update;
-				case 'DecrementStrength':
+				case 'DecrementStat':
+					var statName = msg.a;
 					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Strength)
-						});
-					msg = $temp$msg;
-					model = $temp$model;
-					continue update;
-				case 'IncrementDexterity':
-					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
-						$temp$model = _Utils_update(
-						model,
-						{
-							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Dexterity)
-						});
-					msg = $temp$msg;
-					model = $temp$model;
-					continue update;
-				case 'DecrementDexterity':
-					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
-						$temp$model = _Utils_update(
-						model,
-						{
-							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Dexterity)
-						});
-					msg = $temp$msg;
-					model = $temp$model;
-					continue update;
-				case 'IncrementConstitution':
-					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
-						$temp$model = _Utils_update(
-						model,
-						{
-							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Constitution)
-						});
-					msg = $temp$msg;
-					model = $temp$model;
-					continue update;
-				case 'DecrementConstitution':
-					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
-						$temp$model = _Utils_update(
-						model,
-						{
-							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Constitution)
-						});
-					msg = $temp$msg;
-					model = $temp$model;
-					continue update;
-				case 'IncrementIntelligence':
-					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
-						$temp$model = _Utils_update(
-						model,
-						{
-							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Intelligence)
-						});
-					msg = $temp$msg;
-					model = $temp$model;
-					continue update;
-				case 'DecrementIntelligence':
-					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
-						$temp$model = _Utils_update(
-						model,
-						{
-							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Intelligence)
-						});
-					msg = $temp$msg;
-					model = $temp$model;
-					continue update;
-				case 'IncrementWisdom':
-					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
-						$temp$model = _Utils_update(
-						model,
-						{
-							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Wisdom)
-						});
-					msg = $temp$msg;
-					model = $temp$model;
-					continue update;
-				case 'DecrementWisdom':
-					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
-						$temp$model = _Utils_update(
-						model,
-						{
-							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Wisdom)
-						});
-					msg = $temp$msg;
-					model = $temp$model;
-					continue update;
-				case 'IncrementCharisma':
-					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
-						$temp$model = _Utils_update(
-						model,
-						{
-							rolledStats: A2($author$project$DmTools$incrementStat, rolledStats, $author$project$DmTools$Charisma)
-						});
-					msg = $temp$msg;
-					model = $temp$model;
-					continue update;
-				case 'DecrementCharisma':
-					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
-						$temp$model = _Utils_update(
-						model,
-						{
-							rolledStats: A2($author$project$DmTools$decrementStat, rolledStats, $author$project$DmTools$Charisma)
+							rolledStats: A2(decrementStat, rolledStats, statName)
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -6151,18 +6053,12 @@ var $author$project$DmTools$viewRemainingPoints = function (remainingPoints) {
 					]))
 			]));
 };
-var $author$project$DmTools$DecrementCharisma = {$: 'DecrementCharisma'};
-var $author$project$DmTools$DecrementConstitution = {$: 'DecrementConstitution'};
-var $author$project$DmTools$DecrementDexterity = {$: 'DecrementDexterity'};
-var $author$project$DmTools$DecrementIntelligence = {$: 'DecrementIntelligence'};
-var $author$project$DmTools$DecrementStrength = {$: 'DecrementStrength'};
-var $author$project$DmTools$DecrementWisdom = {$: 'DecrementWisdom'};
-var $author$project$DmTools$IncrementCharisma = {$: 'IncrementCharisma'};
-var $author$project$DmTools$IncrementConstitution = {$: 'IncrementConstitution'};
-var $author$project$DmTools$IncrementDexterity = {$: 'IncrementDexterity'};
-var $author$project$DmTools$IncrementIntelligence = {$: 'IncrementIntelligence'};
-var $author$project$DmTools$IncrementStrength = {$: 'IncrementStrength'};
-var $author$project$DmTools$IncrementWisdom = {$: 'IncrementWisdom'};
+var $author$project$DmTools$DecrementStat = function (a) {
+	return {$: 'DecrementStat', a: a};
+};
+var $author$project$DmTools$IncrementStat = function (a) {
+	return {$: 'IncrementStat', a: a};
+};
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -6198,22 +6094,6 @@ var $author$project$DmTools$statNameToString = function (statName) {
 var $author$project$DmTools$viewStatInput = F2(
 	function (statName, model) {
 		var value = A2($author$project$DmTools$getStatValue, model.rolledStats, statName);
-		var statMessages = function () {
-			switch (statName.$) {
-				case 'Strength':
-					return _Utils_Tuple2($author$project$DmTools$IncrementStrength, $author$project$DmTools$DecrementStrength);
-				case 'Dexterity':
-					return _Utils_Tuple2($author$project$DmTools$IncrementDexterity, $author$project$DmTools$DecrementDexterity);
-				case 'Constitution':
-					return _Utils_Tuple2($author$project$DmTools$IncrementConstitution, $author$project$DmTools$DecrementConstitution);
-				case 'Intelligence':
-					return _Utils_Tuple2($author$project$DmTools$IncrementIntelligence, $author$project$DmTools$DecrementIntelligence);
-				case 'Wisdom':
-					return _Utils_Tuple2($author$project$DmTools$IncrementWisdom, $author$project$DmTools$DecrementWisdom);
-				default:
-					return _Utils_Tuple2($author$project$DmTools$IncrementCharisma, $author$project$DmTools$DecrementCharisma);
-			}
-		}();
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -6264,7 +6144,8 @@ var $author$project$DmTools$viewStatInput = F2(
 									$elm$html$Html$span,
 									_List_fromArray(
 										[
-											$elm$html$Html$Events$onClick(statMessages.a)
+											$elm$html$Html$Events$onClick(
+											$author$project$DmTools$IncrementStat(statName))
 										]),
 									_List_fromArray(
 										[
@@ -6274,7 +6155,8 @@ var $author$project$DmTools$viewStatInput = F2(
 									$elm$html$Html$span,
 									_List_fromArray(
 										[
-											$elm$html$Html$Events$onClick(statMessages.b)
+											$elm$html$Html$Events$onClick(
+											$author$project$DmTools$DecrementStat(statName))
 										]),
 									_List_fromArray(
 										[

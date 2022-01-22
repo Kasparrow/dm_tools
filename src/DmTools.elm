@@ -11,18 +11,8 @@ type Msg
     | UpdateRace String
     | UpdateSubRace String
     | UpdateClass String
-    | IncrementStrength
-    | DecrementStrength
-    | IncrementDexterity
-    | DecrementDexterity
-    | IncrementConstitution
-    | DecrementConstitution
-    | IncrementIntelligence
-    | DecrementIntelligence
-    | IncrementWisdom
-    | DecrementWisdom
-    | IncrementCharisma
-    | DecrementCharisma
+    | IncrementStat StatName
+    | DecrementStat StatName
 
 init: Model
 init = 
@@ -292,14 +282,6 @@ viewStatInput: StatName -> Model -> Html Msg
 viewStatInput statName model =
     let
         value = getStatValue model.rolledStats statName
-        statMessages =
-            case statName of 
-                Strength -> (IncrementStrength, DecrementStrength)
-                Dexterity -> (IncrementDexterity, DecrementDexterity)
-                Constitution -> (IncrementConstitution, DecrementConstitution)
-                Intelligence -> (IncrementIntelligence, DecrementIntelligence)
-                Wisdom -> (IncrementWisdom, DecrementWisdom)
-                Charisma -> (IncrementCharisma, DecrementCharisma)
     in
 
     div [ class "stat-box" ]
@@ -307,8 +289,8 @@ viewStatInput statName model =
         , div [ class "stat-box-body" ]
               [ span [ class "stat-box-value" ] [ text (String.fromInt value) ]
               , div [ class "stat-box-controls" ]
-                    [ span [ onClick (Tuple.first statMessages) ] [ text "+" ]
-                    , span [ onClick (Tuple.second statMessages) ] [ text "-" ]
+                    [ span [ onClick (IncrementStat statName) ] [ text "+" ]
+                    , span [ onClick (DecrementStat statName) ] [ text "-" ]
                     ]
               ]
         ]
@@ -341,50 +323,25 @@ viewRemainingPoints remainingPoints =
 
 -- UPDATE
 
-incrementStat: Stats -> StatName -> Stats
-incrementStat stats statName =
-    List.map (\stat -> if Tuple.first stat == statName then (statName, (Tuple.second stat + 1)) else stat) stats
-
-decrementStat: Stats -> StatName -> Stats
-decrementStat stats statName =
-    List.map (\stat -> if Tuple.first stat == statName then (statName, (Tuple.second stat - 1)) else stat) stats
 
 update: Msg -> Model -> Model
 update msg ({rolledStats} as model) =
-        case msg of
-            IncrementStrength -> 
-                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Strength) }
-            DecrementStrength -> 
-                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Strength) }
-            IncrementDexterity -> 
-                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Dexterity) }
-            DecrementDexterity -> 
-                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Dexterity) }
-            IncrementConstitution -> 
-                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Constitution) }
-            DecrementConstitution ->
-                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Constitution) }
-            IncrementIntelligence -> 
-                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Intelligence) }
-            DecrementIntelligence -> 
-                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Intelligence) }
-            IncrementWisdom -> 
-                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Wisdom) }
-            DecrementWisdom -> 
-                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Wisdom) }
-            IncrementCharisma -> 
-                update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats Charisma) }
-            DecrementCharisma -> 
-                update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats Charisma) }
+    let
+        incrementStat: Stats -> StatName -> Stats
+        incrementStat stats statName =
+            List.map (\stat -> if Tuple.first stat == statName then (statName, (Tuple.second stat + 1)) else stat) stats
 
-            UpdateRemainingPoints ->
-                { model | remainingPoints = (27 - (computeRemainingPoints model.rolledStats)) }
-            UpdateRace value ->
-                { model | race = (stringToRace value), subRace = NoSubRace }
-            UpdateSubRace value ->
-                { model | subRace = (stringToSubRace value ) }
-            UpdateClass value ->
-                { model | class = (stringToClass value) }
+        decrementStat: Stats -> StatName -> Stats
+        decrementStat stats statName =
+            List.map (\stat -> if Tuple.first stat == statName then (statName, (Tuple.second stat - 1)) else stat) stats
+    in
+        case msg of
+            IncrementStat statName -> update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats statName) }
+            DecrementStat statName -> update UpdateRemainingPoints { model | rolledStats = (decrementStat rolledStats statName) }
+            UpdateRemainingPoints -> { model | remainingPoints = (27 - (computeRemainingPoints model.rolledStats)) }
+            UpdateRace value -> { model | race = (stringToRace value), subRace = NoSubRace }
+            UpdateSubRace value -> { model | subRace = (stringToSubRace value ) }
+            UpdateClass value -> { model | class = (stringToClass value) }
 
 -- HELPERS
 
