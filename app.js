@@ -6115,7 +6115,7 @@ var $author$project$DmTools$viewRemainingPoints = function (remainingPoints) {
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('stat-reader')
+				$elm$html$Html$Attributes$class('stat-box')
 			]),
 		_List_fromArray(
 			[
@@ -6123,7 +6123,7 @@ var $author$project$DmTools$viewRemainingPoints = function (remainingPoints) {
 				$elm$html$Html$span,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('stat-reader-title')
+						$elm$html$Html$Attributes$class('stat-box-title')
 					]),
 				_List_fromArray(
 					[
@@ -6133,7 +6133,7 @@ var $author$project$DmTools$viewRemainingPoints = function (remainingPoints) {
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('stat-reader-body')
+						$elm$html$Html$Attributes$class('stat-box-body')
 					]),
 				_List_fromArray(
 					[
@@ -6141,7 +6141,7 @@ var $author$project$DmTools$viewRemainingPoints = function (remainingPoints) {
 						$elm$html$Html$span,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$class('stat-reader-value')
+								$elm$html$Html$Attributes$class('stat-box-value')
 							]),
 						_List_fromArray(
 							[
@@ -6218,7 +6218,7 @@ var $author$project$DmTools$viewStatInput = F2(
 			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$class('stat-input')
+					$elm$html$Html$Attributes$class('stat-box')
 				]),
 			_List_fromArray(
 				[
@@ -6226,7 +6226,7 @@ var $author$project$DmTools$viewStatInput = F2(
 					$elm$html$Html$span,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('stat-input-title')
+							$elm$html$Html$Attributes$class('stat-box-title')
 						]),
 					_List_fromArray(
 						[
@@ -6237,7 +6237,7 @@ var $author$project$DmTools$viewStatInput = F2(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('stat-input-body')
+							$elm$html$Html$Attributes$class('stat-box-body')
 						]),
 					_List_fromArray(
 						[
@@ -6245,7 +6245,7 @@ var $author$project$DmTools$viewStatInput = F2(
 							$elm$html$Html$span,
 							_List_fromArray(
 								[
-									$elm$html$Html$Attributes$class('stat-input-value')
+									$elm$html$Html$Attributes$class('stat-box-value')
 								]),
 							_List_fromArray(
 								[
@@ -6256,7 +6256,7 @@ var $author$project$DmTools$viewStatInput = F2(
 							$elm$html$Html$div,
 							_List_fromArray(
 								[
-									$elm$html$Html$Attributes$class('stat-input-controls')
+									$elm$html$Html$Attributes$class('stat-box-controls')
 								]),
 							_List_fromArray(
 								[
@@ -6330,7 +6330,7 @@ var $author$project$DmTools$viewStatReader = F3(
 			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$class('stat-reader')
+					$elm$html$Html$Attributes$class('stat-box')
 				]),
 			_List_fromArray(
 				[
@@ -6338,7 +6338,7 @@ var $author$project$DmTools$viewStatReader = F3(
 					$elm$html$Html$span,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('stat-reader-title')
+							$elm$html$Html$Attributes$class('stat-box-title')
 						]),
 					_List_fromArray(
 						[
@@ -6349,7 +6349,7 @@ var $author$project$DmTools$viewStatReader = F3(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('stat-reader-body')
+							$elm$html$Html$Attributes$class('stat-box-body')
 						]),
 					_List_fromArray(
 						[
@@ -6357,7 +6357,7 @@ var $author$project$DmTools$viewStatReader = F3(
 							$elm$html$Html$span,
 							_List_fromArray(
 								[
-									$elm$html$Html$Attributes$class('stat-reader-value')
+									$elm$html$Html$Attributes$class('stat-box-value')
 								]),
 							_List_fromArray(
 								[
@@ -6368,7 +6368,7 @@ var $author$project$DmTools$viewStatReader = F3(
 							$elm$html$Html$div,
 							_List_fromArray(
 								[
-									$elm$html$Html$Attributes$class('stat-reader-bonus')
+									$elm$html$Html$Attributes$class('stat-box-bonus')
 								]),
 							_List_fromArray(
 								[

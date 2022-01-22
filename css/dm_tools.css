@@ -115,7 +115,7 @@ nav
     flex-direction: row;
 }
 
-.stat-input {
+.stat-box {
     width: 80px;
     height: 80px;
     display: flex;
@@ -124,101 +124,67 @@ nav
     margin-right: 10px;
 }
 
-.stat-input-title {
+.stat-box-title {
     border-bottom: 1px solid black;
     text-align: center;
 }
 
-.stat-input-body {
+.stat-box-body {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
 }
 
-.stat-input-value {
+.stat-box-value {
     display: flex;
-    flex-grow: 2;
-    border-right: 1px solid black;
+    flex: 2 0;
     align-items: center;
     justify-content: center;
     font-size: 26px;
 }
 
-.stat-input-controls {
+.stat-box-controls {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex: 1 0;
+    border-left: 1px solid black;
 }
 
-.stat-input-controls span {
+.stat-box-bonus {
     display: flex;
-    flex-grow: 1;
+    flex-direction: column;
+    flex: 1 0;
+    border-left: 1px solid black;
+}
+
+.stat-box-controls span {
+    display: flex;
+    flex: 1 0;
     cursor: pointer;
     align-items: center;
     justify-content: center;
     user-select: none;
 }
 
-.stat-input-controls span:first-child{
+.stat-box-controls span:first-child{
     border-bottom: 1px solid black;
 }
 
-.stat-input-controls span:hover {
-    display: flex;
-    flex-grow: 1;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
+.stat-box-controls span:hover {
     background-color: #bbb;
 }
 
-.stat-reader {
-    width: 80px;
-    height: 80px;
+.stat-box-bonus span {
     display: flex;
-    border: 1px solid black;
-    flex-direction: column;
-    margin-right: 10px;
-}
-
-.stat-reader-title {
-    border-bottom: 1px solid black;
-    text-align: center;
-}
-
-.stat-reader-body {
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-}
-
-.stat-reader-value {
-    display: flex;
-    flex-grow: 4;
-    border-right: 1px solid black;
+    flex: 1 0;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
+    user-select: none;
 }
 
-.stat-reader-bonus {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.stat-reader-bonus span {
-    display: flex;
-    flex-grow: 3;
-    align-items: center;
-    justify-content: center;
-}
-
-.stat-reader-bonus span:first-child{
-    flex-grow: 1;
+.stat-box-bonus span:first-child{
     border-bottom: 1px solid black;
 }
-
 
 
 /* footer */

@@ -302,11 +302,11 @@ viewStatInput statName model =
                 Charisma -> (IncrementCharisma, DecrementCharisma)
     in
 
-    div [ class "stat-input" ]
-        [ span [ class "stat-input-title" ] [ text (statNameToString statName) ]
-        , div [ class "stat-input-body" ]
-              [ span [ class "stat-input-value" ] [ text (String.fromInt value) ]
-              , div [ class "stat-input-controls" ]
+    div [ class "stat-box" ]
+        [ span [ class "stat-box-title" ] [ text (statNameToString statName) ]
+        , div [ class "stat-box-body" ]
+              [ span [ class "stat-box-value" ] [ text (String.fromInt value) ]
+              , div [ class "stat-box-controls" ]
                     [ span [ onClick (Tuple.first statMessages) ] [ text "+" ]
                     , span [ onClick (Tuple.second statMessages) ] [ text "-" ]
                     ]
@@ -319,11 +319,11 @@ viewStatReader statName model proficiencySaves =
         hasProficiencySave = List.member statName proficiencySaves
         value = getFinalStatValue model statName
     in
-    div [ class "stat-reader" ]
-        [ span [ class "stat-reader-title" ] [ text (statNameToString statName) ]
-        , div [ class "stat-reader-body" ]
-              [ span [ class "stat-reader-value" ] [ text (String.fromInt value) ]
-              , div [ class "stat-reader-bonus" ]
+    div [ class "stat-box" ]
+        [ span [ class "stat-box-title" ] [ text (statNameToString statName) ]
+        , div [ class "stat-box-body" ]
+              [ span [ class "stat-box-value" ] [ text (String.fromInt value) ]
+              , div [ class "stat-box-bonus" ]
                     [ span [] [ text (printWithSign (computeModifier value)) ]
                     , span [] [ text (if hasProficiencySave then "M" else "")]
                     ]
@@ -332,10 +332,10 @@ viewStatReader statName model proficiencySaves =
 
 viewRemainingPoints: Int -> Html Msg
 viewRemainingPoints remainingPoints =
-    div [ class "stat-reader" ]
-        [ span [ class "stat-reader-title" ] [ text "POINTS" ]
-        , div [ class "stat-reader-body" ]
-              [ span [ class "stat-reader-value" ] [ text (String.fromInt remainingPoints) ]
+    div [ class "stat-box" ]
+        [ span [ class "stat-box-title" ] [ text "POINTS" ]
+        , div [ class "stat-box-body" ]
+              [ span [ class "stat-box-value" ] [ text (String.fromInt remainingPoints) ]
               ]
         ]
 
