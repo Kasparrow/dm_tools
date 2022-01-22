@@ -198,6 +198,7 @@ view model =
                     , viewStatReader Wisdom model classProficiencySaves
                     , viewStatReader Charisma model classProficiencySaves
                     ]
+              , viewCharacterBaseLife model
               ]
         , footer []
                  [ p [] [ text "/[A-Z]IKWAN/" ] ]
@@ -275,6 +276,13 @@ viewSubRaceOption subRace =
 viewOption: String -> Html Msg
 viewOption label =
     option [ value (stringToId label) ] [ text label ]
+
+viewCharacterBaseLife: Model -> Html Msg
+viewCharacterBaseLife model =
+    if model.class /= NoClass then
+        span [] [ text ("Base life " ++ (String.fromInt (getCharacterBaseLife model))) ]
+    else
+        Html.text ""
 
 stringToId: String -> String
 stringToId string =
@@ -565,6 +573,30 @@ getClassProficiencySave class =
         Warlock -> [ Wisdom, Charisma ]
         Wizard -> [ Intelligence, Wisdom ]
         NoClass -> []
+
+getCharacterBaseLife: Model -> Int
+getCharacterBaseLife model =
+    let
+        constitutionModifier = computeModifier (getFinalStatValue model Constitution)
+    in
+
+    case constitutionModifier of
+        Just value ->
+            case model.class of
+                Barbarian -> 12 + value
+                Bard -> 8 + value
+                Cleric -> 8 + value
+                Druid -> 8 + value
+                Fighter -> 10 + value
+                Monk -> 8 + value
+                Paladin -> 10 + value
+                Ranger -> 10 + value
+                Rogue -> 8 + value
+                Sorcerer -> 8 + value
+                Warlock -> 6 + value
+                Wizard -> 6 + value
+                NoClass -> 0 + value
+        Nothing -> 0
 
 computeStatCost: Int -> Int
 computeStatCost value =
