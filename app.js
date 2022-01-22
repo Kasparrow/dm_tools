@@ -5577,19 +5577,15 @@ var $author$project$DmTools$update = F2(
 			}
 		}
 	});
-var $author$project$DmTools$DecrementCharisma = {$: 'DecrementCharisma'};
-var $author$project$DmTools$DecrementConstitution = {$: 'DecrementConstitution'};
-var $author$project$DmTools$DecrementDexterity = {$: 'DecrementDexterity'};
-var $author$project$DmTools$DecrementIntelligence = {$: 'DecrementIntelligence'};
-var $author$project$DmTools$DecrementStrength = {$: 'DecrementStrength'};
-var $author$project$DmTools$DecrementWisdom = {$: 'DecrementWisdom'};
-var $author$project$DmTools$IncrementCharisma = {$: 'IncrementCharisma'};
-var $author$project$DmTools$IncrementConstitution = {$: 'IncrementConstitution'};
-var $author$project$DmTools$IncrementDexterity = {$: 'IncrementDexterity'};
-var $author$project$DmTools$IncrementIntelligence = {$: 'IncrementIntelligence'};
-var $author$project$DmTools$IncrementStrength = {$: 'IncrementStrength'};
-var $author$project$DmTools$IncrementWisdom = {$: 'IncrementWisdom'};
 var $elm$html$Html$a = _VirtualDom_node('a');
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
+	});
 var $elm$html$Html$br = _VirtualDom_node('br');
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
@@ -5601,6 +5597,8 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $author$project$DmTools$enumStatName = _List_fromArray(
+	[$author$project$DmTools$Strength, $author$project$DmTools$Dexterity, $author$project$DmTools$Constitution, $author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom, $author$project$DmTools$Charisma]);
 var $elm$html$Html$footer = _VirtualDom_node('footer');
 var $author$project$DmTools$getClassProficiencySave = function (_class) {
 	switch (_class.$) {
@@ -5644,42 +5642,6 @@ var $author$project$DmTools$getClassProficiencySave = function (_class) {
 			return _List_Nil;
 	}
 };
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
-var $elm$core$List$head = function (list) {
-	if (list.b) {
-		var x = list.a;
-		var xs = list.b;
-		return $elm$core$Maybe$Just(x);
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
-var $author$project$DmTools$getStatValue = F2(
-	function (stats, statName) {
-		var selectedStats = A2(
-			$elm$core$List$filter,
-			function (stat) {
-				return _Utils_eq(stat.a, statName);
-			},
-			stats);
-		var tail = $elm$core$List$head(selectedStats);
-		if (tail.$ === 'Just') {
-			var stat = tail.a;
-			return stat.b;
-		} else {
-			return 0;
-		}
-	});
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$html$Html$Attributes$href = function (url) {
 	return A2(
@@ -5837,6 +5799,42 @@ var $author$project$DmTools$getRaceBonus = function (race) {
 			return _List_Nil;
 	}
 };
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(x);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$DmTools$getStatValue = F2(
+	function (stats, statName) {
+		var selectedStats = A2(
+			$elm$core$List$filter,
+			function (stat) {
+				return _Utils_eq(stat.a, statName);
+			},
+			stats);
+		var tail = $elm$core$List$head(selectedStats);
+		if (tail.$ === 'Just') {
+			var stat = tail.a;
+			return stat.b;
+		} else {
+			return 0;
+		}
+	});
 var $author$project$DmTools$getSubRaceBonus = function (subRace) {
 	switch (subRace.$) {
 		case 'HillsDwarf':
@@ -6153,6 +6151,18 @@ var $author$project$DmTools$viewRemainingPoints = function (remainingPoints) {
 					]))
 			]));
 };
+var $author$project$DmTools$DecrementCharisma = {$: 'DecrementCharisma'};
+var $author$project$DmTools$DecrementConstitution = {$: 'DecrementConstitution'};
+var $author$project$DmTools$DecrementDexterity = {$: 'DecrementDexterity'};
+var $author$project$DmTools$DecrementIntelligence = {$: 'DecrementIntelligence'};
+var $author$project$DmTools$DecrementStrength = {$: 'DecrementStrength'};
+var $author$project$DmTools$DecrementWisdom = {$: 'DecrementWisdom'};
+var $author$project$DmTools$IncrementCharisma = {$: 'IncrementCharisma'};
+var $author$project$DmTools$IncrementConstitution = {$: 'IncrementConstitution'};
+var $author$project$DmTools$IncrementDexterity = {$: 'IncrementDexterity'};
+var $author$project$DmTools$IncrementIntelligence = {$: 'IncrementIntelligence'};
+var $author$project$DmTools$IncrementStrength = {$: 'IncrementStrength'};
+var $author$project$DmTools$IncrementWisdom = {$: 'IncrementWisdom'};
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -6169,8 +6179,41 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $author$project$DmTools$viewStatInput = F4(
-	function (statName, value, incrementMsg, decrementMsg) {
+var $author$project$DmTools$statNameToString = function (statName) {
+	switch (statName.$) {
+		case 'Strength':
+			return 'STR';
+		case 'Dexterity':
+			return 'DEX';
+		case 'Constitution':
+			return 'CON';
+		case 'Intelligence':
+			return 'INT';
+		case 'Wisdom':
+			return 'WIS';
+		default:
+			return 'CHA';
+	}
+};
+var $author$project$DmTools$viewStatInput = F2(
+	function (statName, model) {
+		var value = A2($author$project$DmTools$getStatValue, model.rolledStats, statName);
+		var statMessages = function () {
+			switch (statName.$) {
+				case 'Strength':
+					return _Utils_Tuple2($author$project$DmTools$IncrementStrength, $author$project$DmTools$DecrementStrength);
+				case 'Dexterity':
+					return _Utils_Tuple2($author$project$DmTools$IncrementDexterity, $author$project$DmTools$DecrementDexterity);
+				case 'Constitution':
+					return _Utils_Tuple2($author$project$DmTools$IncrementConstitution, $author$project$DmTools$DecrementConstitution);
+				case 'Intelligence':
+					return _Utils_Tuple2($author$project$DmTools$IncrementIntelligence, $author$project$DmTools$DecrementIntelligence);
+				case 'Wisdom':
+					return _Utils_Tuple2($author$project$DmTools$IncrementWisdom, $author$project$DmTools$DecrementWisdom);
+				default:
+					return _Utils_Tuple2($author$project$DmTools$IncrementCharisma, $author$project$DmTools$DecrementCharisma);
+			}
+		}();
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -6187,7 +6230,8 @@ var $author$project$DmTools$viewStatInput = F4(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(statName)
+							$elm$html$Html$text(
+							$author$project$DmTools$statNameToString(statName))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -6220,7 +6264,7 @@ var $author$project$DmTools$viewStatInput = F4(
 									$elm$html$Html$span,
 									_List_fromArray(
 										[
-											$elm$html$Html$Events$onClick(incrementMsg)
+											$elm$html$Html$Events$onClick(statMessages.a)
 										]),
 									_List_fromArray(
 										[
@@ -6230,7 +6274,7 @@ var $author$project$DmTools$viewStatInput = F4(
 									$elm$html$Html$span,
 									_List_fromArray(
 										[
-											$elm$html$Html$Events$onClick(decrementMsg)
+											$elm$html$Html$Events$onClick(statMessages.b)
 										]),
 									_List_fromArray(
 										[
@@ -6276,22 +6320,6 @@ var $author$project$DmTools$printWithSign = function (value) {
 		return (_int >= 0) ? ('+' + $elm$core$String$fromInt(_int)) : $elm$core$String$fromInt(_int);
 	} else {
 		return '?';
-	}
-};
-var $author$project$DmTools$statNameToString = function (statName) {
-	switch (statName.$) {
-		case 'Strength':
-			return 'STR';
-		case 'Dexterity':
-			return 'DEX';
-		case 'Constitution':
-			return 'CON';
-		case 'Intelligence':
-			return 'INT';
-		case 'Wisdom':
-			return 'WIS';
-		default:
-			return 'CHA';
 	}
 };
 var $author$project$DmTools$viewStatReader = F3(
@@ -6526,46 +6554,18 @@ var $author$project$DmTools$view = function (model) {
 							[
 								$elm$html$Html$Attributes$class('flex-row')
 							]),
-						_List_fromArray(
-							[
-								A4(
-								$author$project$DmTools$viewStatInput,
-								'STR',
-								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Strength),
-								$author$project$DmTools$IncrementStrength,
-								$author$project$DmTools$DecrementStrength),
-								A4(
-								$author$project$DmTools$viewStatInput,
-								'DEX',
-								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Dexterity),
-								$author$project$DmTools$IncrementDexterity,
-								$author$project$DmTools$DecrementDexterity),
-								A4(
-								$author$project$DmTools$viewStatInput,
-								'CON',
-								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Constitution),
-								$author$project$DmTools$IncrementConstitution,
-								$author$project$DmTools$DecrementConstitution),
-								A4(
-								$author$project$DmTools$viewStatInput,
-								'INT',
-								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Intelligence),
-								$author$project$DmTools$IncrementIntelligence,
-								$author$project$DmTools$DecrementIntelligence),
-								A4(
-								$author$project$DmTools$viewStatInput,
-								'WIS',
-								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Wisdom),
-								$author$project$DmTools$IncrementWisdom,
-								$author$project$DmTools$DecrementWisdom),
-								A4(
-								$author$project$DmTools$viewStatInput,
-								'CHA',
-								A2($author$project$DmTools$getStatValue, model.rolledStats, $author$project$DmTools$Charisma),
-								$author$project$DmTools$IncrementCharisma,
-								$author$project$DmTools$DecrementCharisma),
-								$author$project$DmTools$viewRemainingPoints(model.remainingPoints)
-							])),
+						A2(
+							$elm$core$List$append,
+							A2(
+								$elm$core$List$map,
+								function (statName) {
+									return A2($author$project$DmTools$viewStatInput, statName, model);
+								},
+								$author$project$DmTools$enumStatName),
+							_List_fromArray(
+								[
+									$author$project$DmTools$viewRemainingPoints(model.remainingPoints)
+								]))),
 						A2($elm$html$Html$br, _List_Nil, _List_Nil),
 						A2(
 						$elm$html$Html$h3,
@@ -6580,15 +6580,12 @@ var $author$project$DmTools$view = function (model) {
 							[
 								$elm$html$Html$Attributes$class('flex-row')
 							]),
-						_List_fromArray(
-							[
-								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Strength, model, classProficiencySaves),
-								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Dexterity, model, classProficiencySaves),
-								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Constitution, model, classProficiencySaves),
-								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Intelligence, model, classProficiencySaves),
-								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Wisdom, model, classProficiencySaves),
-								A3($author$project$DmTools$viewStatReader, $author$project$DmTools$Charisma, model, classProficiencySaves)
-							])),
+						A2(
+							$elm$core$List$map,
+							function (statName) {
+								return A3($author$project$DmTools$viewStatReader, statName, model, classProficiencySaves);
+							},
+							$author$project$DmTools$enumStatName)),
 						$author$project$DmTools$viewCharacterBaseLife(model)
 					])),
 				A2(

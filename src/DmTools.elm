@@ -50,6 +50,15 @@ type StatName
     | Wisdom
     | Charisma
 
+enumStatName =
+    [ Strength
+    , Dexterity
+    , Constitution
+    , Intelligence
+    , Wisdom
+    , Charisma
+    ]
+
 type alias Stat = (StatName, Int)
 type alias Stats = List Stat
 
@@ -180,24 +189,15 @@ view model =
               , viewClassInput
               , h3 [] [ text "Rolled stats" ]
               , div [ class "flex-row" ]
-                    [ viewStatInput "STR" (getStatValue model.rolledStats Strength) IncrementStrength DecrementStrength
-                    , viewStatInput "DEX" (getStatValue model.rolledStats Dexterity) IncrementDexterity DecrementDexterity
-                    , viewStatInput "CON" (getStatValue model.rolledStats Constitution) IncrementConstitution DecrementConstitution
-                    , viewStatInput "INT" (getStatValue model.rolledStats Intelligence) IncrementIntelligence DecrementIntelligence
-                    , viewStatInput "WIS" (getStatValue model.rolledStats Wisdom) IncrementWisdom DecrementWisdom
-                    , viewStatInput "CHA" (getStatValue model.rolledStats Charisma) IncrementCharisma DecrementCharisma
-                    , viewRemainingPoints model.remainingPoints
-                    ]
+                    (List.append 
+                        (List.map(\statName -> viewStatInput statName model) enumStatName) 
+                        ([viewRemainingPoints model.remainingPoints])
+                    )
               , br [] []
               , h3 [] [ text "Computed stats" ]
               , div [ class "flex-row" ]
-                    [ viewStatReader Strength model classProficiencySaves
-                    , viewStatReader Dexterity model classProficiencySaves
-                    , viewStatReader Constitution model classProficiencySaves
-                    , viewStatReader Intelligence model classProficiencySaves
-                    , viewStatReader Wisdom model classProficiencySaves
-                    , viewStatReader Charisma model classProficiencySaves
-                    ]
+                    (List.map (\statName -> viewStatReader statName model classProficiencySaves) enumStatName)
+                    
               , viewCharacterBaseLife model
               ]
         , footer []
@@ -288,15 +288,27 @@ stringToId: String -> String
 stringToId string =
     String.replace "-" "" (String.replace " " "" string)
 
-viewStatInput: String -> Int -> Msg -> Msg -> Html Msg
-viewStatInput statName value incrementMsg decrementMsg =
+viewStatInput: StatName -> Model -> Html Msg
+viewStatInput statName model =
+    let
+        value = getStatValue model.rolledStats statName
+        statMessages =
+            case statName of 
+                Strength -> (IncrementStrength, DecrementStrength)
+                Dexterity -> (IncrementDexterity, DecrementDexterity)
+                Constitution -> (IncrementConstitution, DecrementConstitution)
+                Intelligence -> (IncrementIntelligence, DecrementIntelligence)
+                Wisdom -> (IncrementWisdom, DecrementWisdom)
+                Charisma -> (IncrementCharisma, DecrementCharisma)
+    in
+
     div [ class "stat-input" ]
-        [ span [ class "stat-input-title" ] [ text statName ]
+        [ span [ class "stat-input-title" ] [ text (statNameToString statName) ]
         , div [ class "stat-input-body" ]
               [ span [ class "stat-input-value" ] [ text (String.fromInt value) ]
               , div [ class "stat-input-controls" ]
-                    [ span [ onClick incrementMsg ] [ text "+" ]
-                    , span [ onClick decrementMsg ] [ text "-" ]
+                    [ span [ onClick (Tuple.first statMessages) ] [ text "+" ]
+                    , span [ onClick (Tuple.second statMessages) ] [ text "-" ]
                     ]
               ]
         ]
