@@ -4475,6 +4475,7 @@ var $elm$core$Basics$LT = {$: 'LT'};
 var $author$project$DmTools$Charisma = {$: 'Charisma'};
 var $author$project$DmTools$Constitution = {$: 'Constitution'};
 var $author$project$DmTools$Dexterity = {$: 'Dexterity'};
+var $elm$core$Basics$False = {$: 'False'};
 var $author$project$DmTools$Intelligence = {$: 'Intelligence'};
 var $author$project$DmTools$NoClass = {$: 'NoClass'};
 var $author$project$DmTools$NoRace = {$: 'NoRace'};
@@ -4483,6 +4484,7 @@ var $author$project$DmTools$Strength = {$: 'Strength'};
 var $author$project$DmTools$Wisdom = {$: 'Wisdom'};
 var $author$project$DmTools$init = {
 	_class: $author$project$DmTools$NoClass,
+	freeStatsInput: false,
 	race: $author$project$DmTools$NoRace,
 	remainingPoints: 27,
 	rolledStats: _List_fromArray(
@@ -4517,7 +4519,6 @@ var $elm$core$Result$Ok = function (a) {
 var $elm$json$Json$Decode$OneOf = function (a) {
 	return {$: 'OneOf', a: a};
 };
-var $elm$core$Basics$False = {$: 'False'};
 var $elm$core$Basics$add = _Basics_add;
 var $elm$core$Maybe$Just = function (a) {
 	return {$: 'Just', a: a};
@@ -5265,6 +5266,10 @@ var $author$project$DmTools$computeRemainingPoints = function (stats) {
 			},
 			stats));
 };
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
+	});
 var $author$project$DmTools$Barbarian = {$: 'Barbarian'};
 var $author$project$DmTools$Bard = {$: 'Bard'};
 var $author$project$DmTools$Cleric = {$: 'Cleric'};
@@ -5407,12 +5412,23 @@ var $author$project$DmTools$update = F2(
 		update:
 		while (true) {
 			var rolledStats = model.rolledStats;
+			var freeStatsInput = model.freeStatsInput;
 			var incrementStat = F2(
 				function (stats, statName) {
 					return A2(
 						$elm$core$List$map,
 						function (stat) {
-							return _Utils_eq(stat.a, statName) ? _Utils_Tuple2(statName, stat.b + 1) : stat;
+							if (_Utils_eq(stat.a, statName)) {
+								var incrementedValue = stat.b + 1;
+								return freeStatsInput ? _Utils_Tuple2(statName, incrementedValue) : _Utils_Tuple2(
+									statName,
+									A2(
+										$elm$core$Basics$min,
+										A2($elm$core$Basics$max, 8, incrementedValue),
+										15));
+							} else {
+								return stat;
+							}
 						},
 						stats);
 				});
@@ -5421,7 +5437,13 @@ var $author$project$DmTools$update = F2(
 					return A2(
 						$elm$core$List$map,
 						function (stat) {
-							return _Utils_eq(stat.a, statName) ? _Utils_Tuple2(statName, stat.b - 1) : stat;
+							var decrementedValue = stat.b - 1;
+							return _Utils_eq(stat.a, statName) ? (freeStatsInput ? _Utils_Tuple2(statName, decrementedValue) : _Utils_Tuple2(
+								statName,
+								A2(
+									$elm$core$Basics$min,
+									A2($elm$core$Basics$max, 8, decrementedValue),
+									15))) : stat;
 						},
 						stats);
 				});
@@ -5469,16 +5491,34 @@ var $author$project$DmTools$update = F2(
 						{
 							subRace: $author$project$DmTools$stringToSubRace(value)
 						});
-				default:
+				case 'UpdateClass':
 					var value = msg.a;
 					return _Utils_update(
 						model,
 						{
 							_class: $author$project$DmTools$stringToClass(value)
 						});
+				default:
+					var checked = msg.a;
+					if (checked) {
+						return _Utils_update(
+							model,
+							{freeStatsInput: true});
+					} else {
+						var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
+							$temp$model = _Utils_update(
+							model,
+							{freeStatsInput: false});
+						msg = $temp$msg;
+						model = $temp$model;
+						continue update;
+					}
 			}
 		}
 	});
+var $author$project$DmTools$CheckFreeStatInput = function (a) {
+	return {$: 'CheckFreeStatInput', a: a};
+};
 var $elm$html$Html$a = _VirtualDom_node('a');
 var $elm$core$List$append = F2(
 	function (xs, ys) {
@@ -5502,6 +5542,7 @@ var $elm$html$Html$div = _VirtualDom_node('div');
 var $author$project$DmTools$enumStatName = _List_fromArray(
 	[$author$project$DmTools$Strength, $author$project$DmTools$Dexterity, $author$project$DmTools$Constitution, $author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom, $author$project$DmTools$Charisma]);
 var $elm$html$Html$footer = _VirtualDom_node('footer');
+var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
 var $author$project$DmTools$getClassProficiencySave = function (_class) {
 	switch (_class.$) {
 		case 'Barbarian':
@@ -5551,11 +5592,43 @@ var $elm$html$Html$Attributes$href = function (url) {
 		'href',
 		_VirtualDom_noJavaScriptUri(url));
 };
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
+var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$nav = _VirtualDom_node('nav');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$bool = _Json_decodeBool;
+var $elm$html$Html$Events$targetChecked = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'checked']),
+	$elm$json$Json$Decode$bool);
+var $elm$html$Html$Events$onCheck = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'change',
+		A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetChecked));
+};
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$core$Array$fromListHelp = F3(
 	function (list, nodeList, nodeListSize) {
 		fromListHelp:
@@ -5840,16 +5913,53 @@ var $author$project$DmTools$getCharacterBaseLife = function (model) {
 	}
 };
 var $elm$core$Basics$neq = _Utils_notEqual;
+var $author$project$DmTools$viewValueBox = F2(
+	function (title, value) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('stat-box')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$span,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('stat-box-title')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(title)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('stat-box-body')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$span,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('stat-box-value')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(
+									$elm$core$String$fromInt(value))
+								]))
+						]))
+				]));
+	});
 var $author$project$DmTools$viewCharacterBaseLife = function (model) {
 	return (!_Utils_eq(model._class, $author$project$DmTools$NoClass)) ? A2(
-		$elm$html$Html$span,
-		_List_Nil,
-		_List_fromArray(
-			[
-				$elm$html$Html$text(
-				'Base life ' + $elm$core$String$fromInt(
-					$author$project$DmTools$getCharacterBaseLife(model)))
-			])) : $elm$html$Html$text('');
+		$author$project$DmTools$viewValueBox,
+		'LIFE',
+		$author$project$DmTools$getCharacterBaseLife(model)) : $elm$html$Html$text('');
 };
 var $author$project$DmTools$UpdateClass = function (a) {
 	return {$: 'UpdateClass', a: a};
@@ -5863,18 +5973,12 @@ var $elm$html$Html$Events$alwaysStop = function (x) {
 var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
 	return {$: 'MayStopPropagation', a: a};
 };
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$stopPropagationOn = F2(
 	function (event, decoder) {
 		return A2(
 			$elm$virtual_dom$VirtualDom$on,
 			event,
 			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
-	});
-var $elm$json$Json$Decode$field = _Json_decodeField;
-var $elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
 	});
 var $elm$json$Json$Decode$string = _Json_decodeString;
 var $elm$html$Html$Events$targetValue = A2(
@@ -6012,63 +6116,12 @@ var $author$project$DmTools$viewRaceInput = A2(
 			$elm$html$Html$Events$onInput($author$project$DmTools$UpdateRace)
 		]),
 	A2($elm$core$List$map, $author$project$DmTools$viewRaceOption, $author$project$DmTools$enumRace));
-var $author$project$DmTools$viewRemainingPoints = function (remainingPoints) {
-	return A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('stat-box')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$span,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('stat-box-title')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('POINTS')
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('stat-box-body')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$span,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('stat-box-value')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(remainingPoints))
-							]))
-					]))
-			]));
-};
 var $author$project$DmTools$DecrementStat = function (a) {
 	return {$: 'DecrementStat', a: a};
 };
 var $author$project$DmTools$IncrementStat = function (a) {
 	return {$: 'IncrementStat', a: a};
 };
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
 var $elm$html$Html$Events$onClick = function (msg) {
 	return A2(
 		$elm$html$Html$Events$on,
@@ -6432,6 +6485,31 @@ var $author$project$DmTools$view = function (model) {
 							])),
 						A2(
 						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$label,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$for('freeStatInput')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Authorize free stats')
+									])),
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$type_('checkbox'),
+										$elm$html$Html$Attributes$id('freeStatInput'),
+										$elm$html$Html$Events$onCheck($author$project$DmTools$CheckFreeStatInput)
+									]),
+								_List_Nil)
+							])),
+						A2(
+						$elm$html$Html$div,
 						_List_fromArray(
 							[
 								$elm$html$Html$Attributes$class('flex-row')
@@ -6444,9 +6522,12 @@ var $author$project$DmTools$view = function (model) {
 									return A2($author$project$DmTools$viewStatInput, statName, model);
 								},
 								$author$project$DmTools$enumStatName),
-							_List_fromArray(
+							model.freeStatsInput ? _List_fromArray(
 								[
-									$author$project$DmTools$viewRemainingPoints(model.remainingPoints)
+									$elm$html$Html$text('')
+								]) : _List_fromArray(
+								[
+									A2($author$project$DmTools$viewValueBox, 'POINTS', model.remainingPoints)
 								]))),
 						A2($elm$html$Html$br, _List_Nil, _List_Nil),
 						A2(
@@ -6468,7 +6549,16 @@ var $author$project$DmTools$view = function (model) {
 								return A3($author$project$DmTools$viewStatReader, statName, model, classProficiencySaves);
 							},
 							$author$project$DmTools$enumStatName)),
-						$author$project$DmTools$viewCharacterBaseLife(model)
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('flex-row')
+							]),
+						_List_fromArray(
+							[
+								$author$project$DmTools$viewCharacterBaseLife(model)
+							]))
 					])),
 				A2(
 				$elm$html$Html$footer,

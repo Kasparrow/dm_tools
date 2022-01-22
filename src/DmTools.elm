@@ -2,7 +2,7 @@ module DmTools exposing (main)
 
 import Html exposing (Html, div, h1, img, span, text, label, input, select, option, br, a, nav, p, footer, h3)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput, onClick)
+import Html.Events exposing (onInput, onClick, onCheck)
 import Array
 import Browser
 
@@ -13,6 +13,7 @@ type Msg
     | UpdateClass String
     | IncrementStat StatName
     | DecrementStat StatName
+    | CheckFreeStatInput Bool
 
 init: Model
 init = 
@@ -28,6 +29,7 @@ init =
     , subRace = NoSubRace
     , class = NoClass
     , remainingPoints = 27
+    , freeStatsInput = False
     }
 
 -- MODEL
@@ -157,6 +159,7 @@ type alias Model =
     , subRace: SubRace
     , class: Class
     , remainingPoints: Int
+    , freeStatsInput: Bool
     }
 
 -- VIEW
@@ -178,17 +181,21 @@ view model =
               , h3 [] [ text "Class" ]
               , viewClassInput
               , h3 [] [ text "Rolled stats" ]
+              , div [] [ label [ for "freeStatInput"] [ text "Authorize free stats" ]
+                       , input [ type_ "checkbox", id "freeStatInput", onCheck CheckFreeStatInput  ] []
+                       ]
               , div [ class "flex-row" ]
                     (List.append 
                         (List.map(\statName -> viewStatInput statName model) enumStatName) 
-                        ([viewRemainingPoints model.remainingPoints])
+                        (if model.freeStatsInput then [ Html.text "" ] else [viewValueBox "POINTS" model.remainingPoints] )
                     )
               , br [] []
               , h3 [] [ text "Computed stats" ]
               , div [ class "flex-row" ]
                     (List.map (\statName -> viewStatReader statName model classProficiencySaves) enumStatName)
                     
-              , viewCharacterBaseLife model
+              , div [ class "flex-row" ]
+                    [ viewCharacterBaseLife model ]
               ]
         , footer []
                  [ p [] [ text "/[A-Z]IKWAN/" ] ]
@@ -270,7 +277,7 @@ viewOption label =
 viewCharacterBaseLife: Model -> Html Msg
 viewCharacterBaseLife model =
     if model.class /= NoClass then
-        span [] [ text ("Base life " ++ (String.fromInt (getCharacterBaseLife model))) ]
+        viewValueBox "LIFE" (getCharacterBaseLife model)
     else
         Html.text ""
 
@@ -312,28 +319,47 @@ viewStatReader statName model proficiencySaves =
               ]
         ]
 
-viewRemainingPoints: Int -> Html Msg
-viewRemainingPoints remainingPoints =
+viewValueBox: String -> Int -> Html Msg
+viewValueBox title value =
     div [ class "stat-box" ]
-        [ span [ class "stat-box-title" ] [ text "POINTS" ]
+        [ span [ class "stat-box-title" ] [ text title ]
         , div [ class "stat-box-body" ]
-              [ span [ class "stat-box-value" ] [ text (String.fromInt remainingPoints) ]
+              [ span [ class "stat-box-value" ] [ text (String.fromInt value) ]
               ]
         ]
 
 -- UPDATE
 
-
 update: Msg -> Model -> Model
-update msg ({rolledStats} as model) =
+update msg ({rolledStats, freeStatsInput} as model) =
     let
         incrementStat: Stats -> StatName -> Stats
         incrementStat stats statName =
-            List.map (\stat -> if Tuple.first stat == statName then (statName, (Tuple.second stat + 1)) else stat) stats
+            List.map (\stat -> 
+                if Tuple.first stat == statName then 
+                    let
+                        incrementedValue = (Tuple.second stat + 1)
+                    in
+                    if freeStatsInput then
+                        (statName, incrementedValue)
+                    else 
+                        (statName, (Basics.min (Basics.max 8 incrementedValue) 15)) 
+                else stat
+            ) stats
 
         decrementStat: Stats -> StatName -> Stats
         decrementStat stats statName =
-            List.map (\stat -> if Tuple.first stat == statName then (statName, (Tuple.second stat - 1)) else stat) stats
+            List.map (\stat -> 
+                let
+                    decrementedValue = (Tuple.second stat - 1)
+                in
+                if Tuple.first stat == statName then 
+                    if freeStatsInput then
+                        (statName, decrementedValue)
+                    else 
+                        (statName, (Basics.min (Basics.max 8 decrementedValue) 15)) 
+                else stat
+            ) stats
     in
         case msg of
             IncrementStat statName -> update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats statName) }
@@ -342,6 +368,10 @@ update msg ({rolledStats} as model) =
             UpdateRace value -> { model | race = (stringToRace value), subRace = NoSubRace }
             UpdateSubRace value -> { model | subRace = (stringToSubRace value ) }
             UpdateClass value -> { model | class = (stringToClass value) }
+            CheckFreeStatInput checked ->
+                case checked of
+                    True -> { model | freeStatsInput = True }
+                    False -> update UpdateRemainingPoints { model | freeStatsInput = False }
 
 -- HELPERS
 

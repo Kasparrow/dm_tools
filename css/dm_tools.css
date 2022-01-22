@@ -113,6 +113,7 @@ nav
 .flex-row {
     display: flex;
     flex-direction: row;
+    margin-bottom: 10px;
 }
 
 .stat-box {
