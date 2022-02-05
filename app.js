@@ -4485,6 +4485,7 @@ var $author$project$DmTools$Wisdom = {$: 'Wisdom'};
 var $author$project$DmTools$init = {
 	_class: $author$project$DmTools$NoClass,
 	freeStatsInput: false,
+	level: 1,
 	race: $author$project$DmTools$NoRace,
 	remainingPoints: 27,
 	rolledStats: _List_fromArray(
@@ -5407,6 +5408,15 @@ var $author$project$DmTools$stringToSubRace = function (string) {
 			return $author$project$DmTools$NoSubRace;
 	}
 };
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
 var $author$project$DmTools$update = F2(
 	function (msg, model) {
 		update:
@@ -5498,6 +5508,16 @@ var $author$project$DmTools$update = F2(
 						{
 							_class: $author$project$DmTools$stringToClass(value)
 						});
+				case 'UpdateLevel':
+					var value = msg.a;
+					return _Utils_update(
+						model,
+						{
+							level: A2(
+								$elm$core$Maybe$withDefault,
+								1,
+								$elm$core$String$toInt(value))
+						});
 				default:
 					var checked = msg.a;
 					if (checked) {
@@ -5585,6 +5605,9 @@ var $author$project$DmTools$getClassProficiencySave = function (_class) {
 			return _List_Nil;
 	}
 };
+var $author$project$DmTools$getProficiency = function (level) {
+	return 2 + $elm$core$Basics$floor((level - 1) / 4);
+};
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$html$Html$Attributes$href = function (url) {
 	return A2(
@@ -5625,6 +5648,15 @@ var $elm$html$Html$Events$onCheck = function (tagger) {
 		A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetChecked));
 };
 var $elm$html$Html$p = _VirtualDom_node('p');
+var $elm$core$Basics$ge = _Utils_ge;
+var $author$project$DmTools$printWithSign = function (value) {
+	if (value.$ === 'Just') {
+		var _int = value.a;
+		return (_int >= 0) ? ('+' + $elm$core$String$fromInt(_int)) : $elm$core$String$fromInt(_int);
+	} else {
+		return '?';
+	}
+};
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
@@ -5667,7 +5699,6 @@ var $elm$core$Array$fromList = function (list) {
 var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
 var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
-var $elm$core$Basics$ge = _Utils_ge;
 var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
 var $elm$core$Array$getHelp = F3(
 	function (shift, index, tree) {
@@ -5949,8 +5980,7 @@ var $author$project$DmTools$viewValueBox = F2(
 								]),
 							_List_fromArray(
 								[
-									$elm$html$Html$text(
-									$elm$core$String$fromInt(value))
+									$elm$html$Html$text(value)
 								]))
 						]))
 				]));
@@ -5959,7 +5989,8 @@ var $author$project$DmTools$viewCharacterBaseLife = function (model) {
 	return (!_Utils_eq(model._class, $author$project$DmTools$NoClass)) ? A2(
 		$author$project$DmTools$viewValueBox,
 		'LIFE',
-		$author$project$DmTools$getCharacterBaseLife(model)) : $elm$html$Html$text('');
+		$elm$core$String$fromInt(
+			$author$project$DmTools$getCharacterBaseLife(model))) : $elm$html$Html$text('');
 };
 var $author$project$DmTools$UpdateClass = function (a) {
 	return {$: 'UpdateClass', a: a};
@@ -6071,6 +6102,32 @@ var $author$project$DmTools$viewClassInput = A2(
 			$elm$html$Html$Events$onInput($author$project$DmTools$UpdateClass)
 		]),
 	A2($elm$core$List$map, $author$project$DmTools$viewClassOption, $author$project$DmTools$enumClass));
+var $author$project$DmTools$UpdateLevel = function (a) {
+	return {$: 'UpdateLevel', a: a};
+};
+var $author$project$DmTools$viewLevelInput = A2(
+	$elm$html$Html$select,
+	_List_fromArray(
+		[
+			$elm$html$Html$Events$onInput($author$project$DmTools$UpdateLevel)
+		]),
+	A2(
+		$elm$core$List$map,
+		function (level) {
+			return A2(
+				$elm$html$Html$option,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$value(
+						$elm$core$String$fromInt(level))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$elm$core$String$fromInt(level))
+					]));
+		},
+		A2($elm$core$List$range, 1, 20)));
 var $author$project$DmTools$UpdateRace = function (a) {
 	return {$: 'UpdateRace', a: a};
 };
@@ -6157,14 +6214,6 @@ var $author$project$DmTools$enumSkills = _List_fromArray(
 	]);
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $elm$html$Html$li = _VirtualDom_node('li');
-var $author$project$DmTools$printWithSign = function (value) {
-	if (value.$ === 'Just') {
-		var _int = value.a;
-		return (_int >= 0) ? ('+' + $elm$core$String$fromInt(_int)) : $elm$core$String$fromInt(_int);
-	} else {
-		return '?';
-	}
-};
 var $author$project$DmTools$skillNameToString = function (skillName) {
 	switch (skillName.$) {
 		case 'Acrobatics':
@@ -6227,15 +6276,16 @@ var $author$project$DmTools$viewSkill = F2(
 	function (model, skill) {
 		var skillName = $author$project$DmTools$skillNameToString(skill.a);
 		var associatedStat = skill.b;
+		var associatedStatName = $author$project$DmTools$statNameToString(associatedStat);
 		var associatedStatValue = A2($author$project$DmTools$getFinalStatValue, model, associatedStat);
+		var modifier = $author$project$DmTools$printWithSign(
+			$author$project$DmTools$computeModifier(associatedStatValue));
 		return A2(
 			$elm$html$Html$li,
 			_List_Nil,
 			_List_fromArray(
 				[
-					$elm$html$Html$text(
-					skillName + (' (' + ($author$project$DmTools$statNameToString(associatedStat) + (') : ' + $author$project$DmTools$printWithSign(
-						$author$project$DmTools$computeModifier(associatedStatValue))))))
+					$elm$html$Html$text(skillName + (' (' + (associatedStatName + (') : ' + modifier))))
 				]));
 	});
 var $author$project$DmTools$viewSkills = function (model) {
@@ -6590,6 +6640,14 @@ var $author$project$DmTools$view = function (model) {
 						_List_Nil,
 						_List_fromArray(
 							[
+								$elm$html$Html$text('Level')
+							])),
+						$author$project$DmTools$viewLevelInput,
+						A2(
+						$elm$html$Html$h3,
+						_List_Nil,
+						_List_fromArray(
+							[
 								$elm$html$Html$text('Rolled stats')
 							])),
 						A2(
@@ -6636,7 +6694,10 @@ var $author$project$DmTools$view = function (model) {
 									$elm$html$Html$text('')
 								]) : _List_fromArray(
 								[
-									A2($author$project$DmTools$viewValueBox, 'POINTS', model.remainingPoints)
+									A2(
+									$author$project$DmTools$viewValueBox,
+									'POINTS',
+									$elm$core$String$fromInt(model.remainingPoints))
 								]))),
 						A2($elm$html$Html$br, _List_Nil, _List_Nil),
 						A2(
@@ -6653,11 +6714,22 @@ var $author$project$DmTools$view = function (model) {
 								$elm$html$Html$Attributes$class('flex-row')
 							]),
 						A2(
-							$elm$core$List$map,
-							function (statName) {
-								return A3($author$project$DmTools$viewStatReader, statName, model, classProficiencySaves);
-							},
-							$author$project$DmTools$enumStatName)),
+							$elm$core$List$append,
+							A2(
+								$elm$core$List$map,
+								function (statName) {
+									return A3($author$project$DmTools$viewStatReader, statName, model, classProficiencySaves);
+								},
+								$author$project$DmTools$enumStatName),
+							_List_fromArray(
+								[
+									A2(
+									$author$project$DmTools$viewValueBox,
+									'PRO',
+									$author$project$DmTools$printWithSign(
+										$elm$core$Maybe$Just(
+											$author$project$DmTools$getProficiency(model.level))))
+								]))),
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(

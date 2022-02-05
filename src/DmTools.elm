@@ -11,6 +11,7 @@ type Msg
     | UpdateRace String
     | UpdateSubRace String
     | UpdateClass String
+    | UpdateLevel String
     | IncrementStat StatName
     | DecrementStat StatName
     | CheckFreeStatInput Bool
@@ -30,6 +31,7 @@ init =
     , class = NoClass
     , remainingPoints = 27
     , freeStatsInput = False
+    , level = 1
     }
 
 -- MODEL
@@ -205,6 +207,7 @@ type alias Model =
     , class: Class
     , remainingPoints: Int
     , freeStatsInput: Bool
+    , level: Int
     }
 
 -- VIEW
@@ -225,6 +228,8 @@ view model =
               , viewSubRaceInput model.race
               , h3 [] [ text "Class" ]
               , viewClassInput
+              , h3 [] [ text "Level" ]
+              , viewLevelInput
               , h3 [] [ text "Rolled stats" ]
               , div [] [ label [ for "freeStatInput"] [ text "Authorize free stats" ]
                        , input [ type_ "checkbox", id "freeStatInput", onCheck CheckFreeStatInput  ] []
@@ -232,12 +237,15 @@ view model =
               , div [ class "flex-row" ]
                     (List.append 
                         (List.map(\statName -> viewStatInput statName model) enumStatName) 
-                        (if model.freeStatsInput then [ Html.text "" ] else [viewValueBox "POINTS" model.remainingPoints] )
+                        (if model.freeStatsInput then [ Html.text "" ] else [viewValueBox "POINTS" (String.fromInt model.remainingPoints)] )
                     )
               , br [] []
               , h3 [] [ text "Computed stats" ]
               , div [ class "flex-row" ]
-                    (List.map (\statName -> viewStatReader statName model classProficiencySaves) enumStatName)
+                    (List.append
+                        (List.map (\statName -> viewStatReader statName model classProficiencySaves) enumStatName)
+                        [viewValueBox "PRO" (printWithSign (Just (getProficiency model.level)))]
+                    )
                     
               , div [ class "flex-row" ]
                     [ viewCharacterBaseLife model ]
@@ -275,6 +283,10 @@ viewSubRaceInput currentRace =
 
 viewClassInput =
     select [ onInput UpdateClass ] (List.map viewClassOption enumClass)
+
+viewLevelInput =
+    select [ onInput UpdateLevel ] (List.map (\level -> option [ value (String.fromInt level)] [ text (String.fromInt level) ]) (List.range 1 20))
+
 
 viewClassOption class =
     case class of
@@ -323,7 +335,7 @@ viewOption label =
 viewCharacterBaseLife: Model -> Html Msg
 viewCharacterBaseLife model =
     if model.class /= NoClass then
-        viewValueBox "LIFE" (getCharacterBaseLife model)
+        viewValueBox "LIFE" (String.fromInt (getCharacterBaseLife model))
     else
         Html.text ""
 
@@ -365,12 +377,12 @@ viewStatReader statName model proficiencySaves =
               ]
         ]
 
-viewValueBox: String -> Int -> Html Msg
+viewValueBox: String -> String -> Html Msg
 viewValueBox title value =
     div [ class "stat-box" ]
         [ span [ class "stat-box-title" ] [ text title ]
         , div [ class "stat-box-body" ]
-              [ span [ class "stat-box-value" ] [ text (String.fromInt value) ]
+              [ span [ class "stat-box-value" ] [ text value ]
               ]
         ]
 
@@ -385,9 +397,11 @@ viewSkill model skill =
         skillName = skillNameToString (Tuple.first skill)
         associatedStat = Tuple.second skill
         associatedStatValue = getFinalStatValue model associatedStat
+        associatedStatName = statNameToString associatedStat
+        modifier = printWithSign (computeModifier associatedStatValue )
 
     in
-    li [] [ text (skillName ++ " (" ++ (statNameToString associatedStat) ++ ") : " ++ (printWithSign (computeModifier associatedStatValue)) ) ]
+    li [] [ text (skillName ++ " (" ++ associatedStatName  ++ ") : " ++ modifier ) ]
 
 -- UPDATE
 
@@ -429,6 +443,7 @@ update msg ({rolledStats, freeStatsInput} as model) =
             UpdateRace value -> { model | race = (stringToRace value), subRace = NoSubRace }
             UpdateSubRace value -> { model | subRace = (stringToSubRace value ) }
             UpdateClass value -> { model | class = (stringToClass value) }
+            UpdateLevel value -> { model | level = (Maybe.withDefault 1 (String.toInt value)) } 
             CheckFreeStatInput checked ->
                 case checked of
                     True -> { model | freeStatsInput = True }
@@ -478,6 +493,11 @@ computeModifier value =
         modifiers = (Array.fromList [-5, -5, -4, -4, -3, -3, -2, -2, -1, -1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10 ])
     in
     Array.get value modifiers
+
+getProficiency: Int -> Int
+getProficiency level =
+    2 + (Basics.floor (toFloat (level - 1) / 4))
+
 
 statNameToString: StatName -> String
 statNameToString statName =
