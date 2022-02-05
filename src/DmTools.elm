@@ -1,6 +1,6 @@
 module DmTools exposing (main)
 
-import Html exposing (Html, div, h1, img, span, text, label, input, select, option, br, a, nav, p, footer, h3)
+import Html exposing (Html, div, h1, img, span, text, label, input, select, option, br, a, nav, p, footer, h3, ul, li)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick, onCheck)
 import Array
@@ -131,6 +131,51 @@ enumClass =
     , Wizard
     ]
 
+type SkillName
+    = Acrobatics
+    | AnimalHandling
+    | Arcana
+    | Athletics
+    | Deception
+    | History
+    | Insight
+    | Intimidation
+    | Investigation
+    | Medicine
+    | Nature
+    | Perception
+    | Performance
+    | Persuasion
+    | Religion
+    | SleightOfHand
+    | Stealth
+    | Survival
+    | NoSkill
+
+type alias Skill = (SkillName, StatName)
+type alias Skills = List Stat
+
+enumSkills = 
+    [ (Acrobatics, Dexterity)
+    , (AnimalHandling, Wisdom)
+    , (Arcana, Intelligence)
+    , (Athletics, Strength)
+    , (Deception, Charisma)
+    , (History, Intelligence)
+    , (Insight, Wisdom)
+    , (Intimidation, Charisma)
+    , (Investigation, Intelligence)
+    , (Medicine, Wisdom)
+    , (Nature, Intelligence)
+    , (Perception, Wisdom)
+    , (Performance, Charisma)
+    , (Persuasion, Charisma)
+    , (Religion, Intelligence)
+    , (SleightOfHand, Dexterity)
+    , (Stealth, Dexterity)
+    , (Survival, Wisdom)
+    ]
+
 getSubRaces: Race -> List SubRace
 getSubRaces race =
     case race of
@@ -196,6 +241,7 @@ view model =
                     
               , div [ class "flex-row" ]
                     [ viewCharacterBaseLife model ]
+              , div [] [ viewSkills model ]
               ]
         , footer []
                  [ p [] [ text "/[A-Z]IKWAN/" ] ]
@@ -327,6 +373,21 @@ viewValueBox title value =
               [ span [ class "stat-box-value" ] [ text (String.fromInt value) ]
               ]
         ]
+
+viewSkills: Model -> Html Msg
+viewSkills model =
+    ul []
+       (List.map (\skill -> (viewSkill model skill)) enumSkills)
+
+viewSkill: Model -> Skill -> Html Msg
+viewSkill model skill =
+    let
+        skillName = skillNameToString (Tuple.first skill)
+        associatedStat = Tuple.second skill
+        associatedStatValue = getFinalStatValue model associatedStat
+
+    in
+    li [] [ text (skillName ++ " (" ++ (statNameToString associatedStat) ++ ") : " ++ (printWithSign (computeModifier associatedStatValue)) ) ]
 
 -- UPDATE
 
@@ -520,6 +581,53 @@ stringToClass string =
         "Warlock" -> Warlock
         "Wizard" -> Wizard
         _ -> NoClass
+
+skillNameToString: SkillName -> String
+skillNameToString skillName =
+    case skillName of
+        Acrobatics -> "Acrobatics"
+        AnimalHandling -> "AnimalHandling"
+        Arcana -> "Arcana"
+        Athletics -> "Athletics"
+        Deception -> "Deception"
+        History -> "History"
+        Insight -> "Insight"
+        Intimidation -> "Intimidation"
+        Investigation -> "Investigation"
+        Medicine -> "Medicine"
+        Nature -> "Nature"
+        Perception -> "Perception"
+        Performance -> "Performance"
+        Persuasion -> "Persuasion"
+        Religion -> "Religion"
+        SleightOfHand -> "SleightOfHand"
+        Stealth -> "Stealth"
+        Survival -> "Survival"
+        NoSkill -> "Unknown skill"
+
+stringToSkillName: String -> SkillName
+stringToSkillName str =
+    case str of
+        "Acrobatics" -> Acrobatics
+        "AnimalHandling" -> AnimalHandling
+        "Arcana" -> Arcana
+        "Athletics" -> Athletics
+        "Deception" -> Deception
+        "History" -> History
+        "Insight" -> Insight
+        "Intimidation" -> Intimidation
+        "Investigation" -> Investigation
+        "Medicine" -> Medicine
+        "Nature" -> Nature
+        "Perception" -> Perception
+        "Performance" -> Performance
+        "Persuasion" -> Persuasion
+        "Religion" -> Religion
+        "SleightOfHand" -> SleightOfHand
+        "Stealth" -> Stealth
+        "Survival" -> Survival
+        _ -> NoSkill
+
 
 getRaceBonus: Race -> Stats
 getRaceBonus race =

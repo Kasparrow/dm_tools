@@ -6116,17 +6116,96 @@ var $author$project$DmTools$viewRaceInput = A2(
 			$elm$html$Html$Events$onInput($author$project$DmTools$UpdateRace)
 		]),
 	A2($elm$core$List$map, $author$project$DmTools$viewRaceOption, $author$project$DmTools$enumRace));
-var $author$project$DmTools$DecrementStat = function (a) {
-	return {$: 'DecrementStat', a: a};
+var $author$project$DmTools$Acrobatics = {$: 'Acrobatics'};
+var $author$project$DmTools$AnimalHandling = {$: 'AnimalHandling'};
+var $author$project$DmTools$Arcana = {$: 'Arcana'};
+var $author$project$DmTools$Athletics = {$: 'Athletics'};
+var $author$project$DmTools$Deception = {$: 'Deception'};
+var $author$project$DmTools$History = {$: 'History'};
+var $author$project$DmTools$Insight = {$: 'Insight'};
+var $author$project$DmTools$Intimidation = {$: 'Intimidation'};
+var $author$project$DmTools$Investigation = {$: 'Investigation'};
+var $author$project$DmTools$Medicine = {$: 'Medicine'};
+var $author$project$DmTools$Nature = {$: 'Nature'};
+var $author$project$DmTools$Perception = {$: 'Perception'};
+var $author$project$DmTools$Performance = {$: 'Performance'};
+var $author$project$DmTools$Persuasion = {$: 'Persuasion'};
+var $author$project$DmTools$Religion = {$: 'Religion'};
+var $author$project$DmTools$SleightOfHand = {$: 'SleightOfHand'};
+var $author$project$DmTools$Stealth = {$: 'Stealth'};
+var $author$project$DmTools$Survival = {$: 'Survival'};
+var $author$project$DmTools$enumSkills = _List_fromArray(
+	[
+		_Utils_Tuple2($author$project$DmTools$Acrobatics, $author$project$DmTools$Dexterity),
+		_Utils_Tuple2($author$project$DmTools$AnimalHandling, $author$project$DmTools$Wisdom),
+		_Utils_Tuple2($author$project$DmTools$Arcana, $author$project$DmTools$Intelligence),
+		_Utils_Tuple2($author$project$DmTools$Athletics, $author$project$DmTools$Strength),
+		_Utils_Tuple2($author$project$DmTools$Deception, $author$project$DmTools$Charisma),
+		_Utils_Tuple2($author$project$DmTools$History, $author$project$DmTools$Intelligence),
+		_Utils_Tuple2($author$project$DmTools$Insight, $author$project$DmTools$Wisdom),
+		_Utils_Tuple2($author$project$DmTools$Intimidation, $author$project$DmTools$Charisma),
+		_Utils_Tuple2($author$project$DmTools$Investigation, $author$project$DmTools$Intelligence),
+		_Utils_Tuple2($author$project$DmTools$Medicine, $author$project$DmTools$Wisdom),
+		_Utils_Tuple2($author$project$DmTools$Nature, $author$project$DmTools$Intelligence),
+		_Utils_Tuple2($author$project$DmTools$Perception, $author$project$DmTools$Wisdom),
+		_Utils_Tuple2($author$project$DmTools$Performance, $author$project$DmTools$Charisma),
+		_Utils_Tuple2($author$project$DmTools$Persuasion, $author$project$DmTools$Charisma),
+		_Utils_Tuple2($author$project$DmTools$Religion, $author$project$DmTools$Intelligence),
+		_Utils_Tuple2($author$project$DmTools$SleightOfHand, $author$project$DmTools$Dexterity),
+		_Utils_Tuple2($author$project$DmTools$Stealth, $author$project$DmTools$Dexterity),
+		_Utils_Tuple2($author$project$DmTools$Survival, $author$project$DmTools$Wisdom)
+	]);
+var $elm$html$Html$ul = _VirtualDom_node('ul');
+var $elm$html$Html$li = _VirtualDom_node('li');
+var $author$project$DmTools$printWithSign = function (value) {
+	if (value.$ === 'Just') {
+		var _int = value.a;
+		return (_int >= 0) ? ('+' + $elm$core$String$fromInt(_int)) : $elm$core$String$fromInt(_int);
+	} else {
+		return '?';
+	}
 };
-var $author$project$DmTools$IncrementStat = function (a) {
-	return {$: 'IncrementStat', a: a};
-};
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
+var $author$project$DmTools$skillNameToString = function (skillName) {
+	switch (skillName.$) {
+		case 'Acrobatics':
+			return 'Acrobatics';
+		case 'AnimalHandling':
+			return 'AnimalHandling';
+		case 'Arcana':
+			return 'Arcana';
+		case 'Athletics':
+			return 'Athletics';
+		case 'Deception':
+			return 'Deception';
+		case 'History':
+			return 'History';
+		case 'Insight':
+			return 'Insight';
+		case 'Intimidation':
+			return 'Intimidation';
+		case 'Investigation':
+			return 'Investigation';
+		case 'Medicine':
+			return 'Medicine';
+		case 'Nature':
+			return 'Nature';
+		case 'Perception':
+			return 'Perception';
+		case 'Performance':
+			return 'Performance';
+		case 'Persuasion':
+			return 'Persuasion';
+		case 'Religion':
+			return 'Religion';
+		case 'SleightOfHand':
+			return 'SleightOfHand';
+		case 'Stealth':
+			return 'Stealth';
+		case 'Survival':
+			return 'Survival';
+		default:
+			return 'Unknown skill';
+	}
 };
 var $author$project$DmTools$statNameToString = function (statName) {
 	switch (statName.$) {
@@ -6143,6 +6222,44 @@ var $author$project$DmTools$statNameToString = function (statName) {
 		default:
 			return 'CHA';
 	}
+};
+var $author$project$DmTools$viewSkill = F2(
+	function (model, skill) {
+		var skillName = $author$project$DmTools$skillNameToString(skill.a);
+		var associatedStat = skill.b;
+		var associatedStatValue = A2($author$project$DmTools$getFinalStatValue, model, associatedStat);
+		return A2(
+			$elm$html$Html$li,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text(
+					skillName + (' (' + ($author$project$DmTools$statNameToString(associatedStat) + (') : ' + $author$project$DmTools$printWithSign(
+						$author$project$DmTools$computeModifier(associatedStatValue))))))
+				]));
+	});
+var $author$project$DmTools$viewSkills = function (model) {
+	return A2(
+		$elm$html$Html$ul,
+		_List_Nil,
+		A2(
+			$elm$core$List$map,
+			function (skill) {
+				return A2($author$project$DmTools$viewSkill, model, skill);
+			},
+			$author$project$DmTools$enumSkills));
+};
+var $author$project$DmTools$DecrementStat = function (a) {
+	return {$: 'DecrementStat', a: a};
+};
+var $author$project$DmTools$IncrementStat = function (a) {
+	return {$: 'IncrementStat', a: a};
+};
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
 };
 var $author$project$DmTools$viewStatInput = F2(
 	function (statName, model) {
@@ -6249,14 +6366,6 @@ var $elm$core$List$member = F2(
 			},
 			xs);
 	});
-var $author$project$DmTools$printWithSign = function (value) {
-	if (value.$ === 'Just') {
-		var _int = value.a;
-		return (_int >= 0) ? ('+' + $elm$core$String$fromInt(_int)) : $elm$core$String$fromInt(_int);
-	} else {
-		return '?';
-	}
-};
 var $author$project$DmTools$viewStatReader = F3(
 	function (statName, model, proficiencySaves) {
 		var value = A2($author$project$DmTools$getFinalStatValue, model, statName);
@@ -6558,6 +6667,13 @@ var $author$project$DmTools$view = function (model) {
 						_List_fromArray(
 							[
 								$author$project$DmTools$viewCharacterBaseLife(model)
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$author$project$DmTools$viewSkills(model)
 							]))
 					])),
 				A2(
