@@ -244,12 +244,15 @@ view model =
               , div [ class "flex-row" ]
                     (List.append
                         (List.map (\statName -> viewStatReader statName model classProficiencySaves) enumStatName)
-                        [viewValueBox "PRO" (printWithSign (Just (getProficiency model.level)))]
+                        [viewValueBox "PRO" (printWithSign (getProficiency model.level))]
                     )
                     
               , div [ class "flex-row" ]
                     [ viewCharacterBaseLife model ]
-              , div [] [ viewSkills model ]
+              , div [ class "flex-row" ] 
+                    [ viewSavingThrows model classProficiencySaves
+                    , viewSkills model
+                    ]
               ]
         , footer []
                  [ p [] [ text "/[A-Z]IKWAN/" ] ]
@@ -391,6 +394,22 @@ viewSkills model =
     ul []
        (List.map (\skill -> (viewSkill model skill)) enumSkills)
 
+viewSavingThrows: Model -> List StatName -> Html Msg
+viewSavingThrows model classProficiencySaves =
+    ul []
+       (List.map (\stat -> (viewSavingThrow model stat classProficiencySaves)) enumStatName)
+
+viewSavingThrow: Model -> StatName -> List StatName -> Html Msg
+viewSavingThrow model statName classProficiencySaves =
+    let
+        associatedStatValue = getFinalStatValue model statName
+        hasProficiencySave = List.member statName classProficiencySaves
+        value = getFinalStatValue model statName 
+        proficiencyBonus = if hasProficiencySave then 2 else 0
+        modifier = printWithSign ((computeModifier value) + proficiencyBonus)
+    in
+    li [] [ text (statNameToString statName ++ " : " ++ modifier) ]
+
 viewSkill: Model -> Skill -> Html Msg
 viewSkill model skill =
     let
@@ -470,29 +489,22 @@ getStatValue stats statName =
         Just stat -> Tuple.second stat
         Nothing -> 0
 
-printWithSign: Maybe Int -> String
+printWithSign: Int -> String
 printWithSign value =
-    case value of
-        Just int ->
-            if int >= 0 then
-                "+" ++ (String.fromInt int)
-            else
-                String.fromInt int
-        Nothing ->
-            "?"
+    if value >= 0 then
+        "+" ++ (String.fromInt value)
+    else
+        String.fromInt value
 
 
 computeRemainingPoints: Stats -> Int
 computeRemainingPoints stats =
     List.sum (List.map (\stat -> computeStatCost (Tuple.second stat)) stats)
 
-computeModifier: Int -> Maybe Int
+computeModifier: Int -> Int
 computeModifier value =
-    let
-        modifiers: Array.Array Int
-        modifiers = (Array.fromList [-5, -5, -4, -4, -3, -3, -2, -2, -1, -1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10 ])
-    in
-    Array.get value modifiers
+    Basics.floor (toFloat (value - 10) / 2)
+
 
 getProficiency: Int -> Int
 getProficiency level =
@@ -707,23 +719,20 @@ getCharacterBaseLife model =
         constitutionModifier = computeModifier (getFinalStatValue model Constitution)
     in
 
-    case constitutionModifier of
-        Just value ->
-            case model.class of
-                Barbarian -> 12 + value
-                Bard -> 8 + value
-                Cleric -> 8 + value
-                Druid -> 8 + value
-                Fighter -> 10 + value
-                Monk -> 8 + value
-                Paladin -> 10 + value
-                Ranger -> 10 + value
-                Rogue -> 8 + value
-                Sorcerer -> 8 + value
-                Warlock -> 6 + value
-                Wizard -> 6 + value
-                NoClass -> 0 + value
-        Nothing -> 0
+    case model.class of
+        Barbarian -> 12 + constitutionModifier
+        Bard -> 8 + constitutionModifier
+        Cleric -> 8 + constitutionModifier
+        Druid -> 8 + constitutionModifier
+        Fighter -> 10 + constitutionModifier
+        Monk -> 8 + constitutionModifier
+        Paladin -> 10 + constitutionModifier
+        Ranger -> 10 + constitutionModifier
+        Rogue -> 8 + constitutionModifier
+        Sorcerer -> 8 + constitutionModifier
+        Warlock -> 6 + constitutionModifier
+        Wizard -> 6 + constitutionModifier
+        NoClass -> 0 + constitutionModifier
 
 computeStatCost: Int -> Int
 computeStatCost value =
