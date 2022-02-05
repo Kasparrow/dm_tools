@@ -123,6 +123,7 @@ type Class
 enumClass =
     [ NoClass
     , Barbarian
+    , Bard
     , Cleric
     , Druid
     , Fighter

@@ -5900,7 +5900,7 @@ var $author$project$DmTools$UpdateClass = function (a) {
 };
 var $author$project$DmTools$Sorcerer = {$: 'Sorcerer'};
 var $author$project$DmTools$enumClass = _List_fromArray(
-	[$author$project$DmTools$NoClass, $author$project$DmTools$Barbarian, $author$project$DmTools$Cleric, $author$project$DmTools$Druid, $author$project$DmTools$Fighter, $author$project$DmTools$Monk, $author$project$DmTools$Paladin, $author$project$DmTools$Ranger, $author$project$DmTools$Rogue, $author$project$DmTools$Sorcerer, $author$project$DmTools$Warlock, $author$project$DmTools$Wizard]);
+	[$author$project$DmTools$NoClass, $author$project$DmTools$Barbarian, $author$project$DmTools$Bard, $author$project$DmTools$Cleric, $author$project$DmTools$Druid, $author$project$DmTools$Fighter, $author$project$DmTools$Monk, $author$project$DmTools$Paladin, $author$project$DmTools$Ranger, $author$project$DmTools$Rogue, $author$project$DmTools$Sorcerer, $author$project$DmTools$Warlock, $author$project$DmTools$Wizard]);
 var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
