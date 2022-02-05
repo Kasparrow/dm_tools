@@ -1,8 +1,8 @@
 module DmTools exposing (main)
 
-import Html exposing (Html, div, h1, img, span, text, label, input, select, option, br, a, nav, p, footer, h3, ul, li)
+import Html exposing (Html, div, h1, img, span, text, label, input, select, option, br, a, nav, p, footer, h3, h4, ul, li)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput, onClick, onCheck)
+import Html.Events exposing (onInput, onClick, onCheck, on)
 import Array
 import Browser
 
@@ -15,6 +15,7 @@ type Msg
     | IncrementStat StatName
     | DecrementStat StatName
     | CheckFreeStatInput Bool
+    | CheckProficiencySkill SkillName Bool 
 
 init: Model
 init = 
@@ -32,6 +33,7 @@ init =
     , remainingPoints = 27
     , freeStatsInput = False
     , level = 1
+    , selectedProficiencySkills = []
     }
 
 -- MODEL
@@ -208,6 +210,7 @@ type alias Model =
     , remainingPoints: Int
     , freeStatsInput: Bool
     , level: Int
+    , selectedProficiencySkills: List SkillName
     }
 
 -- VIEW
@@ -244,7 +247,7 @@ view model =
               , div [ class "flex-row" ]
                     (List.append
                         (List.map (\statName -> viewStatReader statName model classProficiencySaves) enumStatName)
-                        [viewValueBox "PRO" (printWithSign (getProficiency model.level))]
+                        [viewValueBox "PRO" (printWithSign (computeProficiency model.level))]
                     )
                     
               , div [ class "flex-row" ]
@@ -391,13 +394,43 @@ viewValueBox title value =
 
 viewSkills: Model -> Html Msg
 viewSkills model =
-    ul []
-       (List.map (\skill -> (viewSkill model skill)) enumSkills)
+    let 
+        classProficiencySkills = getClassProficiencySkills model.class
+        classProficiencySkillsLimit = getClassProficiencySkillsLimit model.class
+        reachProficiencySkillsLimit = (List.length model.selectedProficiencySkills)>= classProficiencySkillsLimit 
+    in
+    div [ class "margin-right" ]
+        [ h4 [] [text "Skills" ]
+        , ul []
+             (List.map (\skill -> (viewSkill model skill classProficiencySkills reachProficiencySkillsLimit)) enumSkills)
+        ]
+
+viewSkill: Model -> Skill -> List SkillName -> Bool -> Html Msg
+viewSkill model skill classProficiencySkills reachProficiencySkillsLimit =
+    let
+        skillName = Tuple.first skill
+        skillNameStr = skillNameToString skillName
+        associatedStat = Tuple.second skill
+        associatedStatValue = getFinalStatValue model associatedStat
+        associatedStatName = statNameToString associatedStat
+        hasClassProficiencySkill = List.member skillName classProficiencySkills
+        hasSelectedProficiencySkill = List.member skillName model.selectedProficiencySkills
+        proficiencyBonus = if hasSelectedProficiencySkill then (computeProficiency model.level) else 0
+        modifier = printWithSign ((computeModifier associatedStatValue) + proficiencyBonus)
+        disableCheckbox = (not hasSelectedProficiencySkill && (not hasClassProficiencySkill || reachProficiencySkillsLimit))
+    in
+    li [] 
+       [ input [ type_ "checkbox", disabled disableCheckbox, onCheck (CheckProficiencySkill skillName), checked hasSelectedProficiencySkill] []
+       , text (skillNameStr ++ " (" ++ associatedStatName  ++ ") : " ++ modifier )
+       ]
 
 viewSavingThrows: Model -> List StatName -> Html Msg
 viewSavingThrows model classProficiencySaves =
-    ul []
-       (List.map (\stat -> (viewSavingThrow model stat classProficiencySaves)) enumStatName)
+    div [ class "margin-right" ]
+        [ h4  [] [ text "Saving throw" ]
+        , ul []
+             (List.map (\stat -> (viewSavingThrow model stat classProficiencySaves)) enumStatName)
+        ]
 
 viewSavingThrow: Model -> StatName -> List StatName -> Html Msg
 viewSavingThrow model statName classProficiencySaves =
@@ -405,27 +438,15 @@ viewSavingThrow model statName classProficiencySaves =
         associatedStatValue = getFinalStatValue model statName
         hasProficiencySave = List.member statName classProficiencySaves
         value = getFinalStatValue model statName 
-        proficiencyBonus = if hasProficiencySave then 2 else 0
+        proficiencyBonus = if hasProficiencySave then (computeProficiency model.level) else 0
         modifier = printWithSign ((computeModifier value) + proficiencyBonus)
     in
     li [] [ text (statNameToString statName ++ " : " ++ modifier) ]
 
-viewSkill: Model -> Skill -> Html Msg
-viewSkill model skill =
-    let
-        skillName = skillNameToString (Tuple.first skill)
-        associatedStat = Tuple.second skill
-        associatedStatValue = getFinalStatValue model associatedStat
-        associatedStatName = statNameToString associatedStat
-        modifier = printWithSign (computeModifier associatedStatValue )
-
-    in
-    li [] [ text (skillName ++ " (" ++ associatedStatName  ++ ") : " ++ modifier ) ]
-
 -- UPDATE
 
 update: Msg -> Model -> Model
-update msg ({rolledStats, freeStatsInput} as model) =
+update msg ({ rolledStats, freeStatsInput, selectedProficiencySkills } as model) =
     let
         incrementStat: Stats -> StatName -> Stats
         incrementStat stats statName =
@@ -454,6 +475,14 @@ update msg ({rolledStats, freeStatsInput} as model) =
                         (statName, (Basics.min (Basics.max 8 decrementedValue) 15)) 
                 else stat
             ) stats
+
+        pushSelectedProficiencySkill: List SkillName -> SkillName -> List SkillName
+        pushSelectedProficiencySkill selectedSkillNames skillName =
+            skillName :: selectedSkillNames
+
+        removeSelectedProficiencySkill: List SkillName -> SkillName -> List SkillName
+        removeSelectedProficiencySkill selectedSkillNames skillName =
+            List.filter (\selectedSkillName -> selectedSkillName /= skillName) selectedSkillNames
     in
         case msg of
             IncrementStat statName -> update UpdateRemainingPoints { model | rolledStats = (incrementStat rolledStats statName) }
@@ -461,12 +490,16 @@ update msg ({rolledStats, freeStatsInput} as model) =
             UpdateRemainingPoints -> { model | remainingPoints = (27 - (computeRemainingPoints model.rolledStats)) }
             UpdateRace value -> { model | race = (stringToRace value), subRace = NoSubRace }
             UpdateSubRace value -> { model | subRace = (stringToSubRace value ) }
-            UpdateClass value -> { model | class = (stringToClass value) }
+            UpdateClass value -> { model | class = (stringToClass value), selectedProficiencySkills = [] }
             UpdateLevel value -> { model | level = (Maybe.withDefault 1 (String.toInt value)) } 
             CheckFreeStatInput checked ->
                 case checked of
                     True -> { model | freeStatsInput = True }
                     False -> update UpdateRemainingPoints { model | freeStatsInput = False }
+            CheckProficiencySkill skill checked ->
+                case checked of
+                    True -> { model | selectedProficiencySkills = pushSelectedProficiencySkill selectedProficiencySkills skill }
+                    False -> { model | selectedProficiencySkills = removeSelectedProficiencySkill selectedProficiencySkills skill }
 
 -- HELPERS
 
@@ -506,8 +539,8 @@ computeModifier value =
     Basics.floor (toFloat (value - 10) / 2)
 
 
-getProficiency: Int -> Int
-getProficiency level =
+computeProficiency: Int -> Int
+computeProficiency level =
     2 + (Basics.floor (toFloat (level - 1) / 4))
 
 
@@ -712,6 +745,31 @@ getClassProficiencySave class =
         Warlock -> [ Wisdom, Charisma ]
         Wizard -> [ Intelligence, Wisdom ]
         NoClass -> []
+
+getClassProficiencySkills: Class -> List SkillName
+getClassProficiencySkills class =
+    case class of
+        Barbarian -> [ AnimalHandling, Athletics, Intimidation, Nature, Perception, Survival ]
+        Bard -> List.map (\skill -> Tuple.first skill) enumSkills
+        Cleric -> [ History, Insight, Medicine, Persuasion, Religion ]
+        Druid -> [ Arcana, AnimalHandling, Insight, Medicine, Nature, Perception, Religion, Survival ]
+        Fighter -> [ Acrobatics, AnimalHandling, Athletics, History, Insight, Intimidation, Perception, Survival ]
+        Monk -> [ Acrobatics, Athletics, History, Insight, Religion, Stealth ]
+        Paladin -> [ Athletics, Insight, Intimidation, Medicine, Persuasion ]
+        Ranger -> [ AnimalHandling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Survival ]
+        Rogue -> [ Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, SleightOfHand, Stealth ]
+        Sorcerer -> [ Arcana, Deception, Insight, Intimidation, Persuasion ]
+        Warlock -> [ Arcana, Deception, History, Intimidation, Investigation, Nature, Religion ]
+        Wizard -> [ Arcana, History, Insight, Investigation, Medicine, Religion ]
+        NoClass -> []
+
+getClassProficiencySkillsLimit: Class -> Int
+getClassProficiencySkillsLimit class =
+    case class of
+        Rogue -> 4
+        Bard -> 3
+        NoClass -> 0
+        _ -> 2
 
 getCharacterBaseLife: Model -> Int
 getCharacterBaseLife model =

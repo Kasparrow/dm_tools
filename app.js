@@ -4460,6 +4460,7 @@ var $author$project$DmTools$init = {
 			_Utils_Tuple2($author$project$DmTools$Wisdom, 8),
 			_Utils_Tuple2($author$project$DmTools$Charisma, 8)
 		]),
+	selectedProficiencySkills: _List_Nil,
 	subRace: $author$project$DmTools$NoSubRace
 };
 var $elm$core$Result$Err = function (a) {
@@ -5230,10 +5231,22 @@ var $author$project$DmTools$computeRemainingPoints = function (stats) {
 			},
 			stats));
 };
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
 var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
+var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$DmTools$Barbarian = {$: 'Barbarian'};
 var $author$project$DmTools$Bard = {$: 'Bard'};
 var $author$project$DmTools$Cleric = {$: 'Cleric'};
@@ -5386,6 +5399,20 @@ var $author$project$DmTools$update = F2(
 		while (true) {
 			var rolledStats = model.rolledStats;
 			var freeStatsInput = model.freeStatsInput;
+			var selectedProficiencySkills = model.selectedProficiencySkills;
+			var removeSelectedProficiencySkill = F2(
+				function (selectedSkillNames, skillName) {
+					return A2(
+						$elm$core$List$filter,
+						function (selectedSkillName) {
+							return !_Utils_eq(selectedSkillName, skillName);
+						},
+						selectedSkillNames);
+				});
+			var pushSelectedProficiencySkill = F2(
+				function (selectedSkillNames, skillName) {
+					return A2($elm$core$List$cons, skillName, selectedSkillNames);
+				});
 			var incrementStat = F2(
 				function (stats, statName) {
 					return A2(
@@ -5469,7 +5496,8 @@ var $author$project$DmTools$update = F2(
 					return _Utils_update(
 						model,
 						{
-							_class: $author$project$DmTools$stringToClass(value)
+							_class: $author$project$DmTools$stringToClass(value),
+							selectedProficiencySkills: _List_Nil
 						});
 				case 'UpdateLevel':
 					var value = msg.a;
@@ -5481,7 +5509,7 @@ var $author$project$DmTools$update = F2(
 								1,
 								$elm$core$String$toInt(value))
 						});
-				default:
+				case 'CheckFreeStatInput':
 					var checked = msg.a;
 					if (checked) {
 						return _Utils_update(
@@ -5495,6 +5523,22 @@ var $author$project$DmTools$update = F2(
 						msg = $temp$msg;
 						model = $temp$model;
 						continue update;
+					}
+				default:
+					var skill = msg.a;
+					var checked = msg.b;
+					if (checked) {
+						return _Utils_update(
+							model,
+							{
+								selectedProficiencySkills: A2(pushSelectedProficiencySkill, selectedProficiencySkills, skill)
+							});
+					} else {
+						return _Utils_update(
+							model,
+							{
+								selectedProficiencySkills: A2(removeSelectedProficiencySkill, selectedProficiencySkills, skill)
+							});
 					}
 			}
 		}
@@ -5521,6 +5565,9 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $author$project$DmTools$computeProficiency = function (level) {
+	return 2 + $elm$core$Basics$floor((level - 1) / 4);
+};
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $author$project$DmTools$enumStatName = _List_fromArray(
 	[$author$project$DmTools$Strength, $author$project$DmTools$Dexterity, $author$project$DmTools$Constitution, $author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom, $author$project$DmTools$Charisma]);
@@ -5567,9 +5614,6 @@ var $author$project$DmTools$getClassProficiencySave = function (_class) {
 		default:
 			return _List_Nil;
 	}
-};
-var $author$project$DmTools$getProficiency = function (level) {
-	return 2 + $elm$core$Basics$floor((level - 1) / 4);
 };
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$html$Html$Attributes$href = function (url) {
@@ -5681,17 +5725,6 @@ var $author$project$DmTools$getRaceBonus = function (race) {
 			return _List_Nil;
 	}
 };
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
 var $elm$core$List$head = function (list) {
 	if (list.b) {
 		var x = list.a;
@@ -5814,7 +5847,6 @@ var $author$project$DmTools$getCharacterBaseLife = function (model) {
 			return 0 + constitutionModifier;
 	}
 };
-var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$DmTools$viewValueBox = F2(
 	function (title, value) {
 		return A2(
@@ -6044,6 +6076,7 @@ var $author$project$DmTools$viewRaceInput = A2(
 			$elm$html$Html$Events$onInput($author$project$DmTools$UpdateRace)
 		]),
 	A2($elm$core$List$map, $author$project$DmTools$viewRaceOption, $author$project$DmTools$enumRace));
+var $elm$html$Html$h4 = _VirtualDom_node('h4');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$core$List$any = F2(
@@ -6096,7 +6129,7 @@ var $author$project$DmTools$viewSavingThrow = F3(
 	function (model, statName, classProficiencySaves) {
 		var value = A2($author$project$DmTools$getFinalStatValue, model, statName);
 		var hasProficiencySave = A2($elm$core$List$member, statName, classProficiencySaves);
-		var proficiencyBonus = hasProficiencySave ? 2 : 0;
+		var proficiencyBonus = hasProficiencySave ? $author$project$DmTools$computeProficiency(model.level) : 0;
 		var modifier = $author$project$DmTools$printWithSign(
 			$author$project$DmTools$computeModifier(value) + proficiencyBonus);
 		var associatedStatValue = A2($author$project$DmTools$getFinalStatValue, model, statName);
@@ -6112,14 +6145,30 @@ var $author$project$DmTools$viewSavingThrow = F3(
 var $author$project$DmTools$viewSavingThrows = F2(
 	function (model, classProficiencySaves) {
 		return A2(
-			$elm$html$Html$ul,
-			_List_Nil,
-			A2(
-				$elm$core$List$map,
-				function (stat) {
-					return A3($author$project$DmTools$viewSavingThrow, model, stat, classProficiencySaves);
-				},
-				$author$project$DmTools$enumStatName));
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('margin-right')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$h4,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Saving throw')
+						])),
+					A2(
+					$elm$html$Html$ul,
+					_List_Nil,
+					A2(
+						$elm$core$List$map,
+						function (stat) {
+							return A3($author$project$DmTools$viewSavingThrow, model, stat, classProficiencySaves);
+						},
+						$author$project$DmTools$enumStatName))
+				]));
 	});
 var $author$project$DmTools$Acrobatics = {$: 'Acrobatics'};
 var $author$project$DmTools$AnimalHandling = {$: 'AnimalHandling'};
@@ -6160,6 +6209,79 @@ var $author$project$DmTools$enumSkills = _List_fromArray(
 		_Utils_Tuple2($author$project$DmTools$Stealth, $author$project$DmTools$Dexterity),
 		_Utils_Tuple2($author$project$DmTools$Survival, $author$project$DmTools$Wisdom)
 	]);
+var $author$project$DmTools$getClassProficiencySkills = function (_class) {
+	switch (_class.$) {
+		case 'Barbarian':
+			return _List_fromArray(
+				[$author$project$DmTools$AnimalHandling, $author$project$DmTools$Athletics, $author$project$DmTools$Intimidation, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Survival]);
+		case 'Bard':
+			return A2(
+				$elm$core$List$map,
+				function (skill) {
+					return skill.a;
+				},
+				$author$project$DmTools$enumSkills);
+		case 'Cleric':
+			return _List_fromArray(
+				[$author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Medicine, $author$project$DmTools$Persuasion, $author$project$DmTools$Religion]);
+		case 'Druid':
+			return _List_fromArray(
+				[$author$project$DmTools$Arcana, $author$project$DmTools$AnimalHandling, $author$project$DmTools$Insight, $author$project$DmTools$Medicine, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Religion, $author$project$DmTools$Survival]);
+		case 'Fighter':
+			return _List_fromArray(
+				[$author$project$DmTools$Acrobatics, $author$project$DmTools$AnimalHandling, $author$project$DmTools$Athletics, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Perception, $author$project$DmTools$Survival]);
+		case 'Monk':
+			return _List_fromArray(
+				[$author$project$DmTools$Acrobatics, $author$project$DmTools$Athletics, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Religion, $author$project$DmTools$Stealth]);
+		case 'Paladin':
+			return _List_fromArray(
+				[$author$project$DmTools$Athletics, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Medicine, $author$project$DmTools$Persuasion]);
+		case 'Ranger':
+			return _List_fromArray(
+				[$author$project$DmTools$AnimalHandling, $author$project$DmTools$Athletics, $author$project$DmTools$Insight, $author$project$DmTools$Investigation, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Stealth, $author$project$DmTools$Survival]);
+		case 'Rogue':
+			return _List_fromArray(
+				[$author$project$DmTools$Acrobatics, $author$project$DmTools$Athletics, $author$project$DmTools$Deception, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Investigation, $author$project$DmTools$Perception, $author$project$DmTools$Performance, $author$project$DmTools$Persuasion, $author$project$DmTools$SleightOfHand, $author$project$DmTools$Stealth]);
+		case 'Sorcerer':
+			return _List_fromArray(
+				[$author$project$DmTools$Arcana, $author$project$DmTools$Deception, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Persuasion]);
+		case 'Warlock':
+			return _List_fromArray(
+				[$author$project$DmTools$Arcana, $author$project$DmTools$Deception, $author$project$DmTools$History, $author$project$DmTools$Intimidation, $author$project$DmTools$Investigation, $author$project$DmTools$Nature, $author$project$DmTools$Religion]);
+		case 'Wizard':
+			return _List_fromArray(
+				[$author$project$DmTools$Arcana, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Investigation, $author$project$DmTools$Medicine, $author$project$DmTools$Religion]);
+		default:
+			return _List_Nil;
+	}
+};
+var $author$project$DmTools$getClassProficiencySkillsLimit = function (_class) {
+	switch (_class.$) {
+		case 'Rogue':
+			return 4;
+		case 'Bard':
+			return 3;
+		case 'NoClass':
+			return 0;
+		default:
+			return 2;
+	}
+};
+var $author$project$DmTools$CheckProficiencySkill = F2(
+	function (a, b) {
+		return {$: 'CheckProficiencySkill', a: a, b: b};
+	});
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
+var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
+var $elm$core$Basics$not = _Basics_not;
 var $author$project$DmTools$skillNameToString = function (skillName) {
 	switch (skillName.$) {
 		case 'Acrobatics':
@@ -6202,32 +6324,69 @@ var $author$project$DmTools$skillNameToString = function (skillName) {
 			return 'Unknown skill';
 	}
 };
-var $author$project$DmTools$viewSkill = F2(
-	function (model, skill) {
-		var skillName = $author$project$DmTools$skillNameToString(skill.a);
+var $author$project$DmTools$viewSkill = F4(
+	function (model, skill, classProficiencySkills, reachProficiencySkillsLimit) {
+		var skillName = skill.a;
+		var skillNameStr = $author$project$DmTools$skillNameToString(skillName);
+		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillName, model.selectedProficiencySkills);
+		var proficiencyBonus = hasSelectedProficiencySkill ? $author$project$DmTools$computeProficiency(model.level) : 0;
+		var hasClassProficiencySkill = A2($elm$core$List$member, skillName, classProficiencySkills);
+		var disableCheckbox = (!hasSelectedProficiencySkill) && ((!hasClassProficiencySkill) || reachProficiencySkillsLimit);
 		var associatedStat = skill.b;
 		var associatedStatName = $author$project$DmTools$statNameToString(associatedStat);
 		var associatedStatValue = A2($author$project$DmTools$getFinalStatValue, model, associatedStat);
 		var modifier = $author$project$DmTools$printWithSign(
-			$author$project$DmTools$computeModifier(associatedStatValue));
+			$author$project$DmTools$computeModifier(associatedStatValue) + proficiencyBonus);
 		return A2(
 			$elm$html$Html$li,
 			_List_Nil,
 			_List_fromArray(
 				[
-					$elm$html$Html$text(skillName + (' (' + (associatedStatName + (') : ' + modifier))))
+					A2(
+					$elm$html$Html$input,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$type_('checkbox'),
+							$elm$html$Html$Attributes$disabled(disableCheckbox),
+							$elm$html$Html$Events$onCheck(
+							$author$project$DmTools$CheckProficiencySkill(skillName)),
+							$elm$html$Html$Attributes$checked(hasSelectedProficiencySkill)
+						]),
+					_List_Nil),
+					$elm$html$Html$text(skillNameStr + (' (' + (associatedStatName + (') : ' + modifier))))
 				]));
 	});
 var $author$project$DmTools$viewSkills = function (model) {
+	var classProficiencySkillsLimit = $author$project$DmTools$getClassProficiencySkillsLimit(model._class);
+	var reachProficiencySkillsLimit = _Utils_cmp(
+		$elm$core$List$length(model.selectedProficiencySkills),
+		classProficiencySkillsLimit) > -1;
+	var classProficiencySkills = $author$project$DmTools$getClassProficiencySkills(model._class);
 	return A2(
-		$elm$html$Html$ul,
-		_List_Nil,
-		A2(
-			$elm$core$List$map,
-			function (skill) {
-				return A2($author$project$DmTools$viewSkill, model, skill);
-			},
-			$author$project$DmTools$enumSkills));
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('margin-right')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$h4,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Skills')
+					])),
+				A2(
+				$elm$html$Html$ul,
+				_List_Nil,
+				A2(
+					$elm$core$List$map,
+					function (skill) {
+						return A4($author$project$DmTools$viewSkill, model, skill, classProficiencySkills, reachProficiencySkillsLimit);
+					},
+					$author$project$DmTools$enumSkills))
+			]));
 };
 var $author$project$DmTools$DecrementStat = function (a) {
 	return {$: 'DecrementStat', a: a};
@@ -6627,7 +6786,7 @@ var $author$project$DmTools$view = function (model) {
 									$author$project$DmTools$viewValueBox,
 									'PRO',
 									$author$project$DmTools$printWithSign(
-										$author$project$DmTools$getProficiency(model.level)))
+										$author$project$DmTools$computeProficiency(model.level)))
 								]))),
 						A2(
 						$elm$html$Html$div,
