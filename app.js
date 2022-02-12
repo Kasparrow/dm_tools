@@ -4440,6 +4440,7 @@ var $author$project$DmTools$Constitution = {$: 'Constitution'};
 var $author$project$DmTools$Dexterity = {$: 'Dexterity'};
 var $author$project$DmTools$DnD5 = {$: 'DnD5'};
 var $elm$core$Basics$False = {$: 'False'};
+var $author$project$DmTools$French = {$: 'French'};
 var $author$project$DmTools$Intelligence = {$: 'Intelligence'};
 var $author$project$DmTools$NoClass = {$: 'NoClass'};
 var $author$project$DmTools$NoRace = {$: 'NoRace'};
@@ -4462,6 +4463,7 @@ var $author$project$DmTools$Insight = {$: 'Insight'};
 var $author$project$DmTools$Intimidation = {$: 'Intimidation'};
 var $author$project$DmTools$Investigation = {$: 'Investigation'};
 var $author$project$DmTools$Laelith = {$: 'Laelith'};
+var $author$project$DmTools$Lore = {$: 'Lore'};
 var $author$project$DmTools$Medicine = {$: 'Medicine'};
 var $author$project$DmTools$Monk = {$: 'Monk'};
 var $author$project$DmTools$Nature = {$: 'Nature'};
@@ -4471,6 +4473,7 @@ var $author$project$DmTools$Performance = {$: 'Performance'};
 var $author$project$DmTools$Persuasion = {$: 'Persuasion'};
 var $author$project$DmTools$Ranger = {$: 'Ranger'};
 var $author$project$DmTools$Religion = {$: 'Religion'};
+var $author$project$DmTools$Riddle = {$: 'Riddle'};
 var $author$project$DmTools$Rogue = {$: 'Rogue'};
 var $author$project$DmTools$Scholar = {$: 'Scholar'};
 var $author$project$DmTools$Slayer = {$: 'Slayer'};
@@ -4478,16 +4481,14 @@ var $author$project$DmTools$SleightOfHand = {$: 'SleightOfHand'};
 var $author$project$DmTools$Sorcerer = {$: 'Sorcerer'};
 var $author$project$DmTools$Stealth = {$: 'Stealth'};
 var $author$project$DmTools$Survival = {$: 'Survival'};
+var $author$project$DmTools$Traditions = {$: 'Traditions'};
 var $author$project$DmTools$TreasureHunter = {$: 'TreasureHunter'};
 var $author$project$DmTools$Wanderer = {$: 'Wanderer'};
 var $author$project$DmTools$Warden = {$: 'Warden'};
 var $author$project$DmTools$Warlock = {$: 'Warlock'};
 var $author$project$DmTools$Warrior = {$: 'Warrior'};
 var $author$project$DmTools$Wizard = {$: 'Wizard'};
-var $author$project$DmTools$Lore = {$: 'Lore'};
-var $author$project$DmTools$Riddle = {$: 'Riddle'};
 var $author$project$DmTools$ShadowLore = {$: 'ShadowLore'};
-var $author$project$DmTools$Traditions = {$: 'Traditions'};
 var $author$project$DmTools$allSkillIdentifiers = _List_fromArray(
 	[$author$project$DmTools$Acrobatics, $author$project$DmTools$AnimalHandling, $author$project$DmTools$Arcana, $author$project$DmTools$Athletics, $author$project$DmTools$Deception, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Investigation, $author$project$DmTools$Lore, $author$project$DmTools$Medicine, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Performance, $author$project$DmTools$Persuasion, $author$project$DmTools$Religion, $author$project$DmTools$Riddle, $author$project$DmTools$ShadowLore, $author$project$DmTools$SleightOfHand, $author$project$DmTools$Stealth, $author$project$DmTools$Survival, $author$project$DmTools$Traditions]);
 var $author$project$DmTools$getClass = function (classIdentifier) {
@@ -4495,240 +4496,265 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 		case 'Barbarian':
 			return {
 				asString: 'Barbarian',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Barbarian,
 				lifeDice: 12,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$AnimalHandling, $author$project$DmTools$Athletics, $author$project$DmTools$Intimidation, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Survival]),
-				proficiencySkillsLimit: 2
+				optionalProficiencySkillsLimit: 2,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution])
 			};
 		case 'Bard':
 			return {
 				asString: 'Bard',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Bard,
 				lifeDice: 8,
+				optionalProficiencySkills: $author$project$DmTools$allSkillIdentifiers,
+				optionalProficiencySkillsLimit: 3,
 				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Dexterity, $author$project$DmTools$Charisma]),
-				proficiencySkills: $author$project$DmTools$allSkillIdentifiers,
-				proficiencySkillsLimit: 3
+					[$author$project$DmTools$Dexterity, $author$project$DmTools$Charisma])
 			};
 		case 'Cleric':
 			return {
 				asString: 'Cleric',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Cleric,
 				lifeDice: 8,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Wisdom, $author$project$DmTools$Charisma]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Medicine, $author$project$DmTools$Persuasion, $author$project$DmTools$Religion]),
-				proficiencySkillsLimit: 2
+				optionalProficiencySkillsLimit: 2,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Wisdom, $author$project$DmTools$Charisma])
 			};
 		case 'Druid':
 			return {
 				asString: 'Druid',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Druid,
 				lifeDice: 8,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$Arcana, $author$project$DmTools$AnimalHandling, $author$project$DmTools$Insight, $author$project$DmTools$Medicine, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Religion, $author$project$DmTools$Survival]),
-				proficiencySkillsLimit: 2
+				optionalProficiencySkillsLimit: 2,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom])
 			};
 		case 'Fighter':
 			return {
 				asString: 'Fighter',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Fighter,
 				lifeDice: 10,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$Acrobatics, $author$project$DmTools$AnimalHandling, $author$project$DmTools$Athletics, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Perception, $author$project$DmTools$Survival]),
-				proficiencySkillsLimit: 2
+				optionalProficiencySkillsLimit: 2,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution])
 			};
 		case 'Monk':
 			return {
 				asString: 'Monk',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Monk,
 				lifeDice: 8,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Strength, $author$project$DmTools$Dexterity]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$Acrobatics, $author$project$DmTools$Athletics, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Religion, $author$project$DmTools$Stealth]),
-				proficiencySkillsLimit: 2
+				optionalProficiencySkillsLimit: 2,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Strength, $author$project$DmTools$Dexterity])
 			};
 		case 'Paladin':
 			return {
 				asString: 'Paladin',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Paladin,
 				lifeDice: 10,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Wisdom, $author$project$DmTools$Charisma]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$Athletics, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Medicine, $author$project$DmTools$Persuasion]),
-				proficiencySkillsLimit: 2
+				optionalProficiencySkillsLimit: 2,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Wisdom, $author$project$DmTools$Charisma])
 			};
 		case 'Ranger':
 			return {
 				asString: 'Ranger',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Ranger,
 				lifeDice: 10,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Strength, $author$project$DmTools$Dexterity]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$AnimalHandling, $author$project$DmTools$Athletics, $author$project$DmTools$Insight, $author$project$DmTools$Investigation, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Stealth, $author$project$DmTools$Survival]),
-				proficiencySkillsLimit: 2
+				optionalProficiencySkillsLimit: 2,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Strength, $author$project$DmTools$Dexterity])
 			};
 		case 'Rogue':
 			return {
 				asString: 'Rogue',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Rogue,
 				lifeDice: 8,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Dexterity, $author$project$DmTools$Intelligence]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$Acrobatics, $author$project$DmTools$Athletics, $author$project$DmTools$Deception, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Investigation, $author$project$DmTools$Perception, $author$project$DmTools$Performance, $author$project$DmTools$Persuasion, $author$project$DmTools$SleightOfHand, $author$project$DmTools$Stealth]),
-				proficiencySkillsLimit: 4
+				optionalProficiencySkillsLimit: 4,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Dexterity, $author$project$DmTools$Intelligence])
 			};
 		case 'Sorcerer':
 			return {
 				asString: 'Sorcerer',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Sorcerer,
 				lifeDice: 8,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Constitution, $author$project$DmTools$Charisma]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$Arcana, $author$project$DmTools$Deception, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Persuasion]),
-				proficiencySkillsLimit: 2
+				optionalProficiencySkillsLimit: 2,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Constitution, $author$project$DmTools$Charisma])
 			};
 		case 'Warlock':
 			return {
 				asString: 'Warlock',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Warlock,
 				lifeDice: 6,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Wisdom, $author$project$DmTools$Charisma]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$Arcana, $author$project$DmTools$Deception, $author$project$DmTools$History, $author$project$DmTools$Intimidation, $author$project$DmTools$Investigation, $author$project$DmTools$Nature, $author$project$DmTools$Religion]),
-				proficiencySkillsLimit: 2
+				optionalProficiencySkillsLimit: 2,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Wisdom, $author$project$DmTools$Charisma])
 			};
 		case 'Wizard':
 			return {
 				asString: 'Wizard',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Wizard,
 				lifeDice: 6,
-				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom]),
-				proficiencySkills: _List_fromArray(
+				optionalProficiencySkills: _List_fromArray(
 					[$author$project$DmTools$Arcana, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Investigation, $author$project$DmTools$Medicine, $author$project$DmTools$Religion]),
-				proficiencySkillsLimit: 2
+				optionalProficiencySkillsLimit: 2,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom])
 			};
 		case 'Scholar':
 			return {
 				asString: 'Scholar',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Medicine, $author$project$DmTools$Lore]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$Scholar,
 				lifeDice: 8,
+				optionalProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$History, $author$project$DmTools$Riddle, $author$project$DmTools$Traditions, $author$project$DmTools$Insight, $author$project$DmTools$Investigation, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Survival]),
+				optionalProficiencySkillsLimit: 1,
 				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom]),
-				proficiencySkills: _List_Nil,
-				proficiencySkillsLimit: 1
+					[$author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom])
 			};
 		case 'Slayer':
 			return {
 				asString: 'Slayer',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$Slayer,
 				lifeDice: 12,
+				optionalProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$AnimalHandling, $author$project$DmTools$Athletics, $author$project$DmTools$Intimidation, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Survival]),
+				optionalProficiencySkillsLimit: 2,
 				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution]),
-				proficiencySkills: _List_Nil,
-				proficiencySkillsLimit: 2
+					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution])
 			};
 		case 'TreasureHunter':
 			return {
 				asString: 'Treasure Hunter',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$TreasureHunter,
 				lifeDice: 8,
+				optionalProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Acrobatics, $author$project$DmTools$Athletics, $author$project$DmTools$Deception, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Perception, $author$project$DmTools$Persuasion, $author$project$DmTools$Riddle, $author$project$DmTools$SleightOfHand, $author$project$DmTools$Stealth]),
+				optionalProficiencySkillsLimit: 4,
 				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Dexterity, $author$project$DmTools$Intelligence]),
-				proficiencySkills: _List_Nil,
-				proficiencySkillsLimit: 4
+					[$author$project$DmTools$Dexterity, $author$project$DmTools$Intelligence])
 			};
 		case 'Wanderer':
 			return {
 				asString: 'Wanderer',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$Wanderer,
 				lifeDice: 10,
+				optionalProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$AnimalHandling, $author$project$DmTools$Athletics, $author$project$DmTools$Insight, $author$project$DmTools$Investigation, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Stealth, $author$project$DmTools$Traditions]),
+				optionalProficiencySkillsLimit: 3,
 				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution]),
-				proficiencySkills: _List_Nil,
-				proficiencySkillsLimit: 3
+					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution])
 			};
 		case 'Warden':
 			return {
 				asString: 'Warden',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$Warden,
 				lifeDice: 8,
+				optionalProficiencySkills: $author$project$DmTools$allSkillIdentifiers,
+				optionalProficiencySkillsLimit: 2,
 				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Dexterity, $author$project$DmTools$Charisma]),
-				proficiencySkills: _List_Nil,
-				proficiencySkillsLimit: 2
+					[$author$project$DmTools$Dexterity, $author$project$DmTools$Charisma])
 			};
 		case 'Warrior':
 			return {
 				asString: 'Warrior',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$Warrior,
 				lifeDice: 10,
+				optionalProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Acrobatics, $author$project$DmTools$AnimalHandling, $author$project$DmTools$Athletics, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Perception, $author$project$DmTools$Survival, $author$project$DmTools$Traditions]),
+				optionalProficiencySkillsLimit: 2,
 				proficiencySaves: _List_fromArray(
-					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution]),
-				proficiencySkills: _List_Nil,
-				proficiencySkillsLimit: 2
+					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution])
 			};
 		default:
 			return {
 				asString: '',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$NoClass,
 				lifeDice: 0,
-				proficiencySaves: _List_Nil,
-				proficiencySkills: _List_Nil,
-				proficiencySkillsLimit: 0
+				optionalProficiencySkills: _List_Nil,
+				optionalProficiencySkillsLimit: 0,
+				proficiencySaves: _List_Nil
 			};
 	}
 };
@@ -5248,7 +5274,7 @@ var $author$project$DmTools$init = {
 		selectedProficiencySkills: _List_Nil,
 		subRace: $author$project$DmTools$getSubRace($author$project$DmTools$NoSubRace)
 	},
-	settings: {freeStatsInput: false, gameVersion: $author$project$DmTools$DnD5}
+	settings: {freeStatsInput: false, gameVersion: $author$project$DmTools$DnD5, language: $author$project$DmTools$French}
 };
 var $elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
@@ -6060,6 +6086,18 @@ var $author$project$DmTools$stringToClass = function (string) {
 			return $author$project$DmTools$Warlock;
 		case 'Wizard':
 			return $author$project$DmTools$Wizard;
+		case 'Scholar':
+			return $author$project$DmTools$Scholar;
+		case 'Slayer':
+			return $author$project$DmTools$Slayer;
+		case 'TreasureHunter':
+			return $author$project$DmTools$TreasureHunter;
+		case 'Wanderer':
+			return $author$project$DmTools$Wanderer;
+		case 'Warden':
+			return $author$project$DmTools$Warden;
+		case 'Warrior':
+			return $author$project$DmTools$Warrior;
 		default:
 			return $author$project$DmTools$NoClass;
 	}
@@ -7055,7 +7093,7 @@ var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('
 var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$DmTools$viewSkill = F3(
-	function (character, skillIdentifier, proficiencySkillsLimitReached) {
+	function (character, skillIdentifier, optionalProficiencySkillsLimitReached) {
 		var skill = $author$project$DmTools$getSkill(skillIdentifier);
 		var statIdentifier = skill.statIdentifier;
 		var statScore = A2(
@@ -7063,11 +7101,12 @@ var $author$project$DmTools$viewSkill = F3(
 			$author$project$DmTools$computeFinalStats(character),
 			statIdentifier);
 		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillIdentifier, character.selectedProficiencySkills);
-		var proficiencyBonus = hasSelectedProficiencySkill ? $author$project$DmTools$computeProficiency(character.level) : 0;
+		var hasClassProficiencySkill = A2($elm$core$List$member, skillIdentifier, character._class.optionalProficiencySkills);
+		var hasBaseProficiencySkill = A2($elm$core$List$member, skillIdentifier, character._class.baseProficiencySkills);
+		var proficiencyBonus = (hasSelectedProficiencySkill || hasBaseProficiencySkill) ? $author$project$DmTools$computeProficiency(character.level) : 0;
 		var modifier = $author$project$DmTools$printWithSign(
 			$author$project$DmTools$computeModifier(statScore) + proficiencyBonus);
-		var hasClassProficiencySkill = A2($elm$core$List$member, skillIdentifier, character._class.proficiencySkills);
-		var disableCheckbox = (!hasSelectedProficiencySkill) && ((!hasClassProficiencySkill) || proficiencySkillsLimitReached);
+		var disableCheckbox = hasBaseProficiencySkill || ((!hasSelectedProficiencySkill) && ((!hasClassProficiencySkill) || optionalProficiencySkillsLimitReached));
 		return A2(
 			$elm$html$Html$li,
 			_List_Nil,
@@ -7081,7 +7120,7 @@ var $author$project$DmTools$viewSkill = F3(
 							$elm$html$Html$Attributes$disabled(disableCheckbox),
 							$elm$html$Html$Events$onCheck(
 							$author$project$DmTools$CheckProficiencySkill(skillIdentifier)),
-							$elm$html$Html$Attributes$checked(hasSelectedProficiencySkill)
+							$elm$html$Html$Attributes$checked(hasBaseProficiencySkill || hasSelectedProficiencySkill)
 						]),
 					_List_Nil),
 					$elm$html$Html$text(
@@ -7090,9 +7129,9 @@ var $author$project$DmTools$viewSkill = F3(
 	});
 var $author$project$DmTools$viewSkills = F2(
 	function (character, gameVersion) {
-		var proficiencySkillsLimitReached = _Utils_cmp(
+		var optionalProficiencySkillsLimitReached = _Utils_cmp(
 			$elm$core$List$length(character.selectedProficiencySkills),
-			character._class.proficiencySkillsLimit) > -1;
+			character._class.optionalProficiencySkillsLimit) > -1;
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -7114,7 +7153,7 @@ var $author$project$DmTools$viewSkills = F2(
 					A2(
 						$elm$core$List$map,
 						function (skillIdentifier) {
-							return A3($author$project$DmTools$viewSkill, character, skillIdentifier, proficiencySkillsLimitReached);
+							return A3($author$project$DmTools$viewSkill, character, skillIdentifier, optionalProficiencySkillsLimitReached);
 						},
 						$author$project$DmTools$getGameVersionSkills(gameVersion)))
 				]));

@@ -25,6 +25,10 @@ type GameVersion
     | Laelith
 type alias GameVersions = List GameVersion
 
+type Language
+    = French
+    | English
+
 type StatIdentifier
     = Strength
     | Dexterity
@@ -123,8 +127,9 @@ type alias ClassIdentifiers = List ClassIdentifier
 type alias Class =
     { identifier: ClassIdentifier 
     , proficiencySaves: StatIdentifiers
-    , proficiencySkills: SkillIdentifiers
-    , proficiencySkillsLimit: Int
+    , baseProficiencySkills: SkillIdentifiers
+    , optionalProficiencySkills: SkillIdentifiers
+    , optionalProficiencySkillsLimit: Int
     , lifeDice: Int
     , gameVersions: GameVersions
     , asString: String
@@ -177,6 +182,7 @@ type alias Character =
 type alias Settings =
     { gameVersion: GameVersion
     , freeStatsInput: Bool
+    , language: Language
     }
 
 type alias Model = 
@@ -205,6 +211,7 @@ init =
     , settings = 
         { gameVersion = DnD5
         , freeStatsInput = False
+        , language = French
         }
     }
 
@@ -242,7 +249,10 @@ view model =
               , div [ class "flex-row" ]
                     (List.append
                         (List.map(\statIdentifier -> viewStatInput model.character.rolledStats statIdentifier) allStatIdentifiers) 
-                        (if model.settings.freeStatsInput then [ Html.text "" ] else [viewValueBox "POINTS" (String.fromInt model.character.remainingPoints)])
+                        (if model.settings.freeStatsInput then 
+                            [ Html.text "" ] 
+                         else [viewValueBox "POINTS" (String.fromInt model.character.remainingPoints)]
+                         )
                     )
               , br [] []
               , h3 [] [ text "Computed stats" ]
@@ -295,7 +305,7 @@ viewSubRaceOption subRaceIdentifier selectedSubRace =
 
 viewClassSelector: ClassIdentifiers -> ClassIdentifier -> Html Msg
 viewClassSelector classIdentifiers selectedClassIdentifier =
-    select [onInput UpdateClass ] (List.map (\classIdentifier -> viewClassOption classIdentifier selectedClassIdentifier)classIdentifiers )
+    select [onInput UpdateClass ] (List.map (\classIdentifier -> viewClassOption classIdentifier selectedClassIdentifier) classIdentifiers)
 
 viewClassOption: ClassIdentifier -> ClassIdentifier -> Html Msg
 viewClassOption classIdentifier selectedClassIdentifier =
@@ -386,30 +396,31 @@ viewSavingThrow statIdentifier proficiencySaves statModifier proficiencyBonus =
 viewSkills: Character -> GameVersion -> Html Msg
 viewSkills character gameVersion =
     let
-        proficiencySkillsLimitReached = (List.length character.selectedProficiencySkills) >= character.class.proficiencySkillsLimit 
+        optionalProficiencySkillsLimitReached = (List.length character.selectedProficiencySkills) >= character.class.optionalProficiencySkillsLimit 
     in
     div [ class "margin-right" ]
         [ h4 [] [text "Skills" ]
         , ul []
              (List.map (\skillIdentifier -> 
-                 viewSkill character skillIdentifier proficiencySkillsLimitReached
+                 viewSkill character skillIdentifier optionalProficiencySkillsLimitReached
              ) (getGameVersionSkills gameVersion))
         ]
 
 viewSkill: Character -> SkillIdentifier -> Bool -> Html Msg
-viewSkill character skillIdentifier proficiencySkillsLimitReached =
+viewSkill character skillIdentifier optionalProficiencySkillsLimitReached =
     let
         skill = getSkill skillIdentifier
         statIdentifier = skill.statIdentifier
         statScore = getStatScore (computeFinalStats character) statIdentifier
-        hasClassProficiencySkill = List.member skillIdentifier character.class.proficiencySkills
+        hasBaseProficiencySkill = List.member skillIdentifier character.class.baseProficiencySkills
+        hasClassProficiencySkill = List.member skillIdentifier character.class.optionalProficiencySkills
         hasSelectedProficiencySkill = List.member skillIdentifier character.selectedProficiencySkills
-        proficiencyBonus = if hasSelectedProficiencySkill then (computeProficiency character.level) else 0
+        proficiencyBonus = if (hasSelectedProficiencySkill || hasBaseProficiencySkill) then (computeProficiency character.level) else 0
         modifier = printWithSign ((computeModifier statScore) + proficiencyBonus)
-        disableCheckbox = (not hasSelectedProficiencySkill && (not hasClassProficiencySkill || proficiencySkillsLimitReached))
+        disableCheckbox = (hasBaseProficiencySkill || not hasSelectedProficiencySkill && (not hasClassProficiencySkill || optionalProficiencySkillsLimitReached))
     in
     li []
-       [ input [ type_ "checkbox", disabled disableCheckbox, onCheck (CheckProficiencySkill skillIdentifier), checked hasSelectedProficiencySkill] []
+       [ input [ type_ "checkbox", disabled disableCheckbox, onCheck (CheckProficiencySkill skillIdentifier), checked (hasBaseProficiencySkill || hasSelectedProficiencySkill)] []
        , text (skill.asString ++ " (" ++ (statToString statIdentifier) ++ ") :" ++ modifier)
        ]
 
@@ -981,8 +992,9 @@ getClass classIdentifier =
         Barbarian ->
             { identifier = Barbarian
             , proficiencySaves = [ Strength, Constitution ]
-            , proficiencySkills = [ AnimalHandling, Athletics, Intimidation, Nature, Perception, Survival ]
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ AnimalHandling, Athletics, Intimidation, Nature, Perception, Survival ]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 12
             , gameVersions = [DnD5, Laelith]
             , asString = "Barbarian"
@@ -990,8 +1002,9 @@ getClass classIdentifier =
         Bard ->
             { identifier = Bard
             , proficiencySaves = [ Dexterity, Charisma ]
-            , proficiencySkills = allSkillIdentifiers
-            , proficiencySkillsLimit = 3
+            , baseProficiencySkills =  []
+            , optionalProficiencySkills = allSkillIdentifiers
+            , optionalProficiencySkillsLimit = 3
             , lifeDice = 8
             , gameVersions = [DnD5, Laelith]
             , asString = "Bard"
@@ -999,8 +1012,9 @@ getClass classIdentifier =
         Cleric ->
             { identifier = Cleric
             , proficiencySaves = [ Wisdom, Charisma ]
-            , proficiencySkills = [ History, Insight, Medicine, Persuasion, Religion ]
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ History, Insight, Medicine, Persuasion, Religion ]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
             , gameVersions = [DnD5, Laelith]
             , asString = "Cleric"
@@ -1008,8 +1022,9 @@ getClass classIdentifier =
         Druid ->
             { identifier = Druid
             , proficiencySaves = [ Intelligence, Wisdom ]
-            , proficiencySkills = [ Arcana, AnimalHandling, Insight, Medicine, Nature, Perception, Religion, Survival ]
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ Arcana, AnimalHandling, Insight, Medicine, Nature, Perception, Religion, Survival ]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
             , gameVersions = [DnD5, Laelith]
             , asString = "Druid"
@@ -1017,8 +1032,9 @@ getClass classIdentifier =
         Fighter ->
             { identifier = Fighter
             , proficiencySaves = [ Strength, Constitution ]
-            , proficiencySkills = [ Acrobatics, AnimalHandling, Athletics, History, Insight, Intimidation, Perception, Survival ]
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ Acrobatics, AnimalHandling, Athletics, History, Insight, Intimidation, Perception, Survival ]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 10
             , gameVersions = [DnD5, Laelith]
             , asString = "Fighter"
@@ -1026,8 +1042,9 @@ getClass classIdentifier =
         Monk ->
             { identifier = Monk
             , proficiencySaves = [ Strength, Dexterity ]
-            , proficiencySkills = [ Acrobatics, Athletics, History, Insight, Religion, Stealth ]
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ Acrobatics, Athletics, History, Insight, Religion, Stealth ]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
             , gameVersions = [DnD5, Laelith]
             , asString = "Monk"
@@ -1035,8 +1052,9 @@ getClass classIdentifier =
         Paladin ->
             { identifier = Paladin
             , proficiencySaves = [ Wisdom, Charisma ]
-            , proficiencySkills = [ Athletics, Insight, Intimidation, Medicine, Persuasion ]
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ Athletics, Insight, Intimidation, Medicine, Persuasion ]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 10
             , gameVersions = [DnD5, Laelith]
             , asString = "Paladin"
@@ -1044,8 +1062,9 @@ getClass classIdentifier =
         Ranger ->
             { identifier = Ranger
             , proficiencySaves = [ Strength, Dexterity ]
-            , proficiencySkills = [ AnimalHandling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Survival ]
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ AnimalHandling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Survival ]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 10
             , gameVersions = [DnD5, Laelith]
             , asString = "Ranger"
@@ -1053,8 +1072,9 @@ getClass classIdentifier =
         Rogue ->
             { identifier = Rogue
             , proficiencySaves = [ Dexterity, Intelligence ]
-            , proficiencySkills = [ Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, SleightOfHand, Stealth ]
-            , proficiencySkillsLimit = 4
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, SleightOfHand, Stealth ]
+            , optionalProficiencySkillsLimit = 4
             , lifeDice = 8
             , gameVersions = [DnD5, Laelith]
             , asString = "Rogue"
@@ -1062,8 +1082,9 @@ getClass classIdentifier =
         Sorcerer ->
             { identifier = Sorcerer 
             , proficiencySaves = [ Constitution, Charisma ]
-            , proficiencySkills = [ Arcana, Deception, Insight, Intimidation, Persuasion ]
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ Arcana, Deception, Insight, Intimidation, Persuasion ]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
             , gameVersions = [DnD5, Laelith]
             , asString = "Sorcerer"
@@ -1071,8 +1092,9 @@ getClass classIdentifier =
         Warlock ->
             { identifier = Warlock
             , proficiencySaves = [ Wisdom, Charisma ]
-            , proficiencySkills = [ Arcana, Deception, History, Intimidation, Investigation, Nature, Religion ]
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ Arcana, Deception, History, Intimidation, Investigation, Nature, Religion ]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 6
             , gameVersions = [DnD5, Laelith]
             , asString = "Warlock"
@@ -1080,8 +1102,9 @@ getClass classIdentifier =
         Wizard ->
             { identifier = Wizard
             , proficiencySaves = [ Intelligence, Wisdom ]
-            , proficiencySkills = [ Arcana, History, Insight, Investigation, Medicine, Religion ]
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [ Arcana, History, Insight, Investigation, Medicine, Religion ]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 6
             , gameVersions = [DnD5, Laelith]
             , asString = "Wizard"
@@ -1089,8 +1112,9 @@ getClass classIdentifier =
         Scholar ->
             { identifier = Scholar
             , proficiencySaves = [ Intelligence, Wisdom ]
-            , proficiencySkills = []
-            , proficiencySkillsLimit = 1
+            , baseProficiencySkills = [Medicine, Lore]
+            , optionalProficiencySkills = [History, Riddle, Traditions, Insight, Investigation, Nature, Perception, Survival]
+            , optionalProficiencySkillsLimit = 1
             , lifeDice = 8
             , gameVersions = [AiME]
             , asString = "Scholar"
@@ -1098,8 +1122,9 @@ getClass classIdentifier =
         Slayer ->
             { identifier = Slayer
             , proficiencySaves = [ Strength, Constitution ]
-            , proficiencySkills = []
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [AnimalHandling, Athletics, Intimidation, Nature, Perception, Survival]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 12
             , gameVersions = [AiME]
             , asString = "Slayer"
@@ -1107,8 +1132,9 @@ getClass classIdentifier =
         TreasureHunter ->
             { identifier = TreasureHunter
             , proficiencySaves = [ Dexterity, Intelligence ]
-            , proficiencySkills = []
-            , proficiencySkillsLimit = 4
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [Acrobatics, Athletics, Deception, Insight, Intimidation, Perception, Persuasion, Riddle, SleightOfHand, Stealth]
+            , optionalProficiencySkillsLimit = 4
             , lifeDice = 8
             , gameVersions = [AiME]
             , asString = "Treasure Hunter"
@@ -1116,8 +1142,9 @@ getClass classIdentifier =
         Wanderer ->
             { identifier = Wanderer
             , proficiencySaves = [ Strength, Constitution ]
-            , proficiencySkills = []
-            , proficiencySkillsLimit = 3
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = [AnimalHandling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Traditions]
+            , optionalProficiencySkillsLimit = 3
             , lifeDice = 10
             , gameVersions = [AiME]
             , asString = "Wanderer"
@@ -1125,26 +1152,29 @@ getClass classIdentifier =
         Warden ->
             { identifier = Warden
             , proficiencySaves = [ Dexterity, Charisma ]
-            , proficiencySkills = []
-            , proficiencySkillsLimit = 2
+            , baseProficiencySkills = []
+            , optionalProficiencySkills = allSkillIdentifiers
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
             , gameVersions = [AiME]
             , asString = "Warden"
             }
         Warrior ->
             { identifier = Warrior
+            , baseProficiencySkills = []
             , proficiencySaves = [ Strength, Constitution ]
-            , proficiencySkills = []
-            , proficiencySkillsLimit = 2
+            , optionalProficiencySkills = [Acrobatics, AnimalHandling, Athletics, History, Insight, Intimidation, Perception, Survival, Traditions]
+            , optionalProficiencySkillsLimit = 2
             , lifeDice = 10
             , gameVersions = [AiME]
             , asString = "Warrior"
             }
         NoClass ->
             { identifier = NoClass
+            , baseProficiencySkills = []
             , proficiencySaves = []
-            , proficiencySkills = []
-            , proficiencySkillsLimit = 0
+            , optionalProficiencySkills = []
+            , optionalProficiencySkillsLimit = 0
             , lifeDice = 0
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = ""
@@ -1358,6 +1388,12 @@ stringToClass string =
         "Sorcerer" -> Rogue
         "Warlock" -> Warlock
         "Wizard" -> Wizard
+        "Scholar" -> Scholar
+        "Slayer" -> Slayer
+        "TreasureHunter" -> TreasureHunter
+        "Wanderer" -> Wanderer
+        "Warden" -> Warden
+        "Warrior" -> Warrior
         _ -> NoClass
 
 stringToGameVersion: String -> GameVersion
@@ -1379,3 +1415,15 @@ statToString statIdentifier =
         Intelligence -> "INT"
         Wisdom -> "WIS"
         Charisma -> "CHA"
+
+-- I18N
+
+getKey: Language -> String -> String
+getKey language key =
+    case language of
+        French ->
+            case key of
+                _ -> "Traduction non disponible"
+        English ->
+            case key of
+                _ -> "Missing translation"
