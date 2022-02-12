@@ -9,7 +9,8 @@ import Browser
 -- TYPES
 
 type Msg
-    = UpdateRemainingPoints
+    = UpdateGameVersion String
+    | UpdateRemainingPoints
     | UpdateRace String
     | UpdateSubRace String
     | UpdateClass String
@@ -45,6 +46,17 @@ type RaceIdentifier
     | HalfOrc
     | Human
     | Tiefling
+    | Barding
+    | Beorning
+    | Dunedain
+    | LonelyMountainDwarf
+    | MirkwoodElf
+    | ShireHobbit
+    | BreeMen
+    | LakeMen
+    | MinasTirithMen
+    | RohanRider
+    | WilderlandWoodmen
     | NoRace
 type alias RaceIdentifiers = List RaceIdentifier
 type alias Race =
@@ -99,6 +111,12 @@ type ClassIdentifier
     | Sorcerer
     | Warlock
     | Wizard
+    | Scholar
+    | Slayer
+    | TreasureHunter
+    | Wanderer
+    | Warden
+    | Warrior
     | NoClass
 type alias ClassIdentifiers = List ClassIdentifier
 
@@ -123,15 +141,19 @@ type SkillIdentifier
     | Insight
     | Intimidation
     | Investigation
+    | Lore
     | Medicine
     | Nature
     | Perception
     | Performance
     | Persuasion
+    | Riddle
     | Religion
+    | ShadowLore
     | SleightOfHand
     | Stealth
     | Survival
+    | Traditions
     | NoSkill
 type alias SkillIdentifiers = List SkillIdentifier
 type alias Skill = 
@@ -143,35 +165,47 @@ type alias Skill =
 type alias Skills = List Skill
 
 -- MODEL
-
-type alias Model = 
+type alias Character = 
     { rolledStats: Stats
     , race: Race
     , subRace: SubRace
     , class: Class
     , remainingPoints: Int
-    , freeStatsInput: Bool
     , level: Int
     , selectedProficiencySkills: SkillIdentifiers
+    }
+type alias Settings =
+    { gameVersion: GameVersion
+    , freeStatsInput: Bool
+    }
+
+type alias Model = 
+    { character: Character
+    , settings: Settings
     }
 
 init: Model
 init = 
-    { rolledStats = 
-        [ (Strength, 8)
-        , (Dexterity, 8)
-        , (Constitution, 8)
-        , (Intelligence, 8)
-        , (Wisdom, 8)
-        , (Charisma, 8)
-        ]
-    , race = getRace NoRace
-    , subRace = getSubRace NoSubRace
-    , class = getClass NoClass
-    , remainingPoints = 27
-    , freeStatsInput = False
-    , level = 1
-    , selectedProficiencySkills = []
+    { character =
+        { rolledStats = 
+            [ (Strength, 8)
+            , (Dexterity, 8)
+            , (Constitution, 8)
+            , (Intelligence, 8)
+            , (Wisdom, 8)
+            , (Charisma, 8)
+            ]
+        , race = getRace NoRace
+        , subRace = getSubRace NoSubRace
+        , class = getClass NoClass
+        , remainingPoints = 27
+        , level = 1
+        , selectedProficiencySkills = []
+        }
+    , settings = 
+        { gameVersion = DnD5
+        , freeStatsInput = False
+        }
     }
 
 -- VIEW
@@ -179,9 +213,12 @@ init =
 view: Model -> Html Msg
 view model =
     let
-        finalStats = computeFinalStats model
-        proficiencyBonus = computeProficiency model.level
-        characterBaseLife = model.class.lifeDice + (computeModifier (getStatScore finalStats Constitution))
+        finalStats = computeFinalStats model.character
+        proficiencyBonus = computeProficiency model.character.level
+        characterBaseLife = model.character.class.lifeDice + (computeModifier (getStatScore finalStats Constitution))
+        availableRaces = getGameVersionRaces model.settings.gameVersion
+        availableClasses = getGameVersionClasses model.settings.gameVersion
+        availableSkills = getGameVersionSkills model.settings.gameVersion
     in
     div [ class "main-container" ]
         [ nav []
@@ -189,11 +226,13 @@ view model =
                   [ span [ class "navbar-item" ] [ text "Dm Tools" ] ]
               ]
         , div [ class "content" ]
-              [ h3 [] [ text "Race" ]
-              , viewRaceSelector allRaceIdentifiers
-              , viewSubRaceSelector model.race.subRaces model.subRace.identifier
+              [ h3 [] [ text "Game Version" ]
+              , viewGameVersionSelector model.settings.gameVersion
+              , h3 [] [ text "Race" ]
+              , viewRaceSelector availableRaces model.character.race.identifier
+              , viewSubRaceSelector model.character.race.subRaces model.character.subRace.identifier
               , h3 [] [ text "Class" ]
-              , viewClassSelector allClassIdentifiers
+              , viewClassSelector availableClasses model.character.class.identifier
               , h3 [] [ text "Level" ]
               , viewLevelSelector
               , h3 [] [ text "Rolled stats" ]
@@ -202,8 +241,8 @@ view model =
                        ]
               , div [ class "flex-row" ]
                     (List.append
-                        (List.map(\statIdentifier -> viewStatInput model.rolledStats statIdentifier) allStatIdentifiers) 
-                        (if model.freeStatsInput then [ Html.text "" ] else [viewValueBox "POINTS" (String.fromInt model.remainingPoints)])
+                        (List.map(\statIdentifier -> viewStatInput model.character.rolledStats statIdentifier) allStatIdentifiers) 
+                        (if model.settings.freeStatsInput then [ Html.text "" ] else [viewValueBox "POINTS" (String.fromInt model.character.remainingPoints)])
                     )
               , br [] []
               , h3 [] [ text "Computed stats" ]
@@ -213,23 +252,30 @@ view model =
                         [viewValueBox "PRO" (printWithSign proficiencyBonus)]
                     )
               , div [ class "flex-row" ]
-                    [ viewCharacterBaseLife model.class.identifier characterBaseLife ]
+                    [ viewCharacterBaseLife model.character.class.identifier characterBaseLife ]
               , div [ class "flex-row" ]
-                    [ viewSavingThrows finalStats model.class.proficiencySaves proficiencyBonus
-                    , viewSkills model]
+                    [ viewSavingThrows finalStats model.character.class.proficiencySaves proficiencyBonus
+                    , viewSkills model.character model.settings.gameVersion]
               ]
         , footer []
                  [ p [] [ text "/[A-Z]IKWAN/" ] ]
         ]
 
-viewRaceSelector: RaceIdentifiers -> Html Msg
-viewRaceSelector raceIdentifiers =
-    select [onInput UpdateRace] (List.map viewRaceOption raceIdentifiers)
+viewGameVersionSelector: GameVersion -> Html Msg
+viewGameVersionSelector selectedGameVersion =
+    select [ onInput UpdateGameVersion ] 
+           [ option [ value "DnD5", selected (selectedGameVersion == DnD5) ] [ text "Dungeon & Dragon 5" ]
+           , option [ value "AiME", selected (selectedGameVersion == AiME) ] [ text "Adventures in Middle Earth" ]
+           ]
 
-viewRaceOption: RaceIdentifier -> Html Msg
-viewRaceOption raceIdentifier =
+viewRaceSelector: RaceIdentifiers -> RaceIdentifier -> Html Msg
+viewRaceSelector raceIdentifiers selectedRaceIdentifier =
+    select [onInput UpdateRace] (List.map (\raceIdentifier -> viewRaceOption raceIdentifier selectedRaceIdentifier) raceIdentifiers )
+
+viewRaceOption: RaceIdentifier -> RaceIdentifier -> Html Msg
+viewRaceOption raceIdentifier selectedRaceIdentifier =
     case raceIdentifier of
-        NoRace -> option [ value "" ] [ text "Select a race" ]
+        NoRace -> option [ value "", selected (raceIdentifier == selectedRaceIdentifier) ] [ text "Select a race" ]
         _ -> viewOption (getRace raceIdentifier).asString
 
 viewSubRaceSelector: SubRaceIdentifiers -> SubRaceIdentifier -> Html Msg
@@ -247,14 +293,14 @@ viewSubRaceOption subRaceIdentifier selectedSubRace =
         NoSubRace -> option [ value "", selected (subRaceIdentifier == selectedSubRace) ] [ text "Select a subrace" ]
         _ -> viewOption (getSubRace subRaceIdentifier).asString
 
-viewClassSelector: ClassIdentifiers -> Html Msg
-viewClassSelector classIdentifiers =
-    select [onInput UpdateClass ] (List.map viewClassOption classIdentifiers)
+viewClassSelector: ClassIdentifiers -> ClassIdentifier -> Html Msg
+viewClassSelector classIdentifiers selectedClassIdentifier =
+    select [onInput UpdateClass ] (List.map (\classIdentifier -> viewClassOption classIdentifier selectedClassIdentifier)classIdentifiers )
 
-viewClassOption: ClassIdentifier -> Html Msg
-viewClassOption classIdentifier =
+viewClassOption: ClassIdentifier -> ClassIdentifier -> Html Msg
+viewClassOption classIdentifier selectedClassIdentifier =
     case classIdentifier of
-        NoClass -> option [ value "" ] [ text "Select a class" ]
+        NoClass -> option [ value "", selected (classIdentifier == selectedClassIdentifier) ] [ text "Select a class" ]
         _ -> viewOption (getClass classIdentifier).asString
 
 viewOption: String -> Html Msg
@@ -337,28 +383,28 @@ viewSavingThrow statIdentifier proficiencySaves statModifier proficiencyBonus =
     in
     li [] [ text (statToString statIdentifier ++ " : " ++ modifier) ]
 
-viewSkills: Model -> Html Msg
-viewSkills model =
+viewSkills: Character -> GameVersion -> Html Msg
+viewSkills character gameVersion =
     let
-        proficiencySkillsLimitReached = (List.length model.selectedProficiencySkills) >= model.class.proficiencySkillsLimit 
+        proficiencySkillsLimitReached = (List.length character.selectedProficiencySkills) >= character.class.proficiencySkillsLimit 
     in
     div [ class "margin-right" ]
         [ h4 [] [text "Skills" ]
         , ul []
              (List.map (\skillIdentifier -> 
-                 viewSkill model skillIdentifier proficiencySkillsLimitReached
-             ) allSkillIdentifiers)
+                 viewSkill character skillIdentifier proficiencySkillsLimitReached
+             ) (getGameVersionSkills gameVersion))
         ]
 
-viewSkill: Model -> SkillIdentifier -> Bool -> Html Msg
-viewSkill model skillIdentifier proficiencySkillsLimitReached =
+viewSkill: Character -> SkillIdentifier -> Bool -> Html Msg
+viewSkill character skillIdentifier proficiencySkillsLimitReached =
     let
         skill = getSkill skillIdentifier
         statIdentifier = skill.statIdentifier
-        statScore = getStatScore (computeFinalStats model) statIdentifier
-        hasClassProficiencySkill = List.member skillIdentifier model.class.proficiencySkills
-        hasSelectedProficiencySkill = List.member skillIdentifier model.selectedProficiencySkills
-        proficiencyBonus = if hasSelectedProficiencySkill then (computeProficiency model.level) else 0
+        statScore = getStatScore (computeFinalStats character) statIdentifier
+        hasClassProficiencySkill = List.member skillIdentifier character.class.proficiencySkills
+        hasSelectedProficiencySkill = List.member skillIdentifier character.selectedProficiencySkills
+        proficiencyBonus = if hasSelectedProficiencySkill then (computeProficiency character.level) else 0
         modifier = printWithSign ((computeModifier statScore) + proficiencyBonus)
         disableCheckbox = (not hasSelectedProficiencySkill && (not hasClassProficiencySkill || proficiencySkillsLimitReached))
     in
@@ -375,13 +421,13 @@ stringToId string =
 -- UPDATE
 
 update: Msg -> Model -> Model
-update msg ({ rolledStats, freeStatsInput, selectedProficiencySkills } as model) =
+update msg ({ settings, character } as model) =
     let
         updateStat: Stats -> StatIdentifier -> Int -> Stats
         updateStat stats statIdentifier newScore =
             List.map(\stat ->
                 if Tuple.first stat == statIdentifier then
-                    if freeStatsInput then
+                    if settings.freeStatsInput then
                         (statIdentifier, newScore)
                     else
                         (statIdentifier, (Basics.min (Basics.max 8 newScore) 15))
@@ -398,26 +444,55 @@ update msg ({ rolledStats, freeStatsInput, selectedProficiencySkills } as model)
             List.filter (\selectedSkillIdentifier -> selectedSkillIdentifier /= skillIdentifier) selectedSkillIdentifiers
     in
     case msg of
+        UpdateGameVersion gameVersion ->
+            { model | settings =
+                { settings | gameVersion = stringToGameVersion gameVersion }, 
+                character = { character | race = getRace NoRace, subRace = getSubRace NoSubRace, class = getClass NoClass }
+            }
         UpdateRace raceIdentifier -> 
-            { model | race = (getRace (stringToRace raceIdentifier)), subRace = getSubRace NoSubRace }
+            { model | character = 
+                { character | race = (getRace (stringToRace raceIdentifier)), subRace = getSubRace NoSubRace }
+            }
         UpdateSubRace subRaceIdentifier ->
-            { model | subRace = (getSubRace (stringToSubRace subRaceIdentifier)) }
+            { model | character = 
+                { character | subRace = (getSubRace (stringToSubRace subRaceIdentifier)) }
+            }
         UpdateClass classIdentifier ->
-            { model | class = (getClass (stringToClass classIdentifier )), selectedProficiencySkills = [] }
+            { model | character = 
+                { character | class = (getClass (stringToClass classIdentifier )), selectedProficiencySkills = [] }
+            }
         UpdateLevel level ->
-            { model | level = (Maybe.withDefault 1 (String.toInt level)) }
+            { model | character = 
+                { character | level = (Maybe.withDefault 1 (String.toInt level)) }
+            }
         UpdateStat statIdentifier newScore ->
-            update UpdateRemainingPoints { model | rolledStats = (updateStat rolledStats statIdentifier newScore) }
+            update UpdateRemainingPoints { model | character = 
+                { character | rolledStats = (updateStat character.rolledStats statIdentifier newScore) }
+            }
         UpdateRemainingPoints -> 
-            { model | remainingPoints = (27 - (computeRemainingPoints model.rolledStats)) }
+            { model | character = 
+                { character | remainingPoints = (27 - (computeRemainingPoints character.rolledStats)) }
+            }
         CheckFreeStatInput checked ->
             case checked of
-                True -> { model | freeStatsInput = True }
-                False -> update UpdateRemainingPoints { model | freeStatsInput = False }
+                True -> 
+                    { model | settings = 
+                        { settings | freeStatsInput = True }
+                    }
+                False -> 
+                    update UpdateRemainingPoints { model | settings = 
+                        { settings | freeStatsInput = False }
+                    }
         CheckProficiencySkill skill checked ->
             case checked of
-                True -> { model | selectedProficiencySkills = pushSelectedProficiencySkill selectedProficiencySkills skill }
-                False -> { model | selectedProficiencySkills = popSelectedProficiencySkill selectedProficiencySkills skill }
+                True -> 
+                    { model | character = 
+                        { character | selectedProficiencySkills = pushSelectedProficiencySkill character.selectedProficiencySkills skill }
+                    }
+                False -> 
+                    { model | character = 
+                        { character | selectedProficiencySkills = popSelectedProficiencySkill character.selectedProficiencySkills skill }
+                    }
 
 -- MAIN
 
@@ -443,13 +518,13 @@ computeStatCost value =
         15 -> 9
         _ -> 0
 
-computeFinalStats: Model -> Stats
-computeFinalStats model =
+computeFinalStats: Character -> Stats
+computeFinalStats character =
         (List.map (\statIdentifier -> 
             let 
-                finalScore = (getStatScore model.rolledStats statIdentifier) +
-                             (getStatScore model.race.statBonus statIdentifier) +
-                             (getStatScore model.subRace.statBonus statIdentifier)
+                finalScore = (getStatScore character.rolledStats statIdentifier) +
+                             (getStatScore character.race.statBonus statIdentifier) +
+                             (getStatScore character.subRace.statBonus statIdentifier)
             in
             (statIdentifier, finalScore)
          ) allStatIdentifiers)
@@ -461,6 +536,22 @@ computeModifier value =
 computeProficiency: Int -> Int
 computeProficiency level =
     2 + (Basics.floor (toFloat (level - 1) / 4))
+
+getGameVersionRaces: GameVersion -> RaceIdentifiers
+getGameVersionRaces gameVersion =
+    List.map (\race -> race.identifier)
+             (List.filter(\race -> List.member gameVersion race.gameVersions) (List.map getRace allRaceIdentifiers))
+
+getGameVersionClasses: GameVersion -> ClassIdentifiers
+getGameVersionClasses gameVersion =
+    List.map (\class -> class.identifier)
+             (List.filter(\class -> List.member gameVersion class.gameVersions) (List.map getClass allClassIdentifiers))
+
+getGameVersionSkills: GameVersion -> SkillIdentifiers
+getGameVersionSkills gameVersion =
+    List.map (\skill -> skill.identifier)
+             (List.filter(\skill -> List.member gameVersion skill.gameVersions) (List.map getSkill allSkillIdentifiers))
+
 
 getStatScore: Stats -> StatIdentifier -> Int
 getStatScore stats statIdentifier =
@@ -503,6 +594,17 @@ allRaceIdentifiers =
     , HalfOrc
     , Human
     , Tiefling
+    , Barding
+    , Beorning
+    , Dunedain
+    , LonelyMountainDwarf
+    , MirkwoodElf
+    , ShireHobbit
+    , BreeMen
+    , LakeMen
+    , MinasTirithMen
+    , RohanRider
+    , WilderlandWoodmen
     ]
 
 allSubRaceIdentifiers: SubRaceIdentifiers
@@ -544,6 +646,12 @@ allClassIdentifiers =
     , Sorcerer
     , Warlock
     , Wizard
+    , Scholar
+    , Slayer
+    , TreasureHunter
+    , Wanderer
+    , Warden
+    , Warrior
     ]
 
 allSkillIdentifiers: SkillIdentifiers
@@ -557,15 +665,19 @@ allSkillIdentifiers =
     , Insight
     , Intimidation
     , Investigation
+    , Lore
     , Medicine
     , Nature
     , Perception
     , Performance
     , Persuasion
     , Religion
+    , Riddle
+    , ShadowLore
     , SleightOfHand
     , Stealth
     , Survival
+    , Traditions
     ]
 
 
@@ -654,11 +766,88 @@ getRace identifier =
             , gameVersions = [DnD5, Laelith]
             , asString = "Tiefling"
             }
-        _ ->
+        Barding ->
+            { identifier = Barding
+            , statBonus = [ (Constitution, 1) ]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Barding"
+            }
+        Beorning ->
+            { identifier = Beorning
+            , statBonus = [ (Strength, 1) ]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Beorning"
+            }
+        Dunedain ->
+            { identifier = Dunedain
+            , statBonus = [ (Constitution, 1), (Wisdom, 1) ]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Dunedain"
+            }
+        LonelyMountainDwarf ->
+            { identifier = LonelyMountainDwarf
+            , statBonus = [ (Constitution, 2) ]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Lonely Mountain Dwarf"
+            }
+        MirkwoodElf ->
+            { identifier = MirkwoodElf
+            , statBonus = [ (Dexterity, 2), (Wisdom, 1) ]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Mirkwood Elf"
+            }
+        ShireHobbit ->
+            { identifier = ShireHobbit
+            , statBonus = [ (Dexterity, 2) ]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Shire Hobbit"
+            }
+        BreeMen ->
+            { identifier = BreeMen
+            , statBonus = [ (Wisdom, 1) ]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Bree Men"
+            }
+        LakeMen ->
+            { identifier = LakeMen
+            , statBonus = [ (Charisma, 1) ]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Lake Men"
+            }
+        MinasTirithMen ->
+            { identifier = MinasTirithMen
+            , statBonus = [ (Intelligence, 1) ]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Minas Tirith Men"
+            }
+        RohanRider ->
+            { identifier = RohanRider
+            , statBonus = [ (Wisdom, 1)]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Rohan Rider"
+            }
+        WilderlandWoodmen ->
+            { identifier = WilderlandWoodmen
+            , statBonus = [ (Dexterity, 1) ]
+            , subRaces = []
+            , gameVersions = [AiME]
+            , asString = "Wilderland Woodmen"
+            }
+        NoRace ->
             { identifier = NoRace
             , statBonus = []
             , subRaces = []
-            , gameVersions = []
+            , gameVersions = [DnD5, Laelith, AiME]
             , asString = ""
             }
 
@@ -779,10 +968,10 @@ getSubRace identifier =
             , gameVersions = [DnD5, Laelith]
             , asString = "Stout Halfling"
             }
-        _ ->
+        NoSubRace ->
             { identifier = NoSubRace
             , statBonus = []
-            , gameVersions = []
+            , gameVersions = [DnD5, Laelith, AiME]
             , asString = ""
             }
 
@@ -897,13 +1086,67 @@ getClass classIdentifier =
             , gameVersions = [DnD5, Laelith]
             , asString = "Wizard"
             }
+        Scholar ->
+            { identifier = Scholar
+            , proficiencySaves = [ Intelligence, Wisdom ]
+            , proficiencySkills = []
+            , proficiencySkillsLimit = 1
+            , lifeDice = 8
+            , gameVersions = [AiME]
+            , asString = "Scholar"
+            }
+        Slayer ->
+            { identifier = Slayer
+            , proficiencySaves = [ Strength, Constitution ]
+            , proficiencySkills = []
+            , proficiencySkillsLimit = 2
+            , lifeDice = 12
+            , gameVersions = [AiME]
+            , asString = "Slayer"
+            }
+        TreasureHunter ->
+            { identifier = TreasureHunter
+            , proficiencySaves = [ Dexterity, Intelligence ]
+            , proficiencySkills = []
+            , proficiencySkillsLimit = 4
+            , lifeDice = 8
+            , gameVersions = [AiME]
+            , asString = "Treasure Hunter"
+            }
+        Wanderer ->
+            { identifier = Wanderer
+            , proficiencySaves = [ Strength, Constitution ]
+            , proficiencySkills = []
+            , proficiencySkillsLimit = 3
+            , lifeDice = 10
+            , gameVersions = [AiME]
+            , asString = "Wanderer"
+            }
+        Warden ->
+            { identifier = Warden
+            , proficiencySaves = [ Dexterity, Charisma ]
+            , proficiencySkills = []
+            , proficiencySkillsLimit = 2
+            , lifeDice = 8
+            , gameVersions = [AiME]
+            , asString = "Warden"
+            }
+        Warrior ->
+            { identifier = Warrior
+            , proficiencySaves = [ Strength, Constitution ]
+            , proficiencySkills = []
+            , proficiencySkillsLimit = 2
+            , lifeDice = 10
+            , gameVersions = [AiME]
+            , asString = "Warrior"
+            }
         NoClass ->
             { identifier = NoClass
             , proficiencySaves = []
             , proficiencySkills = []
             , proficiencySkillsLimit = 0
             , lifeDice = 0
-            , gameVersions = []
+            , gameVersions = [DnD5, Laelith, AiME]
             , asString = ""
             }
 
@@ -925,7 +1168,7 @@ getSkill skillIdentifier =
         Arcana ->
             { identifier = Arcana
             , statIdentifier = Intelligence
-            , gameVersions = [DnD5, Laelith, AiME]
+            , gameVersions = [DnD5, Laelith]
             , asString = "Arcana"
             }
         Athletics ->
@@ -964,6 +1207,12 @@ getSkill skillIdentifier =
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Investigation"
             }
+        Lore ->
+            { identifier = Lore
+            , statIdentifier = Intelligence
+            , gameVersions = [AiME]
+            , asString = "Lore"
+            }
         Medicine ->
             { identifier = Medicine
             , statIdentifier = Wisdom
@@ -997,8 +1246,20 @@ getSkill skillIdentifier =
         Religion ->
             { identifier = Religion
             , statIdentifier = Intelligence
-            , gameVersions = [DnD5, Laelith, AiME]
+            , gameVersions = [DnD5, Laelith]
             , asString = "Religion"
+            }
+        Riddle ->
+            { identifier = Riddle
+            , statIdentifier = Intelligence
+            , gameVersions = [AiME]
+            , asString = "Riddle"
+            }
+        ShadowLore ->
+            { identifier = ShadowLore
+            , statIdentifier = Intelligence
+            , gameVersions = [AiME]
+            , asString = "Shadow Lore"
             }
         SleightOfHand ->
             { identifier = SleightOfHand
@@ -1017,6 +1278,12 @@ getSkill skillIdentifier =
             , statIdentifier = Wisdom
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Survival"
+            }
+        Traditions ->
+            { identifier = Traditions
+            , statIdentifier = Intelligence
+            , gameVersions = [AiME]
+            , asString = "Traditions"
             }
         NoSkill ->
             { identifier = NoSkill
@@ -1039,6 +1306,17 @@ stringToRace string =
         "HalfOrc" -> HalfOrc
         "Human" -> Human
         "Tiefling" -> Tiefling
+        "Barding" -> Barding
+        "Beorning" -> Beorning
+        "Dunedain" -> Dunedain
+        "LonelyMountainDwarf" -> LonelyMountainDwarf
+        "MirkwoodElf" -> MirkwoodElf
+        "ShireHobbit" -> ShireHobbit
+        "BreeMen" -> BreeMen
+        "LakeMen" -> LakeMen
+        "MinasTirithMen" -> MinasTirithMen
+        "RohanRider" -> RohanRider
+        "WilderlandWoodmen" -> WilderlandWoodmen
         _ -> NoRace
 
 stringToSubRace: String -> SubRaceIdentifier
@@ -1082,28 +1360,13 @@ stringToClass string =
         "Wizard" -> Wizard
         _ -> NoClass
 
-stringToSkill: String -> SkillIdentifier
-stringToSkill str =
-    case str of
-        "Acrobatics" -> Acrobatics
-        "AnimalHandling" -> AnimalHandling
-        "Arcana" -> Arcana
-        "Athletics" -> Athletics
-        "Deception" -> Deception
-        "History" -> History
-        "Insight" -> Insight
-        "Intimidation" -> Intimidation
-        "Investigation" -> Investigation
-        "Medicine" -> Medicine
-        "Nature" -> Nature
-        "Perception" -> Perception
-        "Performance" -> Performance
-        "Persuasion" -> Persuasion
-        "Religion" -> Religion
-        "SleightOfHand" -> SleightOfHand
-        "Stealth" -> Stealth
-        "Survival" -> Survival
-        _ -> NoSkill
+stringToGameVersion: String -> GameVersion
+stringToGameVersion string =
+    case string of
+        "DnD5" -> DnD5
+        "AiME" -> AiME
+        "Laelith" -> Laelith
+        _ -> DnD5
 
 -- TO STRING
 

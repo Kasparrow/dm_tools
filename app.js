@@ -4438,6 +4438,7 @@ var $elm$core$Basics$LT = {$: 'LT'};
 var $author$project$DmTools$Charisma = {$: 'Charisma'};
 var $author$project$DmTools$Constitution = {$: 'Constitution'};
 var $author$project$DmTools$Dexterity = {$: 'Dexterity'};
+var $author$project$DmTools$DnD5 = {$: 'DnD5'};
 var $elm$core$Basics$False = {$: 'False'};
 var $author$project$DmTools$Intelligence = {$: 'Intelligence'};
 var $author$project$DmTools$NoClass = {$: 'NoClass'};
@@ -4446,6 +4447,7 @@ var $author$project$DmTools$NoSubRace = {$: 'NoSubRace'};
 var $author$project$DmTools$Strength = {$: 'Strength'};
 var $author$project$DmTools$Wisdom = {$: 'Wisdom'};
 var $author$project$DmTools$Acrobatics = {$: 'Acrobatics'};
+var $author$project$DmTools$AiME = {$: 'AiME'};
 var $author$project$DmTools$AnimalHandling = {$: 'AnimalHandling'};
 var $author$project$DmTools$Arcana = {$: 'Arcana'};
 var $author$project$DmTools$Athletics = {$: 'Athletics'};
@@ -4453,7 +4455,6 @@ var $author$project$DmTools$Barbarian = {$: 'Barbarian'};
 var $author$project$DmTools$Bard = {$: 'Bard'};
 var $author$project$DmTools$Cleric = {$: 'Cleric'};
 var $author$project$DmTools$Deception = {$: 'Deception'};
-var $author$project$DmTools$DnD5 = {$: 'DnD5'};
 var $author$project$DmTools$Druid = {$: 'Druid'};
 var $author$project$DmTools$Fighter = {$: 'Fighter'};
 var $author$project$DmTools$History = {$: 'History'};
@@ -4471,14 +4472,24 @@ var $author$project$DmTools$Persuasion = {$: 'Persuasion'};
 var $author$project$DmTools$Ranger = {$: 'Ranger'};
 var $author$project$DmTools$Religion = {$: 'Religion'};
 var $author$project$DmTools$Rogue = {$: 'Rogue'};
+var $author$project$DmTools$Scholar = {$: 'Scholar'};
+var $author$project$DmTools$Slayer = {$: 'Slayer'};
 var $author$project$DmTools$SleightOfHand = {$: 'SleightOfHand'};
 var $author$project$DmTools$Sorcerer = {$: 'Sorcerer'};
 var $author$project$DmTools$Stealth = {$: 'Stealth'};
 var $author$project$DmTools$Survival = {$: 'Survival'};
+var $author$project$DmTools$TreasureHunter = {$: 'TreasureHunter'};
+var $author$project$DmTools$Wanderer = {$: 'Wanderer'};
+var $author$project$DmTools$Warden = {$: 'Warden'};
 var $author$project$DmTools$Warlock = {$: 'Warlock'};
+var $author$project$DmTools$Warrior = {$: 'Warrior'};
 var $author$project$DmTools$Wizard = {$: 'Wizard'};
+var $author$project$DmTools$Lore = {$: 'Lore'};
+var $author$project$DmTools$Riddle = {$: 'Riddle'};
+var $author$project$DmTools$ShadowLore = {$: 'ShadowLore'};
+var $author$project$DmTools$Traditions = {$: 'Traditions'};
 var $author$project$DmTools$allSkillIdentifiers = _List_fromArray(
-	[$author$project$DmTools$Acrobatics, $author$project$DmTools$AnimalHandling, $author$project$DmTools$Arcana, $author$project$DmTools$Athletics, $author$project$DmTools$Deception, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Investigation, $author$project$DmTools$Medicine, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Performance, $author$project$DmTools$Persuasion, $author$project$DmTools$Religion, $author$project$DmTools$SleightOfHand, $author$project$DmTools$Stealth, $author$project$DmTools$Survival]);
+	[$author$project$DmTools$Acrobatics, $author$project$DmTools$AnimalHandling, $author$project$DmTools$Arcana, $author$project$DmTools$Athletics, $author$project$DmTools$Deception, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Intimidation, $author$project$DmTools$Investigation, $author$project$DmTools$Lore, $author$project$DmTools$Medicine, $author$project$DmTools$Nature, $author$project$DmTools$Perception, $author$project$DmTools$Performance, $author$project$DmTools$Persuasion, $author$project$DmTools$Religion, $author$project$DmTools$Riddle, $author$project$DmTools$ShadowLore, $author$project$DmTools$SleightOfHand, $author$project$DmTools$Stealth, $author$project$DmTools$Survival, $author$project$DmTools$Traditions]);
 var $author$project$DmTools$getClass = function (classIdentifier) {
 	switch (classIdentifier.$) {
 		case 'Barbarian':
@@ -4636,18 +4647,103 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 					[$author$project$DmTools$Arcana, $author$project$DmTools$History, $author$project$DmTools$Insight, $author$project$DmTools$Investigation, $author$project$DmTools$Medicine, $author$project$DmTools$Religion]),
 				proficiencySkillsLimit: 2
 			};
+		case 'Scholar':
+			return {
+				asString: 'Scholar',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Scholar,
+				lifeDice: 8,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom]),
+				proficiencySkills: _List_Nil,
+				proficiencySkillsLimit: 1
+			};
+		case 'Slayer':
+			return {
+				asString: 'Slayer',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Slayer,
+				lifeDice: 12,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution]),
+				proficiencySkills: _List_Nil,
+				proficiencySkillsLimit: 2
+			};
+		case 'TreasureHunter':
+			return {
+				asString: 'Treasure Hunter',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$TreasureHunter,
+				lifeDice: 8,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Dexterity, $author$project$DmTools$Intelligence]),
+				proficiencySkills: _List_Nil,
+				proficiencySkillsLimit: 4
+			};
+		case 'Wanderer':
+			return {
+				asString: 'Wanderer',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Wanderer,
+				lifeDice: 10,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution]),
+				proficiencySkills: _List_Nil,
+				proficiencySkillsLimit: 3
+			};
+		case 'Warden':
+			return {
+				asString: 'Warden',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Warden,
+				lifeDice: 8,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Dexterity, $author$project$DmTools$Charisma]),
+				proficiencySkills: _List_Nil,
+				proficiencySkillsLimit: 2
+			};
+		case 'Warrior':
+			return {
+				asString: 'Warrior',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Warrior,
+				lifeDice: 10,
+				proficiencySaves: _List_fromArray(
+					[$author$project$DmTools$Strength, $author$project$DmTools$Constitution]),
+				proficiencySkills: _List_Nil,
+				proficiencySkillsLimit: 2
+			};
 		default:
-			return {asString: '', gameVersions: _List_Nil, identifier: $author$project$DmTools$NoClass, lifeDice: 0, proficiencySaves: _List_Nil, proficiencySkills: _List_Nil, proficiencySkillsLimit: 0};
+			return {
+				asString: '',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$NoClass,
+				lifeDice: 0,
+				proficiencySaves: _List_Nil,
+				proficiencySkills: _List_Nil,
+				proficiencySkillsLimit: 0
+			};
 	}
 };
+var $author$project$DmTools$Barding = {$: 'Barding'};
+var $author$project$DmTools$Beorning = {$: 'Beorning'};
 var $author$project$DmTools$BlackDragonborn = {$: 'BlackDragonborn'};
 var $author$project$DmTools$BlueDragonborn = {$: 'BlueDragonborn'};
 var $author$project$DmTools$BrassDragonborn = {$: 'BrassDragonborn'};
+var $author$project$DmTools$BreeMen = {$: 'BreeMen'};
 var $author$project$DmTools$BronzeDragonborn = {$: 'BronzeDragonborn'};
 var $author$project$DmTools$CopperDragonborn = {$: 'CopperDragonborn'};
 var $author$project$DmTools$DeepGnome = {$: 'DeepGnome'};
 var $author$project$DmTools$Dragonborn = {$: 'Dragonborn'};
 var $author$project$DmTools$Drow = {$: 'Drow'};
+var $author$project$DmTools$Dunedain = {$: 'Dunedain'};
 var $author$project$DmTools$Dwarf = {$: 'Dwarf'};
 var $author$project$DmTools$Elf = {$: 'Elf'};
 var $author$project$DmTools$Gnome = {$: 'Gnome'};
@@ -4659,14 +4755,21 @@ var $author$project$DmTools$Halfling = {$: 'Halfling'};
 var $author$project$DmTools$HighElf = {$: 'HighElf'};
 var $author$project$DmTools$HillsDwarf = {$: 'HillsDwarf'};
 var $author$project$DmTools$Human = {$: 'Human'};
+var $author$project$DmTools$LakeMen = {$: 'LakeMen'};
 var $author$project$DmTools$LightfootHalfling = {$: 'LightfootHalfling'};
+var $author$project$DmTools$LonelyMountainDwarf = {$: 'LonelyMountainDwarf'};
+var $author$project$DmTools$MinasTirithMen = {$: 'MinasTirithMen'};
+var $author$project$DmTools$MirkwoodElf = {$: 'MirkwoodElf'};
 var $author$project$DmTools$MountainsDwarf = {$: 'MountainsDwarf'};
 var $author$project$DmTools$RedDragonborn = {$: 'RedDragonborn'};
 var $author$project$DmTools$RockGnome = {$: 'RockGnome'};
+var $author$project$DmTools$RohanRider = {$: 'RohanRider'};
+var $author$project$DmTools$ShireHobbit = {$: 'ShireHobbit'};
 var $author$project$DmTools$SilverDragonborn = {$: 'SilverDragonborn'};
 var $author$project$DmTools$StoutHalfling = {$: 'StoutHalfling'};
 var $author$project$DmTools$Tiefling = {$: 'Tiefling'};
 var $author$project$DmTools$WhiteDragonborn = {$: 'WhiteDragonborn'};
+var $author$project$DmTools$WilderlandWoodmen = {$: 'WilderlandWoodmen'};
 var $author$project$DmTools$WoodElf = {$: 'WoodElf'};
 var $author$project$DmTools$getRace = function (identifier) {
 	switch (identifier.$) {
@@ -4791,8 +4894,149 @@ var $author$project$DmTools$getRace = function (identifier) {
 					]),
 				subRaces: _List_Nil
 			};
+		case 'Barding':
+			return {
+				asString: 'Barding',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Barding,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Constitution, 1)
+					]),
+				subRaces: _List_Nil
+			};
+		case 'Beorning':
+			return {
+				asString: 'Beorning',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Beorning,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Strength, 1)
+					]),
+				subRaces: _List_Nil
+			};
+		case 'Dunedain':
+			return {
+				asString: 'Dunedain',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Dunedain,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Constitution, 1),
+						_Utils_Tuple2($author$project$DmTools$Wisdom, 1)
+					]),
+				subRaces: _List_Nil
+			};
+		case 'LonelyMountainDwarf':
+			return {
+				asString: 'Lonely Mountain Dwarf',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$LonelyMountainDwarf,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Constitution, 2)
+					]),
+				subRaces: _List_Nil
+			};
+		case 'MirkwoodElf':
+			return {
+				asString: 'Mirkwood Elf',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$MirkwoodElf,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Dexterity, 2),
+						_Utils_Tuple2($author$project$DmTools$Wisdom, 1)
+					]),
+				subRaces: _List_Nil
+			};
+		case 'ShireHobbit':
+			return {
+				asString: 'Shire Hobbit',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$ShireHobbit,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Dexterity, 2)
+					]),
+				subRaces: _List_Nil
+			};
+		case 'BreeMen':
+			return {
+				asString: 'Bree Men',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$BreeMen,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Wisdom, 1)
+					]),
+				subRaces: _List_Nil
+			};
+		case 'LakeMen':
+			return {
+				asString: 'Lake Men',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$LakeMen,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Charisma, 1)
+					]),
+				subRaces: _List_Nil
+			};
+		case 'MinasTirithMen':
+			return {
+				asString: 'Minas Tirith Men',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$MinasTirithMen,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Intelligence, 1)
+					]),
+				subRaces: _List_Nil
+			};
+		case 'RohanRider':
+			return {
+				asString: 'Rohan Rider',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$RohanRider,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Wisdom, 1)
+					]),
+				subRaces: _List_Nil
+			};
+		case 'WilderlandWoodmen':
+			return {
+				asString: 'Wilderland Woodmen',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$WilderlandWoodmen,
+				statBonus: _List_fromArray(
+					[
+						_Utils_Tuple2($author$project$DmTools$Dexterity, 1)
+					]),
+				subRaces: _List_Nil
+			};
 		default:
-			return {asString: '', gameVersions: _List_Nil, identifier: $author$project$DmTools$NoRace, statBonus: _List_Nil, subRaces: _List_Nil};
+			return {
+				asString: '',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$NoRace,
+				statBonus: _List_Nil,
+				subRaces: _List_Nil
+			};
 	}
 };
 var $author$project$DmTools$getSubRace = function (identifier) {
@@ -4977,26 +5221,34 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 					])
 			};
 		default:
-			return {asString: '', gameVersions: _List_Nil, identifier: $author$project$DmTools$NoSubRace, statBonus: _List_Nil};
+			return {
+				asString: '',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$NoSubRace,
+				statBonus: _List_Nil
+			};
 	}
 };
 var $author$project$DmTools$init = {
-	_class: $author$project$DmTools$getClass($author$project$DmTools$NoClass),
-	freeStatsInput: false,
-	level: 1,
-	race: $author$project$DmTools$getRace($author$project$DmTools$NoRace),
-	remainingPoints: 27,
-	rolledStats: _List_fromArray(
-		[
-			_Utils_Tuple2($author$project$DmTools$Strength, 8),
-			_Utils_Tuple2($author$project$DmTools$Dexterity, 8),
-			_Utils_Tuple2($author$project$DmTools$Constitution, 8),
-			_Utils_Tuple2($author$project$DmTools$Intelligence, 8),
-			_Utils_Tuple2($author$project$DmTools$Wisdom, 8),
-			_Utils_Tuple2($author$project$DmTools$Charisma, 8)
-		]),
-	selectedProficiencySkills: _List_Nil,
-	subRace: $author$project$DmTools$getSubRace($author$project$DmTools$NoSubRace)
+	character: {
+		_class: $author$project$DmTools$getClass($author$project$DmTools$NoClass),
+		level: 1,
+		race: $author$project$DmTools$getRace($author$project$DmTools$NoRace),
+		remainingPoints: 27,
+		rolledStats: _List_fromArray(
+			[
+				_Utils_Tuple2($author$project$DmTools$Strength, 8),
+				_Utils_Tuple2($author$project$DmTools$Dexterity, 8),
+				_Utils_Tuple2($author$project$DmTools$Constitution, 8),
+				_Utils_Tuple2($author$project$DmTools$Intelligence, 8),
+				_Utils_Tuple2($author$project$DmTools$Wisdom, 8),
+				_Utils_Tuple2($author$project$DmTools$Charisma, 8)
+			]),
+		selectedProficiencySkills: _List_Nil,
+		subRace: $author$project$DmTools$getSubRace($author$project$DmTools$NoSubRace)
+	},
+	settings: {freeStatsInput: false, gameVersion: $author$project$DmTools$DnD5}
 };
 var $elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
@@ -5812,6 +6064,18 @@ var $author$project$DmTools$stringToClass = function (string) {
 			return $author$project$DmTools$NoClass;
 	}
 };
+var $author$project$DmTools$stringToGameVersion = function (string) {
+	switch (string) {
+		case 'DnD5':
+			return $author$project$DmTools$DnD5;
+		case 'AiME':
+			return $author$project$DmTools$AiME;
+		case 'Laelith':
+			return $author$project$DmTools$Laelith;
+		default:
+			return $author$project$DmTools$DnD5;
+	}
+};
 var $author$project$DmTools$stringToRace = function (string) {
 	switch (string) {
 		case 'Dragonborn':
@@ -5832,6 +6096,28 @@ var $author$project$DmTools$stringToRace = function (string) {
 			return $author$project$DmTools$Human;
 		case 'Tiefling':
 			return $author$project$DmTools$Tiefling;
+		case 'Barding':
+			return $author$project$DmTools$Barding;
+		case 'Beorning':
+			return $author$project$DmTools$Beorning;
+		case 'Dunedain':
+			return $author$project$DmTools$Dunedain;
+		case 'LonelyMountainDwarf':
+			return $author$project$DmTools$LonelyMountainDwarf;
+		case 'MirkwoodElf':
+			return $author$project$DmTools$MirkwoodElf;
+		case 'ShireHobbit':
+			return $author$project$DmTools$ShireHobbit;
+		case 'BreeMen':
+			return $author$project$DmTools$BreeMen;
+		case 'LakeMen':
+			return $author$project$DmTools$LakeMen;
+		case 'MinasTirithMen':
+			return $author$project$DmTools$MinasTirithMen;
+		case 'RohanRider':
+			return $author$project$DmTools$RohanRider;
+		case 'WilderlandWoodmen':
+			return $author$project$DmTools$WilderlandWoodmen;
 		default:
 			return $author$project$DmTools$NoRace;
 	}
@@ -5893,15 +6179,14 @@ var $author$project$DmTools$update = F2(
 	function (msg, model) {
 		update:
 		while (true) {
-			var rolledStats = model.rolledStats;
-			var freeStatsInput = model.freeStatsInput;
-			var selectedProficiencySkills = model.selectedProficiencySkills;
+			var settings = model.settings;
+			var character = model.character;
 			var updateStat = F3(
 				function (stats, statIdentifier, newScore) {
 					return A2(
 						$elm$core$List$map,
 						function (stat) {
-							return _Utils_eq(stat.a, statIdentifier) ? (freeStatsInput ? _Utils_Tuple2(statIdentifier, newScore) : _Utils_Tuple2(
+							return _Utils_eq(stat.a, statIdentifier) ? (settings.freeStatsInput ? _Utils_Tuple2(statIdentifier, newScore) : _Utils_Tuple2(
 								statIdentifier,
 								A2(
 									$elm$core$Basics$min,
@@ -5924,41 +6209,75 @@ var $author$project$DmTools$update = F2(
 						selectedSkillIdentifiers);
 				});
 			switch (msg.$) {
+				case 'UpdateGameVersion':
+					var gameVersion = msg.a;
+					return _Utils_update(
+						model,
+						{
+							character: _Utils_update(
+								character,
+								{
+									_class: $author$project$DmTools$getClass($author$project$DmTools$NoClass),
+									race: $author$project$DmTools$getRace($author$project$DmTools$NoRace),
+									subRace: $author$project$DmTools$getSubRace($author$project$DmTools$NoSubRace)
+								}),
+							settings: _Utils_update(
+								settings,
+								{
+									gameVersion: $author$project$DmTools$stringToGameVersion(gameVersion)
+								})
+						});
 				case 'UpdateRace':
 					var raceIdentifier = msg.a;
 					return _Utils_update(
 						model,
 						{
-							race: $author$project$DmTools$getRace(
-								$author$project$DmTools$stringToRace(raceIdentifier)),
-							subRace: $author$project$DmTools$getSubRace($author$project$DmTools$NoSubRace)
+							character: _Utils_update(
+								character,
+								{
+									race: $author$project$DmTools$getRace(
+										$author$project$DmTools$stringToRace(raceIdentifier)),
+									subRace: $author$project$DmTools$getSubRace($author$project$DmTools$NoSubRace)
+								})
 						});
 				case 'UpdateSubRace':
 					var subRaceIdentifier = msg.a;
 					return _Utils_update(
 						model,
 						{
-							subRace: $author$project$DmTools$getSubRace(
-								$author$project$DmTools$stringToSubRace(subRaceIdentifier))
+							character: _Utils_update(
+								character,
+								{
+									subRace: $author$project$DmTools$getSubRace(
+										$author$project$DmTools$stringToSubRace(subRaceIdentifier))
+								})
 						});
 				case 'UpdateClass':
 					var classIdentifier = msg.a;
 					return _Utils_update(
 						model,
 						{
-							_class: $author$project$DmTools$getClass(
-								$author$project$DmTools$stringToClass(classIdentifier)),
-							selectedProficiencySkills: _List_Nil
+							character: _Utils_update(
+								character,
+								{
+									_class: $author$project$DmTools$getClass(
+										$author$project$DmTools$stringToClass(classIdentifier)),
+									selectedProficiencySkills: _List_Nil
+								})
 						});
 				case 'UpdateLevel':
 					var level = msg.a;
 					return _Utils_update(
 						model,
 						{
-							level: A2(
-								$elm$core$Maybe$withDefault,
-								1,
-								$elm$core$String$toInt(level))
+							character: _Utils_update(
+								character,
+								{
+									level: A2(
+										$elm$core$Maybe$withDefault,
+										1,
+										$elm$core$String$toInt(level))
+								})
 						});
 				case 'UpdateStat':
 					var statIdentifier = msg.a;
@@ -5967,7 +6286,11 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							rolledStats: A3(updateStat, rolledStats, statIdentifier, newScore)
+							character: _Utils_update(
+								character,
+								{
+									rolledStats: A3(updateStat, character.rolledStats, statIdentifier, newScore)
+								})
 						});
 					msg = $temp$msg;
 					model = $temp$model;
@@ -5976,19 +6299,31 @@ var $author$project$DmTools$update = F2(
 					return _Utils_update(
 						model,
 						{
-							remainingPoints: 27 - $author$project$DmTools$computeRemainingPoints(model.rolledStats)
+							character: _Utils_update(
+								character,
+								{
+									remainingPoints: 27 - $author$project$DmTools$computeRemainingPoints(character.rolledStats)
+								})
 						});
 				case 'CheckFreeStatInput':
 					var checked = msg.a;
 					if (checked) {
 						return _Utils_update(
 							model,
-							{freeStatsInput: true});
+							{
+								settings: _Utils_update(
+									settings,
+									{freeStatsInput: true})
+							});
 					} else {
 						var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
 							$temp$model = _Utils_update(
 							model,
-							{freeStatsInput: false});
+							{
+								settings: _Utils_update(
+									settings,
+									{freeStatsInput: false})
+							});
 						msg = $temp$msg;
 						model = $temp$model;
 						continue update;
@@ -6000,13 +6335,21 @@ var $author$project$DmTools$update = F2(
 						return _Utils_update(
 							model,
 							{
-								selectedProficiencySkills: A2(pushSelectedProficiencySkill, selectedProficiencySkills, skill)
+								character: _Utils_update(
+									character,
+									{
+										selectedProficiencySkills: A2(pushSelectedProficiencySkill, character.selectedProficiencySkills, skill)
+									})
 							});
 					} else {
 						return _Utils_update(
 							model,
 							{
-								selectedProficiencySkills: A2(popSelectedProficiencySkill, selectedProficiencySkills, skill)
+								character: _Utils_update(
+									character,
+									{
+										selectedProficiencySkills: A2(popSelectedProficiencySkill, character.selectedProficiencySkills, skill)
+									})
 							});
 					}
 			}
@@ -6016,10 +6359,6 @@ var $author$project$DmTools$CheckFreeStatInput = function (a) {
 	return {$: 'CheckFreeStatInput', a: a};
 };
 var $elm$html$Html$a = _VirtualDom_node('a');
-var $author$project$DmTools$allClassIdentifiers = _List_fromArray(
-	[$author$project$DmTools$NoClass, $author$project$DmTools$Barbarian, $author$project$DmTools$Bard, $author$project$DmTools$Cleric, $author$project$DmTools$Druid, $author$project$DmTools$Fighter, $author$project$DmTools$Monk, $author$project$DmTools$Paladin, $author$project$DmTools$Ranger, $author$project$DmTools$Rogue, $author$project$DmTools$Sorcerer, $author$project$DmTools$Warlock, $author$project$DmTools$Wizard]);
-var $author$project$DmTools$allRaceIdentifiers = _List_fromArray(
-	[$author$project$DmTools$NoRace, $author$project$DmTools$Dragonborn, $author$project$DmTools$Dwarf, $author$project$DmTools$Elf, $author$project$DmTools$Gnome, $author$project$DmTools$HalfElf, $author$project$DmTools$Halfling, $author$project$DmTools$HalfOrc, $author$project$DmTools$Human, $author$project$DmTools$Tiefling]);
 var $author$project$DmTools$allStatIdentifiers = _List_fromArray(
 	[$author$project$DmTools$Strength, $author$project$DmTools$Dexterity, $author$project$DmTools$Constitution, $author$project$DmTools$Intelligence, $author$project$DmTools$Wisdom, $author$project$DmTools$Charisma]);
 var $elm$core$List$append = F2(
@@ -6065,11 +6404,11 @@ var $author$project$DmTools$getStatScore = F2(
 			return 0;
 		}
 	});
-var $author$project$DmTools$computeFinalStats = function (model) {
+var $author$project$DmTools$computeFinalStats = function (character) {
 	return A2(
 		$elm$core$List$map,
 		function (statIdentifier) {
-			var finalScore = (A2($author$project$DmTools$getStatScore, model.rolledStats, statIdentifier) + A2($author$project$DmTools$getStatScore, model.race.statBonus, statIdentifier)) + A2($author$project$DmTools$getStatScore, model.subRace.statBonus, statIdentifier);
+			var finalScore = (A2($author$project$DmTools$getStatScore, character.rolledStats, statIdentifier) + A2($author$project$DmTools$getStatScore, character.race.statBonus, statIdentifier)) + A2($author$project$DmTools$getStatScore, character.subRace.statBonus, statIdentifier);
 			return _Utils_Tuple2(statIdentifier, finalScore);
 		},
 		$author$project$DmTools$allStatIdentifiers);
@@ -6083,6 +6422,262 @@ var $author$project$DmTools$computeProficiency = function (level) {
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$footer = _VirtualDom_node('footer');
 var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
+var $author$project$DmTools$allClassIdentifiers = _List_fromArray(
+	[$author$project$DmTools$NoClass, $author$project$DmTools$Barbarian, $author$project$DmTools$Bard, $author$project$DmTools$Cleric, $author$project$DmTools$Druid, $author$project$DmTools$Fighter, $author$project$DmTools$Monk, $author$project$DmTools$Paladin, $author$project$DmTools$Ranger, $author$project$DmTools$Rogue, $author$project$DmTools$Sorcerer, $author$project$DmTools$Warlock, $author$project$DmTools$Wizard, $author$project$DmTools$Scholar, $author$project$DmTools$Slayer, $author$project$DmTools$TreasureHunter, $author$project$DmTools$Wanderer, $author$project$DmTools$Warden, $author$project$DmTools$Warrior]);
+var $elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var $elm$core$List$member = F2(
+	function (x, xs) {
+		return A2(
+			$elm$core$List$any,
+			function (a) {
+				return _Utils_eq(a, x);
+			},
+			xs);
+	});
+var $author$project$DmTools$getGameVersionClasses = function (gameVersion) {
+	return A2(
+		$elm$core$List$map,
+		function (_class) {
+			return _class.identifier;
+		},
+		A2(
+			$elm$core$List$filter,
+			function (_class) {
+				return A2($elm$core$List$member, gameVersion, _class.gameVersions);
+			},
+			A2($elm$core$List$map, $author$project$DmTools$getClass, $author$project$DmTools$allClassIdentifiers)));
+};
+var $author$project$DmTools$allRaceIdentifiers = _List_fromArray(
+	[$author$project$DmTools$NoRace, $author$project$DmTools$Dragonborn, $author$project$DmTools$Dwarf, $author$project$DmTools$Elf, $author$project$DmTools$Gnome, $author$project$DmTools$HalfElf, $author$project$DmTools$Halfling, $author$project$DmTools$HalfOrc, $author$project$DmTools$Human, $author$project$DmTools$Tiefling, $author$project$DmTools$Barding, $author$project$DmTools$Beorning, $author$project$DmTools$Dunedain, $author$project$DmTools$LonelyMountainDwarf, $author$project$DmTools$MirkwoodElf, $author$project$DmTools$ShireHobbit, $author$project$DmTools$BreeMen, $author$project$DmTools$LakeMen, $author$project$DmTools$MinasTirithMen, $author$project$DmTools$RohanRider, $author$project$DmTools$WilderlandWoodmen]);
+var $author$project$DmTools$getGameVersionRaces = function (gameVersion) {
+	return A2(
+		$elm$core$List$map,
+		function (race) {
+			return race.identifier;
+		},
+		A2(
+			$elm$core$List$filter,
+			function (race) {
+				return A2($elm$core$List$member, gameVersion, race.gameVersions);
+			},
+			A2($elm$core$List$map, $author$project$DmTools$getRace, $author$project$DmTools$allRaceIdentifiers)));
+};
+var $author$project$DmTools$NoSkill = {$: 'NoSkill'};
+var $author$project$DmTools$getSkill = function (skillIdentifier) {
+	switch (skillIdentifier.$) {
+		case 'Acrobatics':
+			return {
+				asString: 'Acrobatics',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Acrobatics,
+				statIdentifier: $author$project$DmTools$Dexterity
+			};
+		case 'AnimalHandling':
+			return {
+				asString: 'Animal Handling',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$AnimalHandling,
+				statIdentifier: $author$project$DmTools$Wisdom
+			};
+		case 'Arcana':
+			return {
+				asString: 'Arcana',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
+				identifier: $author$project$DmTools$Arcana,
+				statIdentifier: $author$project$DmTools$Intelligence
+			};
+		case 'Athletics':
+			return {
+				asString: 'Athletics',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Athletics,
+				statIdentifier: $author$project$DmTools$Strength
+			};
+		case 'Deception':
+			return {
+				asString: 'Deception',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Deception,
+				statIdentifier: $author$project$DmTools$Charisma
+			};
+		case 'History':
+			return {
+				asString: 'History',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$History,
+				statIdentifier: $author$project$DmTools$Intelligence
+			};
+		case 'Insight':
+			return {
+				asString: 'Insight',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Insight,
+				statIdentifier: $author$project$DmTools$Wisdom
+			};
+		case 'Intimidation':
+			return {
+				asString: 'Intimidation',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Intimidation,
+				statIdentifier: $author$project$DmTools$Charisma
+			};
+		case 'Investigation':
+			return {
+				asString: 'Investigation',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Investigation,
+				statIdentifier: $author$project$DmTools$Intelligence
+			};
+		case 'Lore':
+			return {
+				asString: 'Lore',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Lore,
+				statIdentifier: $author$project$DmTools$Intelligence
+			};
+		case 'Medicine':
+			return {
+				asString: 'Medicine',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Medicine,
+				statIdentifier: $author$project$DmTools$Wisdom
+			};
+		case 'Nature':
+			return {
+				asString: 'Nature',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Nature,
+				statIdentifier: $author$project$DmTools$Intelligence
+			};
+		case 'Perception':
+			return {
+				asString: 'Perception',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Perception,
+				statIdentifier: $author$project$DmTools$Wisdom
+			};
+		case 'Performance':
+			return {
+				asString: 'Performance',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Performance,
+				statIdentifier: $author$project$DmTools$Charisma
+			};
+		case 'Persuasion':
+			return {
+				asString: 'Persuasion',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Persuasion,
+				statIdentifier: $author$project$DmTools$Charisma
+			};
+		case 'Religion':
+			return {
+				asString: 'Religion',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
+				identifier: $author$project$DmTools$Religion,
+				statIdentifier: $author$project$DmTools$Intelligence
+			};
+		case 'Riddle':
+			return {
+				asString: 'Riddle',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Riddle,
+				statIdentifier: $author$project$DmTools$Intelligence
+			};
+		case 'ShadowLore':
+			return {
+				asString: 'Shadow Lore',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$ShadowLore,
+				statIdentifier: $author$project$DmTools$Intelligence
+			};
+		case 'SleightOfHand':
+			return {
+				asString: 'Sleight of Hand',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$SleightOfHand,
+				statIdentifier: $author$project$DmTools$Dexterity
+			};
+		case 'Stealth':
+			return {
+				asString: 'Stealth',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Stealth,
+				statIdentifier: $author$project$DmTools$Dexterity
+			};
+		case 'Survival':
+			return {
+				asString: 'Survival',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Survival,
+				statIdentifier: $author$project$DmTools$Wisdom
+			};
+		case 'Traditions':
+			return {
+				asString: 'Traditions',
+				gameVersions: _List_fromArray(
+					[$author$project$DmTools$AiME]),
+				identifier: $author$project$DmTools$Traditions,
+				statIdentifier: $author$project$DmTools$Intelligence
+			};
+		default:
+			return {asString: '', gameVersions: _List_Nil, identifier: $author$project$DmTools$NoSkill, statIdentifier: $author$project$DmTools$Strength};
+	}
+};
+var $author$project$DmTools$getGameVersionSkills = function (gameVersion) {
+	return A2(
+		$elm$core$List$map,
+		function (skill) {
+			return skill.identifier;
+		},
+		A2(
+			$elm$core$List$filter,
+			function (skill) {
+				return A2($elm$core$List$member, gameVersion, skill.gameVersions);
+			},
+			A2($elm$core$List$map, $author$project$DmTools$getSkill, $author$project$DmTools$allSkillIdentifiers)));
+};
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$html$Html$Attributes$href = function (url) {
 	return A2(
@@ -6212,6 +6807,15 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 };
 var $elm$html$Html$select = _VirtualDom_node('select');
 var $elm$html$Html$option = _VirtualDom_node('option');
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$selected = $elm$html$Html$Attributes$boolProperty('selected');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $elm$core$String$replace = F3(
 	function (before, after, string) {
@@ -6240,31 +6844,78 @@ var $author$project$DmTools$viewOption = function (label) {
 				$elm$html$Html$text(label)
 			]));
 };
-var $author$project$DmTools$viewClassOption = function (classIdentifier) {
-	if (classIdentifier.$ === 'NoClass') {
+var $author$project$DmTools$viewClassOption = F2(
+	function (classIdentifier, selectedClassIdentifier) {
+		if (classIdentifier.$ === 'NoClass') {
+			return A2(
+				$elm$html$Html$option,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$value(''),
+						$elm$html$Html$Attributes$selected(
+						_Utils_eq(classIdentifier, selectedClassIdentifier))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Select a class')
+					]));
+		} else {
+			return $author$project$DmTools$viewOption(
+				$author$project$DmTools$getClass(classIdentifier).asString);
+		}
+	});
+var $author$project$DmTools$viewClassSelector = F2(
+	function (classIdentifiers, selectedClassIdentifier) {
 		return A2(
-			$elm$html$Html$option,
+			$elm$html$Html$select,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$value('')
+					$elm$html$Html$Events$onInput($author$project$DmTools$UpdateClass)
 				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Select a class')
-				]));
-	} else {
-		return $author$project$DmTools$viewOption(
-			$author$project$DmTools$getClass(classIdentifier).asString);
-	}
+			A2(
+				$elm$core$List$map,
+				function (classIdentifier) {
+					return A2($author$project$DmTools$viewClassOption, classIdentifier, selectedClassIdentifier);
+				},
+				classIdentifiers));
+	});
+var $author$project$DmTools$UpdateGameVersion = function (a) {
+	return {$: 'UpdateGameVersion', a: a};
 };
-var $author$project$DmTools$viewClassSelector = function (classIdentifiers) {
+var $author$project$DmTools$viewGameVersionSelector = function (selectedGameVersion) {
 	return A2(
 		$elm$html$Html$select,
 		_List_fromArray(
 			[
-				$elm$html$Html$Events$onInput($author$project$DmTools$UpdateClass)
+				$elm$html$Html$Events$onInput($author$project$DmTools$UpdateGameVersion)
 			]),
-		A2($elm$core$List$map, $author$project$DmTools$viewClassOption, classIdentifiers));
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$option,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$value('DnD5'),
+						$elm$html$Html$Attributes$selected(
+						_Utils_eq(selectedGameVersion, $author$project$DmTools$DnD5))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Dungeon & Dragon 5')
+					])),
+				A2(
+				$elm$html$Html$option,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$value('AiME'),
+						$elm$html$Html$Attributes$selected(
+						_Utils_eq(selectedGameVersion, $author$project$DmTools$AiME))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Adventures in Middle Earth')
+					]))
+			]));
 };
 var $author$project$DmTools$UpdateLevel = function (a) {
 	return {$: 'UpdateLevel', a: a};
@@ -6298,65 +6949,44 @@ var $author$project$DmTools$viewLevelSelector = function () {
 var $author$project$DmTools$UpdateRace = function (a) {
 	return {$: 'UpdateRace', a: a};
 };
-var $author$project$DmTools$viewRaceOption = function (raceIdentifier) {
-	if (raceIdentifier.$ === 'NoRace') {
+var $author$project$DmTools$viewRaceOption = F2(
+	function (raceIdentifier, selectedRaceIdentifier) {
+		if (raceIdentifier.$ === 'NoRace') {
+			return A2(
+				$elm$html$Html$option,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$value(''),
+						$elm$html$Html$Attributes$selected(
+						_Utils_eq(raceIdentifier, selectedRaceIdentifier))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Select a race')
+					]));
+		} else {
+			return $author$project$DmTools$viewOption(
+				$author$project$DmTools$getRace(raceIdentifier).asString);
+		}
+	});
+var $author$project$DmTools$viewRaceSelector = F2(
+	function (raceIdentifiers, selectedRaceIdentifier) {
 		return A2(
-			$elm$html$Html$option,
+			$elm$html$Html$select,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$value('')
+					$elm$html$Html$Events$onInput($author$project$DmTools$UpdateRace)
 				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Select a race')
-				]));
-	} else {
-		return $author$project$DmTools$viewOption(
-			$author$project$DmTools$getRace(raceIdentifier).asString);
-	}
-};
-var $author$project$DmTools$viewRaceSelector = function (raceIdentifiers) {
-	return A2(
-		$elm$html$Html$select,
-		_List_fromArray(
-			[
-				$elm$html$Html$Events$onInput($author$project$DmTools$UpdateRace)
-			]),
-		A2($elm$core$List$map, $author$project$DmTools$viewRaceOption, raceIdentifiers));
-};
+			A2(
+				$elm$core$List$map,
+				function (raceIdentifier) {
+					return A2($author$project$DmTools$viewRaceOption, raceIdentifier, selectedRaceIdentifier);
+				},
+				raceIdentifiers));
+	});
 var $elm$html$Html$h4 = _VirtualDom_node('h4');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $elm$html$Html$li = _VirtualDom_node('li');
-var $elm$core$List$any = F2(
-	function (isOkay, list) {
-		any:
-		while (true) {
-			if (!list.b) {
-				return false;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				if (isOkay(x)) {
-					return true;
-				} else {
-					var $temp$isOkay = isOkay,
-						$temp$list = xs;
-					isOkay = $temp$isOkay;
-					list = $temp$list;
-					continue any;
-				}
-			}
-		}
-	});
-var $elm$core$List$member = F2(
-	function (x, xs) {
-		return A2(
-			$elm$core$List$any,
-			function (a) {
-				return _Utils_eq(a, x);
-			},
-			xs);
-	});
 var $author$project$DmTools$statToString = function (statIdentifier) {
 	switch (statIdentifier.$) {
 		case 'Strength':
@@ -6421,182 +7051,22 @@ var $author$project$DmTools$CheckProficiencySkill = F2(
 	function (a, b) {
 		return {$: 'CheckProficiencySkill', a: a, b: b};
 	});
-var $elm$json$Json$Encode$bool = _Json_wrap;
-var $elm$html$Html$Attributes$boolProperty = F2(
-	function (key, bool) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$bool(bool));
-	});
 var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
 var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
-var $author$project$DmTools$AiME = {$: 'AiME'};
-var $author$project$DmTools$NoSkill = {$: 'NoSkill'};
-var $author$project$DmTools$getSkill = function (skillIdentifier) {
-	switch (skillIdentifier.$) {
-		case 'Acrobatics':
-			return {
-				asString: 'Acrobatics',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Acrobatics,
-				statIdentifier: $author$project$DmTools$Dexterity
-			};
-		case 'AnimalHandling':
-			return {
-				asString: 'Animal Handling',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$AnimalHandling,
-				statIdentifier: $author$project$DmTools$Wisdom
-			};
-		case 'Arcana':
-			return {
-				asString: 'Arcana',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Arcana,
-				statIdentifier: $author$project$DmTools$Intelligence
-			};
-		case 'Athletics':
-			return {
-				asString: 'Athletics',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Athletics,
-				statIdentifier: $author$project$DmTools$Strength
-			};
-		case 'Deception':
-			return {
-				asString: 'Deception',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Deception,
-				statIdentifier: $author$project$DmTools$Charisma
-			};
-		case 'History':
-			return {
-				asString: 'History',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$History,
-				statIdentifier: $author$project$DmTools$Intelligence
-			};
-		case 'Insight':
-			return {
-				asString: 'Insight',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Insight,
-				statIdentifier: $author$project$DmTools$Wisdom
-			};
-		case 'Intimidation':
-			return {
-				asString: 'Intimidation',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Intimidation,
-				statIdentifier: $author$project$DmTools$Charisma
-			};
-		case 'Investigation':
-			return {
-				asString: 'Investigation',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Investigation,
-				statIdentifier: $author$project$DmTools$Intelligence
-			};
-		case 'Medicine':
-			return {
-				asString: 'Medicine',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Medicine,
-				statIdentifier: $author$project$DmTools$Wisdom
-			};
-		case 'Nature':
-			return {
-				asString: 'Nature',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Nature,
-				statIdentifier: $author$project$DmTools$Intelligence
-			};
-		case 'Perception':
-			return {
-				asString: 'Perception',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Perception,
-				statIdentifier: $author$project$DmTools$Wisdom
-			};
-		case 'Performance':
-			return {
-				asString: 'Performance',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Performance,
-				statIdentifier: $author$project$DmTools$Charisma
-			};
-		case 'Persuasion':
-			return {
-				asString: 'Persuasion',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Persuasion,
-				statIdentifier: $author$project$DmTools$Charisma
-			};
-		case 'Religion':
-			return {
-				asString: 'Religion',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Religion,
-				statIdentifier: $author$project$DmTools$Intelligence
-			};
-		case 'SleightOfHand':
-			return {
-				asString: 'Sleight of Hand',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$SleightOfHand,
-				statIdentifier: $author$project$DmTools$Dexterity
-			};
-		case 'Stealth':
-			return {
-				asString: 'Stealth',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Stealth,
-				statIdentifier: $author$project$DmTools$Dexterity
-			};
-		case 'Survival':
-			return {
-				asString: 'Survival',
-				gameVersions: _List_fromArray(
-					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
-				identifier: $author$project$DmTools$Survival,
-				statIdentifier: $author$project$DmTools$Wisdom
-			};
-		default:
-			return {asString: '', gameVersions: _List_Nil, identifier: $author$project$DmTools$NoSkill, statIdentifier: $author$project$DmTools$Strength};
-	}
-};
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$DmTools$viewSkill = F3(
-	function (model, skillIdentifier, proficiencySkillsLimitReached) {
+	function (character, skillIdentifier, proficiencySkillsLimitReached) {
 		var skill = $author$project$DmTools$getSkill(skillIdentifier);
 		var statIdentifier = skill.statIdentifier;
 		var statScore = A2(
 			$author$project$DmTools$getStatScore,
-			$author$project$DmTools$computeFinalStats(model),
+			$author$project$DmTools$computeFinalStats(character),
 			statIdentifier);
-		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillIdentifier, model.selectedProficiencySkills);
-		var proficiencyBonus = hasSelectedProficiencySkill ? $author$project$DmTools$computeProficiency(model.level) : 0;
+		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillIdentifier, character.selectedProficiencySkills);
+		var proficiencyBonus = hasSelectedProficiencySkill ? $author$project$DmTools$computeProficiency(character.level) : 0;
 		var modifier = $author$project$DmTools$printWithSign(
 			$author$project$DmTools$computeModifier(statScore) + proficiencyBonus);
-		var hasClassProficiencySkill = A2($elm$core$List$member, skillIdentifier, model._class.proficiencySkills);
+		var hasClassProficiencySkill = A2($elm$core$List$member, skillIdentifier, character._class.proficiencySkills);
 		var disableCheckbox = (!hasSelectedProficiencySkill) && ((!hasClassProficiencySkill) || proficiencySkillsLimitReached);
 		return A2(
 			$elm$html$Html$li,
@@ -6618,36 +7088,37 @@ var $author$project$DmTools$viewSkill = F3(
 					skill.asString + (' (' + ($author$project$DmTools$statToString(statIdentifier) + (') :' + modifier))))
 				]));
 	});
-var $author$project$DmTools$viewSkills = function (model) {
-	var proficiencySkillsLimitReached = _Utils_cmp(
-		$elm$core$List$length(model.selectedProficiencySkills),
-		model._class.proficiencySkillsLimit) > -1;
-	return A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('margin-right')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$h4,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Skills')
-					])),
-				A2(
-				$elm$html$Html$ul,
-				_List_Nil,
-				A2(
-					$elm$core$List$map,
-					function (skillIdentifier) {
-						return A3($author$project$DmTools$viewSkill, model, skillIdentifier, proficiencySkillsLimitReached);
-					},
-					$author$project$DmTools$allSkillIdentifiers))
-			]));
-};
+var $author$project$DmTools$viewSkills = F2(
+	function (character, gameVersion) {
+		var proficiencySkillsLimitReached = _Utils_cmp(
+			$elm$core$List$length(character.selectedProficiencySkills),
+			character._class.proficiencySkillsLimit) > -1;
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('margin-right')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$h4,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Skills')
+						])),
+					A2(
+					$elm$html$Html$ul,
+					_List_Nil,
+					A2(
+						$elm$core$List$map,
+						function (skillIdentifier) {
+							return A3($author$project$DmTools$viewSkill, character, skillIdentifier, proficiencySkillsLimitReached);
+						},
+						$author$project$DmTools$getGameVersionSkills(gameVersion)))
+				]));
+	});
 var $author$project$DmTools$UpdateStat = F2(
 	function (a, b) {
 		return {$: 'UpdateStat', a: a, b: b};
@@ -6799,7 +7270,6 @@ var $author$project$DmTools$viewStatReader = F2(
 var $author$project$DmTools$UpdateSubRace = function (a) {
 	return {$: 'UpdateSubRace', a: a};
 };
-var $elm$html$Html$Attributes$selected = $elm$html$Html$Attributes$boolProperty('selected');
 var $author$project$DmTools$viewSubRaceOption = F2(
 	function (subRaceIdentifier, selectedSubRace) {
 		if (subRaceIdentifier.$ === 'NoSubRace') {
@@ -6836,10 +7306,13 @@ var $author$project$DmTools$viewSubRaceSelector = F2(
 				subRaceIdentifiers)) : $elm$html$Html$text('');
 	});
 var $author$project$DmTools$view = function (model) {
-	var proficiencyBonus = $author$project$DmTools$computeProficiency(model.level);
-	var finalStats = $author$project$DmTools$computeFinalStats(model);
-	var characterBaseLife = model._class.lifeDice + $author$project$DmTools$computeModifier(
+	var proficiencyBonus = $author$project$DmTools$computeProficiency(model.character.level);
+	var finalStats = $author$project$DmTools$computeFinalStats(model.character);
+	var characterBaseLife = model.character._class.lifeDice + $author$project$DmTools$computeModifier(
 		A2($author$project$DmTools$getStatScore, finalStats, $author$project$DmTools$Constitution));
+	var availableSkills = $author$project$DmTools$getGameVersionSkills(model.settings.gameVersion);
+	var availableRaces = $author$project$DmTools$getGameVersionRaces(model.settings.gameVersion);
+	var availableClasses = $author$project$DmTools$getGameVersionClasses(model.settings.gameVersion);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -6886,10 +7359,18 @@ var $author$project$DmTools$view = function (model) {
 						_List_Nil,
 						_List_fromArray(
 							[
+								$elm$html$Html$text('Game Version')
+							])),
+						$author$project$DmTools$viewGameVersionSelector(model.settings.gameVersion),
+						A2(
+						$elm$html$Html$h3,
+						_List_Nil,
+						_List_fromArray(
+							[
 								$elm$html$Html$text('Race')
 							])),
-						$author$project$DmTools$viewRaceSelector($author$project$DmTools$allRaceIdentifiers),
-						A2($author$project$DmTools$viewSubRaceSelector, model.race.subRaces, model.subRace.identifier),
+						A2($author$project$DmTools$viewRaceSelector, availableRaces, model.character.race.identifier),
+						A2($author$project$DmTools$viewSubRaceSelector, model.character.race.subRaces, model.character.subRace.identifier),
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
@@ -6897,7 +7378,7 @@ var $author$project$DmTools$view = function (model) {
 							[
 								$elm$html$Html$text('Class')
 							])),
-						$author$project$DmTools$viewClassSelector($author$project$DmTools$allClassIdentifiers),
+						A2($author$project$DmTools$viewClassSelector, availableClasses, model.character._class.identifier),
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
@@ -6949,10 +7430,10 @@ var $author$project$DmTools$view = function (model) {
 							A2(
 								$elm$core$List$map,
 								function (statIdentifier) {
-									return A2($author$project$DmTools$viewStatInput, model.rolledStats, statIdentifier);
+									return A2($author$project$DmTools$viewStatInput, model.character.rolledStats, statIdentifier);
 								},
 								$author$project$DmTools$allStatIdentifiers),
-							model.freeStatsInput ? _List_fromArray(
+							model.settings.freeStatsInput ? _List_fromArray(
 								[
 									$elm$html$Html$text('')
 								]) : _List_fromArray(
@@ -6960,7 +7441,7 @@ var $author$project$DmTools$view = function (model) {
 									A2(
 									$author$project$DmTools$viewValueBox,
 									'POINTS',
-									$elm$core$String$fromInt(model.remainingPoints))
+									$elm$core$String$fromInt(model.character.remainingPoints))
 								]))),
 						A2($elm$html$Html$br, _List_Nil, _List_Nil),
 						A2(
@@ -6999,7 +7480,7 @@ var $author$project$DmTools$view = function (model) {
 							]),
 						_List_fromArray(
 							[
-								A2($author$project$DmTools$viewCharacterBaseLife, model._class.identifier, characterBaseLife)
+								A2($author$project$DmTools$viewCharacterBaseLife, model.character._class.identifier, characterBaseLife)
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -7009,8 +7490,8 @@ var $author$project$DmTools$view = function (model) {
 							]),
 						_List_fromArray(
 							[
-								A3($author$project$DmTools$viewSavingThrows, finalStats, model._class.proficiencySaves, proficiencyBonus),
-								$author$project$DmTools$viewSkills(model)
+								A3($author$project$DmTools$viewSavingThrows, finalStats, model.character._class.proficiencySaves, proficiencyBonus),
+								A2($author$project$DmTools$viewSkills, model.character, model.settings.gameVersion)
 							]))
 					])),
 				A2(
