@@ -4802,6 +4802,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'Dragonborn':
 			return {
 				asString: 'Dragonborn',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Dragonborn,
@@ -4816,6 +4817,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'Dwarf':
 			return {
 				asString: 'Dwarf',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Dwarf,
@@ -4829,6 +4831,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'Elf':
 			return {
 				asString: 'Elf',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Perception]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Elf,
@@ -4842,6 +4846,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'Gnome':
 			return {
 				asString: 'Gnome',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Gnome,
@@ -4855,6 +4860,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'HalfElf':
 			return {
 				asString: 'Half-Elf',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$HalfElf,
@@ -4867,6 +4873,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'Halfling':
 			return {
 				asString: 'Halfling',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Halfling,
@@ -4880,6 +4887,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'HalfOrc':
 			return {
 				asString: 'Half-Orc',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Intimidation]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$HalfOrc,
@@ -4893,6 +4902,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'Human':
 			return {
 				asString: 'Human',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Human,
@@ -4910,6 +4920,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'Tiefling':
 			return {
 				asString: 'Tiefling',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith]),
 				identifier: $author$project$DmTools$Tiefling,
@@ -4923,6 +4934,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'Barding':
 			return {
 				asString: 'Barding',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Insight]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$Barding,
@@ -4935,6 +4948,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'Beorning':
 			return {
 				asString: 'Beorning',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Intimidation]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$Beorning,
@@ -4947,6 +4962,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'Dunedain':
 			return {
 				asString: 'Dunedain',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Survival]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$Dunedain,
@@ -4960,6 +4977,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'LonelyMountainDwarf':
 			return {
 				asString: 'Lonely Mountain Dwarf',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$LonelyMountainDwarf,
@@ -4972,6 +4990,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'MirkwoodElf':
 			return {
 				asString: 'Mirkwood Elf',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Stealth]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$MirkwoodElf,
@@ -4985,6 +5005,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'ShireHobbit':
 			return {
 				asString: 'Shire Hobbit',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Stealth]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$ShireHobbit,
@@ -4997,6 +5019,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'BreeMen':
 			return {
 				asString: 'Bree Men',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Perception]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$BreeMen,
@@ -5009,6 +5033,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'LakeMen':
 			return {
 				asString: 'Lake Men',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Persuasion]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$LakeMen,
@@ -5021,6 +5047,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'MinasTirithMen':
 			return {
 				asString: 'Minas Tirith Men',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$History]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$MinasTirithMen,
@@ -5033,6 +5061,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'RohanRider':
 			return {
 				asString: 'Rohan Rider',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$AnimalHandling]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$RohanRider,
@@ -5045,6 +5075,8 @@ var $author$project$DmTools$getRace = function (identifier) {
 		case 'WilderlandWoodmen':
 			return {
 				asString: 'Wilderland Woodmen',
+				baseProficiencySkills: _List_fromArray(
+					[$author$project$DmTools$Survival]),
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$WilderlandWoodmen,
@@ -5057,6 +5089,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 		default:
 			return {
 				asString: '',
+				baseProficiencySkills: _List_Nil,
 				gameVersions: _List_fromArray(
 					[$author$project$DmTools$DnD5, $author$project$DmTools$Laelith, $author$project$DmTools$AiME]),
 				identifier: $author$project$DmTools$NoRace,
@@ -7090,6 +7123,9 @@ var $author$project$DmTools$CheckProficiencySkill = F2(
 		return {$: 'CheckProficiencySkill', a: a, b: b};
 	});
 var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
+var $elm$core$List$concat = function (lists) {
+	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
+};
 var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$DmTools$viewSkill = F3(
@@ -7102,7 +7138,12 @@ var $author$project$DmTools$viewSkill = F3(
 			statIdentifier);
 		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillIdentifier, character.selectedProficiencySkills);
 		var hasClassProficiencySkill = A2($elm$core$List$member, skillIdentifier, character._class.optionalProficiencySkills);
-		var hasBaseProficiencySkill = A2($elm$core$List$member, skillIdentifier, character._class.baseProficiencySkills);
+		var hasBaseProficiencySkill = A2(
+			$elm$core$List$member,
+			skillIdentifier,
+			$elm$core$List$concat(
+				_List_fromArray(
+					[character._class.baseProficiencySkills, character.race.baseProficiencySkills])));
 		var proficiencyBonus = (hasSelectedProficiencySkill || hasBaseProficiencySkill) ? $author$project$DmTools$computeProficiency(character.level) : 0;
 		var modifier = $author$project$DmTools$printWithSign(
 			$author$project$DmTools$computeModifier(statScore) + proficiencyBonus);

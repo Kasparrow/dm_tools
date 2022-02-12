@@ -67,6 +67,7 @@ type alias Race =
     { identifier: RaceIdentifier
     , statBonus: Stats
     , subRaces: SubRaceIdentifiers
+    , baseProficiencySkills: SkillIdentifiers
     , gameVersions: GameVersions
     , asString: String
     }
@@ -412,7 +413,7 @@ viewSkill character skillIdentifier optionalProficiencySkillsLimitReached =
         skill = getSkill skillIdentifier
         statIdentifier = skill.statIdentifier
         statScore = getStatScore (computeFinalStats character) statIdentifier
-        hasBaseProficiencySkill = List.member skillIdentifier character.class.baseProficiencySkills
+        hasBaseProficiencySkill = List.member skillIdentifier (List.concat [character.class.baseProficiencySkills, character.race.baseProficiencySkills])
         hasClassProficiencySkill = List.member skillIdentifier character.class.optionalProficiencySkills
         hasSelectedProficiencySkill = List.member skillIdentifier character.selectedProficiencySkills
         proficiencyBonus = if (hasSelectedProficiencySkill || hasBaseProficiencySkill) then (computeProficiency character.level) else 0
@@ -711,6 +712,7 @@ getRace identifier =
                 , SilverDragonborn
                 , WhiteDragonborn
                 ]
+            , baseProficiencySkills = []
             , gameVersions = [DnD5, Laelith]
             , asString = "Dragonborn"
             }
@@ -718,6 +720,7 @@ getRace identifier =
             { identifier = Dwarf
             , statBonus = [ (Constitution, 2) ]
             , subRaces = [NoSubRace, HillsDwarf, MountainsDwarf]
+            , baseProficiencySkills = []
             , gameVersions = [DnD5, Laelith]
             , asString = "Dwarf"
             }
@@ -725,6 +728,7 @@ getRace identifier =
             { identifier = Elf
             , statBonus = [ (Dexterity, 2)]
             , subRaces = [ NoSubRace, Drow, WoodElf, HighElf ]
+            , baseProficiencySkills = [Perception]
             , gameVersions = [DnD5, Laelith]
             , asString = "Elf"
             }
@@ -732,6 +736,7 @@ getRace identifier =
             { identifier = Gnome
             , statBonus = [ (Intelligence, 2) ]
             , subRaces = [ NoSubRace, DeepGnome, RockGnome ]
+            , baseProficiencySkills = []
             , gameVersions = [DnD5, Laelith]
             , asString = "Gnome"
             }
@@ -739,6 +744,7 @@ getRace identifier =
             { identifier = HalfElf
             , statBonus = [ (Charisma, 2) ]
             , subRaces = []
+            , baseProficiencySkills = []
             , gameVersions = [DnD5, Laelith]
             , asString = "Half-Elf"
             }
@@ -746,6 +752,7 @@ getRace identifier =
             { identifier = Halfling
             , statBonus = [ (Dexterity, 2) ]
             , subRaces = [ NoSubRace, LightfootHalfling, StoutHalfling ]
+            , baseProficiencySkills = []
             , gameVersions = [DnD5, Laelith ]
             , asString = "Halfling"
             }
@@ -753,6 +760,7 @@ getRace identifier =
             { identifier = HalfOrc
             , statBonus = [ (Strength, 2), (Constitution, 1) ]
             , subRaces = []
+            , baseProficiencySkills = [Intimidation]
             , gameVersions = [DnD5, Laelith]
             , asString = "Half-Orc"
             }
@@ -767,6 +775,7 @@ getRace identifier =
                 , (Charisma, 1)
                 ]
             , subRaces = []
+            , baseProficiencySkills = []
             , gameVersions = [DnD5, Laelith]
             , asString = "Human"
             }
@@ -774,6 +783,7 @@ getRace identifier =
             { identifier = Tiefling
             , statBonus = [ (Intelligence, 1), (Charisma, 2) ]
             , subRaces = []
+            , baseProficiencySkills = []
             , gameVersions = [DnD5, Laelith]
             , asString = "Tiefling"
             }
@@ -781,6 +791,7 @@ getRace identifier =
             { identifier = Barding
             , statBonus = [ (Constitution, 1) ]
             , subRaces = []
+            , baseProficiencySkills = [Insight]
             , gameVersions = [AiME]
             , asString = "Barding"
             }
@@ -788,6 +799,7 @@ getRace identifier =
             { identifier = Beorning
             , statBonus = [ (Strength, 1) ]
             , subRaces = []
+            , baseProficiencySkills = [Intimidation]
             , gameVersions = [AiME]
             , asString = "Beorning"
             }
@@ -795,6 +807,7 @@ getRace identifier =
             { identifier = Dunedain
             , statBonus = [ (Constitution, 1), (Wisdom, 1) ]
             , subRaces = []
+            , baseProficiencySkills = [Survival]
             , gameVersions = [AiME]
             , asString = "Dunedain"
             }
@@ -802,6 +815,7 @@ getRace identifier =
             { identifier = LonelyMountainDwarf
             , statBonus = [ (Constitution, 2) ]
             , subRaces = []
+            , baseProficiencySkills = []
             , gameVersions = [AiME]
             , asString = "Lonely Mountain Dwarf"
             }
@@ -809,6 +823,7 @@ getRace identifier =
             { identifier = MirkwoodElf
             , statBonus = [ (Dexterity, 2), (Wisdom, 1) ]
             , subRaces = []
+            , baseProficiencySkills = [Stealth]
             , gameVersions = [AiME]
             , asString = "Mirkwood Elf"
             }
@@ -816,6 +831,7 @@ getRace identifier =
             { identifier = ShireHobbit
             , statBonus = [ (Dexterity, 2) ]
             , subRaces = []
+            , baseProficiencySkills = [Stealth]
             , gameVersions = [AiME]
             , asString = "Shire Hobbit"
             }
@@ -823,6 +839,7 @@ getRace identifier =
             { identifier = BreeMen
             , statBonus = [ (Wisdom, 1) ]
             , subRaces = []
+            , baseProficiencySkills = [Perception]
             , gameVersions = [AiME]
             , asString = "Bree Men"
             }
@@ -830,6 +847,7 @@ getRace identifier =
             { identifier = LakeMen
             , statBonus = [ (Charisma, 1) ]
             , subRaces = []
+            , baseProficiencySkills = [Persuasion]
             , gameVersions = [AiME]
             , asString = "Lake Men"
             }
@@ -837,6 +855,7 @@ getRace identifier =
             { identifier = MinasTirithMen
             , statBonus = [ (Intelligence, 1) ]
             , subRaces = []
+            , baseProficiencySkills = [History]
             , gameVersions = [AiME]
             , asString = "Minas Tirith Men"
             }
@@ -844,6 +863,7 @@ getRace identifier =
             { identifier = RohanRider
             , statBonus = [ (Wisdom, 1)]
             , subRaces = []
+            , baseProficiencySkills = [AnimalHandling]
             , gameVersions = [AiME]
             , asString = "Rohan Rider"
             }
@@ -851,6 +871,7 @@ getRace identifier =
             { identifier = WilderlandWoodmen
             , statBonus = [ (Dexterity, 1) ]
             , subRaces = []
+            , baseProficiencySkills = [Survival]
             , gameVersions = [AiME]
             , asString = "Wilderland Woodmen"
             }
@@ -858,6 +879,7 @@ getRace identifier =
             { identifier = NoRace
             , statBonus = []
             , subRaces = []
+            , baseProficiencySkills = []
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = ""
             }
