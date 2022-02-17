@@ -1,4 +1,4 @@
-module Models.RaceKind exposing (RaceKind(..), all, fromString)
+module Models.RaceKind exposing (RaceKind(..), RaceKinds, all, fromString)
 
 type RaceKind
     = Dragonborn
@@ -22,5 +22,55 @@ type RaceKind
     | RohanRider
     | WilderlandWoodmen
     | NoRace
+
 type alias RaceKinds = List RaceKind
 
+all: RaceKinds
+all =
+    [ Dragonborn
+    , Dwarf
+    , Elf
+    , Gnome
+    , HalfElf
+    , Halfling
+    , HalfOrc
+    , Human
+    , Tiefling
+    , Barding
+    , Beorning
+    , Dunedain
+    , LonelyMountainDwarf
+    , MirkwoodElf
+    , ShireHobbit
+    , BreeMen
+    , LakeMen
+    , MinasTirithMen
+    , RohanRider
+    , WilderlandWoodmen
+    , NoRace
+    ]
+
+fromString: String -> RaceKind
+fromString string =
+    case string of
+        "Dragonborn" -> Dragonborn
+        "Dwarf" -> Dwarf
+        "Elf" -> Elf
+        "Gnome" -> Gnome
+        "HalfElf" -> HalfElf
+        "Halfling" -> Halfling
+        "HalfOrc" -> HalfOrc
+        "Human" -> Human
+        "Tiefling" -> Tiefling
+        "Barding" -> Barding
+        "Beorning" -> Beorning
+        "Dunedain" -> Dunedain
+        "LonelyMountainDwarf" -> LonelyMountainDwarf
+        "MirkwoodElf" -> MirkwoodElf
+        "ShireHobbit" -> ShireHobbit
+        "BreeMen" -> BreeMen
+        "LakeMen" -> LakeMen
+        "MinasTirithMen" -> MinasTirithMen
+        "RohanRider" -> RohanRider
+        "WilderlandWoodmen" -> WilderlandWoodmen
+        _ -> NoRace

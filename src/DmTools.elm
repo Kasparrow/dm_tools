@@ -7,10 +7,15 @@ import Array
 import Browser
 
 import Models.RuleSetKind as RuleSetKind exposing (RuleSetKind(..), RuleSetKinds, all, fromString)
-import Models.Stat as Stat exposing (Stat, Stats)
 import Models.StatKind as StatKind exposing (StatKind(..), StatKinds, all, toString)
 import Models.SkillKind as SkillKind exposing (SkillKind(..), SkillKinds, all, fromString)
+import Models.RaceKind as RaceKind exposing (RaceKind(..), RaceKinds, all, fromString)
+import Models.SubRaceKind as SubRaceKind exposing (SubRaceKind(..), SubRaceKinds, all, fromString)
+
+import Models.Stat as Stat exposing (Stat, Stats)
 import Models.Skill as Skill exposing (Skill, Skills, get)
+import Models.Race as Race exposing (Race, Races, get)
+import Models.SubRace as SubRace exposing (SubRace, SubRaces, get)
 
 -- TYPES
 
@@ -25,68 +30,7 @@ type Msg
     | CheckFreeStatInput Bool
     | CheckProficiencySkill SkillKind Bool 
 
-type RaceIdentifier
-    = Dragonborn
-    | Dwarf
-    | Elf
-    | Gnome
-    | HalfElf
-    | Halfling
-    | HalfOrc
-    | Human
-    | Tiefling
-    | Barding
-    | Beorning
-    | Dunedain
-    | LonelyMountainDwarf
-    | MirkwoodElf
-    | ShireHobbit
-    | BreeMen
-    | LakeMen
-    | MinasTirithMen
-    | RohanRider
-    | WilderlandWoodmen
-    | NoRace
-type alias RaceIdentifiers = List RaceIdentifier
-type alias Race =
-    { identifier: RaceIdentifier
-    , statBonus: Stats
-    , subRaces: SubRaceIdentifiers
-    , baseProficiencySkills: SkillKinds
-    , ruleSetKinds: RuleSetKinds
-    , asString: String
-    }
-type alias Races = List Race
 
-type SubRaceIdentifier
-    = BlackDragonborn
-    | BlueDragonborn
-    | BrassDragonborn
-    | BronzeDragonborn
-    | CopperDragonborn
-    | GoldDragonborn
-    | GreenDragonborn
-    | RedDragonborn
-    | SilverDragonborn
-    | WhiteDragonborn
-    | HillsDwarf
-    | MountainsDwarf
-    | HighElf
-    | WoodElf
-    | Drow
-    | DeepGnome
-    | RockGnome
-    | LightfootHalfling
-    | StoutHalfling
-    | NoSubRace
-type alias SubRaceIdentifiers = List SubRaceIdentifier
-type alias SubRace =
-    { identifier: SubRaceIdentifier
-    , statBonus: Stats
-    , ruleSetKinds: RuleSetKinds
-    , asString: String
-    }
-type alias SubRaces = List SubRace
 
 type ClassIdentifier
     = Barbarian
@@ -154,8 +98,8 @@ init =
             , (Wisdom, 8)
             , (Charisma, 8)
             ]
-        , race = getRace NoRace
-        , subRace = getSubRace NoSubRace
+        , race = Race.get NoRace
+        , subRace = SubRace.get NoSubRace
         , class = getClass NoClass
         , remainingPoints = 27
         , level = 1
@@ -188,8 +132,8 @@ view model =
               [ h3 [] [ text "Game Version" ]
               , viewRuleSetSelector model.settings.ruleSetKind
               , h3 [] [ text "Race" ]
-              , viewRaceSelector availableRaces model.character.race.identifier
-              , viewSubRaceSelector model.character.race.subRaces model.character.subRace.identifier
+              , viewRaceSelector availableRaces model.character.race.raceKind
+              , viewSubRaceSelector model.character.race.subRaces model.character.subRace.subRaceKind
               , h3 [] [ text "Class" ]
               , viewClassSelector availableClasses model.character.class.identifier
               , h3 [] [ text "Level" ]
@@ -230,30 +174,30 @@ viewRuleSetSelector selectedRuleSetKind =
            , option [ value "AiME", selected (selectedRuleSetKind == AiME) ] [ text "Adventures in Middle Earth" ]
            ]
 
-viewRaceSelector: RaceIdentifiers -> RaceIdentifier -> Html Msg
-viewRaceSelector raceIdentifiers selectedRaceIdentifier =
-    select [onInput UpdateRace] (List.map (\raceIdentifier -> viewRaceOption raceIdentifier selectedRaceIdentifier) raceIdentifiers )
+viewRaceSelector: RaceKinds -> RaceKind -> Html Msg
+viewRaceSelector raceKinds selectedRaceKind =
+    select [onInput UpdateRace] (List.map (\raceKind -> viewRaceOption raceKind selectedRaceKind) raceKinds )
 
-viewRaceOption: RaceIdentifier -> RaceIdentifier -> Html Msg
-viewRaceOption raceIdentifier selectedRaceIdentifier =
-    case raceIdentifier of
-        NoRace -> option [ value "", selected (raceIdentifier == selectedRaceIdentifier) ] [ text "Select a race" ]
-        _ -> viewOption (getRace raceIdentifier).asString
+viewRaceOption: RaceKind -> RaceKind -> Html Msg
+viewRaceOption raceKind selectedRaceKind =
+    case raceKind of
+        NoRace -> option [ value "", selected (raceKind == selectedRaceKind) ] [ text "Select a race" ]
+        _ -> viewOption (Race.get raceKind).asString
 
-viewSubRaceSelector: SubRaceIdentifiers -> SubRaceIdentifier -> Html Msg
-viewSubRaceSelector subRaceIdentifiers selectedSubRace =
-    if List.length subRaceIdentifiers > 0 then
+viewSubRaceSelector: SubRaceKinds -> SubRaceKind -> Html Msg
+viewSubRaceSelector subRaceKinds selectedSubRaceKind =
+    if List.length subRaceKinds > 0 then
         select [onInput UpdateSubRace] 
-               (List.map (\subRaceIdentifier -> viewSubRaceOption subRaceIdentifier selectedSubRace
-               ) subRaceIdentifiers)
+               (List.map (\subRaceKind -> viewSubRaceOption subRaceKind selectedSubRaceKind
+               ) subRaceKinds)
     else 
         Html.text ""
 
-viewSubRaceOption: SubRaceIdentifier -> SubRaceIdentifier -> Html Msg
-viewSubRaceOption subRaceIdentifier selectedSubRace =
-    case subRaceIdentifier of
-        NoSubRace -> option [ value "", selected (subRaceIdentifier == selectedSubRace) ] [ text "Select a subrace" ]
-        _ -> viewOption (getSubRace subRaceIdentifier).asString
+viewSubRaceOption: SubRaceKind -> SubRaceKind -> Html Msg
+viewSubRaceOption subRaceKind selectedSubRaceKind =
+    case subRaceKind of
+        NoSubRace -> option [ value "", selected (subRaceKind == selectedSubRaceKind) ] [ text "Select a subrace" ]
+        _ -> viewOption (SubRace.get subRaceKind).asString
 
 viewClassSelector: ClassIdentifiers -> ClassIdentifier -> Html Msg
 viewClassSelector classIdentifiers selectedClassIdentifier =
@@ -410,15 +354,15 @@ update msg ({ settings, character } as model) =
         UpdateRuleSetKind string ->
             { model | settings =
                 { settings | ruleSetKind = RuleSetKind.fromString string }, 
-                character = { character | race = getRace NoRace, subRace = getSubRace NoSubRace, class = getClass NoClass }
+                character = { character | race = Race.get NoRace, subRace = SubRace.get NoSubRace, class = getClass NoClass }
             }
-        UpdateRace raceIdentifier -> 
+        UpdateRace string -> 
             { model | character = 
-                { character | race = (getRace (stringToRace raceIdentifier)), subRace = getSubRace NoSubRace }
+                { character | race = (Race.get (RaceKind.fromString string)), subRace = SubRace.get NoSubRace }
             }
-        UpdateSubRace subRaceIdentifier ->
+        UpdateSubRace string ->
             { model | character = 
-                { character | subRace = (getSubRace (stringToSubRace subRaceIdentifier)) }
+                { character | subRace = (SubRace.get (SubRaceKind.fromString string)) }
             }
         UpdateClass classIdentifier ->
             { model | character = 
@@ -500,10 +444,10 @@ computeProficiency: Int -> Int
 computeProficiency level =
     2 + (Basics.floor (toFloat (level - 1) / 4))
 
-getRuleSetRaces: RuleSetKind -> RaceIdentifiers
+getRuleSetRaces: RuleSetKind -> RaceKinds
 getRuleSetRaces ruleSetKind =
-    List.map (\race -> race.identifier)
-             (List.filter(\race -> List.member ruleSetKind race.ruleSetKinds) (List.map getRace allRaceIdentifiers))
+    List.map (\race -> race.raceKind)
+             (List.filter(\race -> List.member ruleSetKind race.ruleSetKinds) (List.map Race.get RaceKind.all))
 
 getRuleSetClasses: RuleSetKind -> ClassIdentifiers
 getRuleSetClasses ruleSetKind =
@@ -536,55 +480,6 @@ printWithSign value =
 -- DATA
 
 
-allRaceIdentifiers: RaceIdentifiers
-allRaceIdentifiers = 
-    [ NoRace
-    , Dragonborn
-    , Dwarf
-    , Elf
-    , Gnome
-    , HalfElf
-    , Halfling
-    , HalfOrc
-    , Human
-    , Tiefling
-    , Barding
-    , Beorning
-    , Dunedain
-    , LonelyMountainDwarf
-    , MirkwoodElf
-    , ShireHobbit
-    , BreeMen
-    , LakeMen
-    , MinasTirithMen
-    , RohanRider
-    , WilderlandWoodmen
-    ]
-
-allSubRaceIdentifiers: SubRaceIdentifiers
-allSubRaceIdentifiers =
-    [ NoSubRace
-    , BlackDragonborn
-    , BlueDragonborn
-    , BrassDragonborn
-    , BronzeDragonborn
-    , CopperDragonborn
-    , GoldDragonborn
-    , GreenDragonborn
-    , RedDragonborn
-    , SilverDragonborn
-    , WhiteDragonborn
-    , HillsDwarf
-    , MountainsDwarf
-    , HighElf
-    , WoodElf
-    , Drow
-    , DeepGnome
-    , RockGnome
-    , LightfootHalfling
-    , StoutHalfling
-    ]
-
 allClassIdentifiers: ClassIdentifiers
 allClassIdentifiers =
     [ NoClass
@@ -608,320 +503,7 @@ allClassIdentifiers =
     , Warrior
     ]
 
-getRace: RaceIdentifier -> Race
-getRace identifier =
-    case identifier of
-        Dragonborn ->
-            { identifier = Dragonborn
-            , statBonus = [ (Strength, 2), (Charisma, 1) ]
-            , subRaces = 
-                [ NoSubRace
-                , BlackDragonborn
-                , BlueDragonborn
-                , BrassDragonborn
-                , BronzeDragonborn
-                , CopperDragonborn
-                , GoldDragonborn
-                , GreenDragonborn
-                , RedDragonborn
-                , SilverDragonborn
-                , WhiteDragonborn
-                ]
-            , baseProficiencySkills = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Dragonborn"
-            }
-        Dwarf ->
-            { identifier = Dwarf
-            , statBonus = [ (Constitution, 2) ]
-            , subRaces = [NoSubRace, HillsDwarf, MountainsDwarf]
-            , baseProficiencySkills = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Dwarf"
-            }
-        Elf ->
-            { identifier = Elf
-            , statBonus = [ (Dexterity, 2)]
-            , subRaces = [ NoSubRace, Drow, WoodElf, HighElf ]
-            , baseProficiencySkills = [Perception]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Elf"
-            }
-        Gnome ->
-            { identifier = Gnome
-            , statBonus = [ (Intelligence, 2) ]
-            , subRaces = [ NoSubRace, DeepGnome, RockGnome ]
-            , baseProficiencySkills = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Gnome"
-            }
-        HalfElf ->
-            { identifier = HalfElf
-            , statBonus = [ (Charisma, 2) ]
-            , subRaces = []
-            , baseProficiencySkills = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Half-Elf"
-            }
-        Halfling ->
-            { identifier = Halfling
-            , statBonus = [ (Dexterity, 2) ]
-            , subRaces = [ NoSubRace, LightfootHalfling, StoutHalfling ]
-            , baseProficiencySkills = []
-            , ruleSetKinds = [DnD5, Laelith ]
-            , asString = "Halfling"
-            }
-        HalfOrc ->
-            { identifier = HalfOrc
-            , statBonus = [ (Strength, 2), (Constitution, 1) ]
-            , subRaces = []
-            , baseProficiencySkills = [Intimidation]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Half-Orc"
-            }
-        Human ->
-            { identifier = Human
-            , statBonus =
-                [ (Strength, 1)
-                , (Dexterity, 1)
-                , (Constitution, 1)
-                , (Intelligence, 1)
-                , (Wisdom, 1)
-                , (Charisma, 1)
-                ]
-            , subRaces = []
-            , baseProficiencySkills = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Human"
-            }
-        Tiefling ->
-            { identifier = Tiefling
-            , statBonus = [ (Intelligence, 1), (Charisma, 2) ]
-            , subRaces = []
-            , baseProficiencySkills = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Tiefling"
-            }
-        Barding ->
-            { identifier = Barding
-            , statBonus = [ (Constitution, 1) ]
-            , subRaces = []
-            , baseProficiencySkills = [Insight]
-            , ruleSetKinds = [AiME]
-            , asString = "Barding"
-            }
-        Beorning ->
-            { identifier = Beorning
-            , statBonus = [ (Strength, 1) ]
-            , subRaces = []
-            , baseProficiencySkills = [Intimidation]
-            , ruleSetKinds = [AiME]
-            , asString = "Beorning"
-            }
-        Dunedain ->
-            { identifier = Dunedain
-            , statBonus = [ (Constitution, 1), (Wisdom, 1) ]
-            , subRaces = []
-            , baseProficiencySkills = [Survival]
-            , ruleSetKinds = [AiME]
-            , asString = "Dunedain"
-            }
-        LonelyMountainDwarf ->
-            { identifier = LonelyMountainDwarf
-            , statBonus = [ (Constitution, 2) ]
-            , subRaces = []
-            , baseProficiencySkills = []
-            , ruleSetKinds = [AiME]
-            , asString = "Lonely Mountain Dwarf"
-            }
-        MirkwoodElf ->
-            { identifier = MirkwoodElf
-            , statBonus = [ (Dexterity, 2), (Wisdom, 1) ]
-            , subRaces = []
-            , baseProficiencySkills = [Stealth]
-            , ruleSetKinds = [AiME]
-            , asString = "Mirkwood Elf"
-            }
-        ShireHobbit ->
-            { identifier = ShireHobbit
-            , statBonus = [ (Dexterity, 2) ]
-            , subRaces = []
-            , baseProficiencySkills = [Stealth]
-            , ruleSetKinds = [AiME]
-            , asString = "Shire Hobbit"
-            }
-        BreeMen ->
-            { identifier = BreeMen
-            , statBonus = [ (Wisdom, 1) ]
-            , subRaces = []
-            , baseProficiencySkills = [Perception]
-            , ruleSetKinds = [AiME]
-            , asString = "Bree Men"
-            }
-        LakeMen ->
-            { identifier = LakeMen
-            , statBonus = [ (Charisma, 1) ]
-            , subRaces = []
-            , baseProficiencySkills = [Persuasion]
-            , ruleSetKinds = [AiME]
-            , asString = "Lake Men"
-            }
-        MinasTirithMen ->
-            { identifier = MinasTirithMen
-            , statBonus = [ (Intelligence, 1) ]
-            , subRaces = []
-            , baseProficiencySkills = [History]
-            , ruleSetKinds = [AiME]
-            , asString = "Minas Tirith Men"
-            }
-        RohanRider ->
-            { identifier = RohanRider
-            , statBonus = [ (Wisdom, 1)]
-            , subRaces = []
-            , baseProficiencySkills = [AnimalHandling]
-            , ruleSetKinds = [AiME]
-            , asString = "Rohan Rider"
-            }
-        WilderlandWoodmen ->
-            { identifier = WilderlandWoodmen
-            , statBonus = [ (Dexterity, 1) ]
-            , subRaces = []
-            , baseProficiencySkills = [Survival]
-            , ruleSetKinds = [AiME]
-            , asString = "Wilderland Woodmen"
-            }
-        NoRace ->
-            { identifier = NoRace
-            , statBonus = []
-            , subRaces = []
-            , baseProficiencySkills = []
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = ""
-            }
 
-getSubRace: SubRaceIdentifier -> SubRace
-getSubRace identifier =
-    case identifier of
-        BlackDragonborn ->
-            { identifier = BlackDragonborn
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Black Dragonborn"
-            }
-        BlueDragonborn ->
-            { identifier = BlueDragonborn
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Blue Dragonborn"
-            }
-        BrassDragonborn ->
-            { identifier = BrassDragonborn
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Brass Dragonborn"
-            }
-        BronzeDragonborn ->
-            { identifier = BronzeDragonborn 
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Bronze Dragonborn"
-            }
-        CopperDragonborn ->
-            { identifier = CopperDragonborn
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Copper Dragonborn"
-            }
-        GoldDragonborn ->
-            { identifier = GoldDragonborn 
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Gold Dragonborn"
-            }
-        GreenDragonborn ->
-            { identifier = GreenDragonborn
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Green Dragonborn"
-            }
-        RedDragonborn ->
-            { identifier = RedDragonborn
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Red Dragonborn"
-            }
-        SilverDragonborn ->
-            { identifier = SilverDragonborn
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Silver Dragonborn"
-            }
-        WhiteDragonborn ->
-            { identifier = WhiteDragonborn
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "White Dragonborn"
-            }
-        HillsDwarf ->
-            { identifier = HillsDwarf
-            , statBonus = [ (Wisdom, 1) ]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Hills Dwarf"
-            }
-        MountainsDwarf ->
-            { identifier = MountainsDwarf
-            , statBonus = [ (Strength, 1) ]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Mountains Dwarf"
-            }
-        Drow ->
-            { identifier = Drow
-            , statBonus = [ (Charisma, 1) ]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Drow"
-            }
-        WoodElf ->
-            { identifier = WoodElf
-            , statBonus = [ (Wisdom, 1) ]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Wood Elf"
-            }
-        HighElf ->
-            { identifier = HighElf
-            , statBonus = [ (Intelligence, 1) ]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "High Elf"
-            }
-        DeepGnome ->
-            { identifier = DeepGnome
-            , statBonus = [ (Dexterity, 1) ]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Deep Gnome"
-            }
-        RockGnome ->
-            { identifier = RockGnome
-            , statBonus = [ (Constitution, 1) ]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Rock Gnome"
-            }
-        LightfootHalfling ->
-            { identifier = LightfootHalfling
-            , statBonus = [ (Charisma, 1) ]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Lightfoot Halfling"
-            }
-        StoutHalfling ->
-            { identifier = StoutHalfling
-            , statBonus = [ (Constitution, 1) ]
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Stout Halfling"
-            }
-        NoSubRace ->
-            { identifier = NoSubRace
-            , statBonus = []
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = ""
-            }
 
 getClass: ClassIdentifier -> Class 
 getClass classIdentifier =
@@ -1117,57 +699,7 @@ getClass classIdentifier =
             , asString = ""
             }
 
-
 -- IDENTIFIER FROM STRING
-
-stringToRace: String -> RaceIdentifier
-stringToRace string =
-    case string of
-        "Dragonborn" -> Dragonborn
-        "Dwarf" -> Dwarf
-        "Elf" -> Elf
-        "Gnome" -> Gnome
-        "HalfElf" -> HalfElf
-        "Halfling" -> Halfling
-        "HalfOrc" -> HalfOrc
-        "Human" -> Human
-        "Tiefling" -> Tiefling
-        "Barding" -> Barding
-        "Beorning" -> Beorning
-        "Dunedain" -> Dunedain
-        "LonelyMountainDwarf" -> LonelyMountainDwarf
-        "MirkwoodElf" -> MirkwoodElf
-        "ShireHobbit" -> ShireHobbit
-        "BreeMen" -> BreeMen
-        "LakeMen" -> LakeMen
-        "MinasTirithMen" -> MinasTirithMen
-        "RohanRider" -> RohanRider
-        "WilderlandWoodmen" -> WilderlandWoodmen
-        _ -> NoRace
-
-stringToSubRace: String -> SubRaceIdentifier
-stringToSubRace string =
-    case string of
-        "BlackDragonborn" -> BlackDragonborn
-        "BlueDragonborn" -> BlueDragonborn
-        "BrassDragonborn" -> BrassDragonborn
-        "BronzeDragonborn" -> BronzeDragonborn
-        "CopperDragonborn" -> CopperDragonborn
-        "GoldDragonborn" -> GoldDragonborn
-        "GreenDragonborn" -> GreenDragonborn
-        "RedDragonborn" -> RedDragonborn
-        "SilverDragonborn" -> SilverDragonborn
-        "WhiteDragonborn" -> WhiteDragonborn
-        "HillsDwarf" -> HillsDwarf
-        "MountainsDwarf" -> MountainsDwarf
-        "Drow" -> Drow
-        "HighElf" -> HighElf
-        "WoodElf" -> WoodElf
-        "DeepGnome" -> DeepGnome
-        "RockGnome" -> RockGnome
-        "LightfootHalfling" -> LightfootHalfling
-        "StoutHalfling" -> StoutHalfling
-        _ -> NoSubRace
 
 stringToClass: String -> ClassIdentifier
 stringToClass string =
