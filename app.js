@@ -4435,18 +4435,18 @@ var $elm$core$Set$toList = function (_v0) {
 var $elm$core$Basics$EQ = 1;
 var $elm$core$Basics$GT = 2;
 var $elm$core$Basics$LT = 0;
-var $author$project$DmTools$Charisma = 5;
-var $author$project$DmTools$Constitution = 2;
-var $author$project$DmTools$Dexterity = 1;
+var $author$project$Models$StatKind$Charisma = 5;
+var $author$project$Models$StatKind$Constitution = 2;
+var $author$project$Models$StatKind$Dexterity = 1;
 var $author$project$DmTools$DnD5 = 0;
 var $elm$core$Basics$False = 1;
 var $author$project$DmTools$French = 0;
-var $author$project$DmTools$Intelligence = 3;
+var $author$project$Models$StatKind$Intelligence = 3;
 var $author$project$DmTools$NoClass = 18;
 var $author$project$DmTools$NoRace = 20;
 var $author$project$DmTools$NoSubRace = 19;
-var $author$project$DmTools$Strength = 0;
-var $author$project$DmTools$Wisdom = 4;
+var $author$project$Models$StatKind$Strength = 0;
+var $author$project$Models$StatKind$Wisdom = 4;
 var $author$project$DmTools$Acrobatics = 0;
 var $author$project$DmTools$AiME = 1;
 var $author$project$DmTools$AnimalHandling = 1;
@@ -6247,12 +6247,12 @@ var $author$project$DmTools$update = F2(
 			var settings = model.u;
 			var character = model.g;
 			var updateStat = F3(
-				function (stats, statIdentifier, newScore) {
+				function (stats, statKind, newScore) {
 					return A2(
 						$elm$core$List$map,
 						function (stat) {
-							return _Utils_eq(stat.a, statIdentifier) ? (settings.P ? _Utils_Tuple2(statIdentifier, newScore) : _Utils_Tuple2(
-								statIdentifier,
+							return _Utils_eq(stat.a, statKind) ? (settings.P ? _Utils_Tuple2(statKind, newScore) : _Utils_Tuple2(
+								statKind,
 								A2(
 									$elm$core$Basics$min,
 									A2($elm$core$Basics$max, 8, newScore),
@@ -6345,7 +6345,7 @@ var $author$project$DmTools$update = F2(
 								})
 						});
 				case 6:
-					var statIdentifier = msg.a;
+					var statKind = msg.a;
 					var newScore = msg.b;
 					var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
 						$temp$model = _Utils_update(
@@ -6354,7 +6354,7 @@ var $author$project$DmTools$update = F2(
 							g: _Utils_update(
 								character,
 								{
-									L: A3(updateStat, character.L, statIdentifier, newScore)
+									L: A3(updateStat, character.L, statKind, newScore)
 								})
 						});
 					msg = $temp$msg;
@@ -6424,7 +6424,7 @@ var $author$project$DmTools$CheckFreeStatInput = function (a) {
 	return {$: 7, a: a};
 };
 var $elm$html$Html$a = _VirtualDom_node('a');
-var $author$project$DmTools$allStatIdentifiers = _List_fromArray(
+var $author$project$Models$StatKind$all = _List_fromArray(
 	[0, 1, 2, 3, 4, 5]);
 var $elm$core$List$append = F2(
 	function (xs, ys) {
@@ -6454,11 +6454,11 @@ var $elm$core$List$head = function (list) {
 	}
 };
 var $author$project$DmTools$getStatScore = F2(
-	function (stats, statIdentifier) {
+	function (stats, statKind) {
 		var selectedStats = A2(
 			$elm$core$List$filter,
 			function (stat) {
-				return _Utils_eq(stat.a, statIdentifier);
+				return _Utils_eq(stat.a, statKind);
 			},
 			stats);
 		var head = $elm$core$List$head(selectedStats);
@@ -6472,11 +6472,11 @@ var $author$project$DmTools$getStatScore = F2(
 var $author$project$DmTools$computeFinalStats = function (character) {
 	return A2(
 		$elm$core$List$map,
-		function (statIdentifier) {
-			var finalScore = (A2($author$project$DmTools$getStatScore, character.L, statIdentifier) + A2($author$project$DmTools$getStatScore, character.G.d, statIdentifier)) + A2($author$project$DmTools$getStatScore, character.M.d, statIdentifier);
-			return _Utils_Tuple2(statIdentifier, finalScore);
+		function (statKind) {
+			var finalScore = (A2($author$project$DmTools$getStatScore, character.L, statKind) + A2($author$project$DmTools$getStatScore, character.G.d, statKind)) + A2($author$project$DmTools$getStatScore, character.M.d, statKind);
+			return _Utils_Tuple2(statKind, finalScore);
 		},
-		$author$project$DmTools$allStatIdentifiers);
+		$author$project$Models$StatKind$all);
 };
 var $author$project$DmTools$computeModifier = function (value) {
 	return $elm$core$Basics$floor((value - 10) / 2);
@@ -7050,8 +7050,8 @@ var $author$project$DmTools$viewRaceSelector = F2(
 var $elm$html$Html$h4 = _VirtualDom_node('h4');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $elm$html$Html$li = _VirtualDom_node('li');
-var $author$project$DmTools$statToString = function (statIdentifier) {
-	switch (statIdentifier) {
+var $author$project$DmTools$statToString = function (statKind) {
+	switch (statKind) {
 		case 0:
 			return 'STR';
 		case 1:
@@ -7067,8 +7067,8 @@ var $author$project$DmTools$statToString = function (statIdentifier) {
 	}
 };
 var $author$project$DmTools$viewSavingThrow = F4(
-	function (statIdentifier, proficiencySaves, statModifier, proficiencyBonus) {
-		var hasProficiencySave = A2($elm$core$List$member, statIdentifier, proficiencySaves);
+	function (statKind, proficiencySaves, statModifier, proficiencyBonus) {
+		var hasProficiencySave = A2($elm$core$List$member, statKind, proficiencySaves);
 		var savingThrowScore = hasProficiencySave ? (statModifier + proficiencyBonus) : statModifier;
 		var modifier = $author$project$DmTools$printWithSign(savingThrowScore);
 		return A2(
@@ -7077,7 +7077,7 @@ var $author$project$DmTools$viewSavingThrow = F4(
 			_List_fromArray(
 				[
 					$elm$html$Html$text(
-					$author$project$DmTools$statToString(statIdentifier) + (' : ' + modifier))
+					$author$project$DmTools$statToString(statKind) + (' : ' + modifier))
 				]));
 	});
 var $author$project$DmTools$viewSavingThrows = F3(
@@ -7102,12 +7102,12 @@ var $author$project$DmTools$viewSavingThrows = F3(
 					_List_Nil,
 					A2(
 						$elm$core$List$map,
-						function (statIdentifier) {
+						function (statKind) {
 							var statModifier = $author$project$DmTools$computeModifier(
-								A2($author$project$DmTools$getStatScore, finalStats, statIdentifier));
-							return A4($author$project$DmTools$viewSavingThrow, statIdentifier, proficiencySaves, statModifier, proficiencyBonus);
+								A2($author$project$DmTools$getStatScore, finalStats, statKind));
+							return A4($author$project$DmTools$viewSavingThrow, statKind, proficiencySaves, statModifier, proficiencyBonus);
 						},
-						$author$project$DmTools$allStatIdentifiers))
+						$author$project$Models$StatKind$all))
 				]));
 	});
 var $author$project$DmTools$CheckProficiencySkill = F2(
@@ -7123,11 +7123,11 @@ var $elm$core$Basics$not = _Basics_not;
 var $author$project$DmTools$viewSkill = F3(
 	function (character, skillIdentifier, optionalProficiencySkillsLimitReached) {
 		var skill = $author$project$DmTools$getSkill(skillIdentifier);
-		var statIdentifier = skill.f;
+		var statKind = skill.f;
 		var statScore = A2(
 			$author$project$DmTools$getStatScore,
 			$author$project$DmTools$computeFinalStats(character),
-			statIdentifier);
+			statKind);
 		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillIdentifier, character.A);
 		var hasClassProficiencySkill = A2($elm$core$List$member, skillIdentifier, character.v.j);
 		var hasBaseProficiencySkill = A2(
@@ -7157,7 +7157,7 @@ var $author$project$DmTools$viewSkill = F3(
 						]),
 					_List_Nil),
 					$elm$html$Html$text(
-					skill.b + (' (' + ($author$project$DmTools$statToString(statIdentifier) + (') :' + modifier))))
+					skill.b + (' (' + ($author$project$DmTools$statToString(statKind) + (') :' + modifier))))
 				]));
 	});
 var $author$project$DmTools$viewSkills = F2(
@@ -7202,8 +7202,8 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		$elm$json$Json$Decode$succeed(msg));
 };
 var $author$project$DmTools$viewStatInput = F2(
-	function (stats, statIdentifier) {
-		var score = A2($author$project$DmTools$getStatScore, stats, statIdentifier);
+	function (stats, statKind) {
+		var score = A2($author$project$DmTools$getStatScore, stats, statKind);
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -7221,7 +7221,7 @@ var $author$project$DmTools$viewStatInput = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$author$project$DmTools$statToString(statIdentifier))
+							$author$project$DmTools$statToString(statKind))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -7255,7 +7255,7 @@ var $author$project$DmTools$viewStatInput = F2(
 									_List_fromArray(
 										[
 											$elm$html$Html$Events$onClick(
-											A2($author$project$DmTools$UpdateStat, statIdentifier, score + 1))
+											A2($author$project$DmTools$UpdateStat, statKind, score + 1))
 										]),
 									_List_fromArray(
 										[
@@ -7266,7 +7266,7 @@ var $author$project$DmTools$viewStatInput = F2(
 									_List_fromArray(
 										[
 											$elm$html$Html$Events$onClick(
-											A2($author$project$DmTools$UpdateStat, statIdentifier, score - 1))
+											A2($author$project$DmTools$UpdateStat, statKind, score - 1))
 										]),
 									_List_fromArray(
 										[
@@ -7277,8 +7277,8 @@ var $author$project$DmTools$viewStatInput = F2(
 				]));
 	});
 var $author$project$DmTools$viewStatReader = F2(
-	function (stats, statIdentifier) {
-		var score = A2($author$project$DmTools$getStatScore, stats, statIdentifier);
+	function (stats, statKind) {
+		var score = A2($author$project$DmTools$getStatScore, stats, statKind);
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -7296,7 +7296,7 @@ var $author$project$DmTools$viewStatReader = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$author$project$DmTools$statToString(statIdentifier))
+							$author$project$DmTools$statToString(statKind))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -7501,10 +7501,10 @@ var $author$project$DmTools$view = function (model) {
 							$elm$core$List$append,
 							A2(
 								$elm$core$List$map,
-								function (statIdentifier) {
-									return A2($author$project$DmTools$viewStatInput, model.g.L, statIdentifier);
+								function (statKind) {
+									return A2($author$project$DmTools$viewStatInput, model.g.L, statKind);
 								},
-								$author$project$DmTools$allStatIdentifiers),
+								$author$project$Models$StatKind$all),
 							model.u.P ? _List_fromArray(
 								[
 									$elm$html$Html$text('')
@@ -7533,10 +7533,10 @@ var $author$project$DmTools$view = function (model) {
 							$elm$core$List$append,
 							A2(
 								$elm$core$List$map,
-								function (statIdentifier) {
-									return A2($author$project$DmTools$viewStatReader, finalStats, statIdentifier);
+								function (statKind) {
+									return A2($author$project$DmTools$viewStatReader, finalStats, statKind);
 								},
-								$author$project$DmTools$allStatIdentifiers),
+								$author$project$Models$StatKind$all),
 							_List_fromArray(
 								[
 									A2(

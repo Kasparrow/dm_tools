@@ -6,6 +6,9 @@ import Html.Events exposing (onInput, onClick, onCheck, on)
 import Array
 import Browser
 
+import Models.Stat as Stat exposing (Stat, Stats)
+import Models.StatKind as StatKind exposing (StatKind(..), StatKinds, all)
+
 -- TYPES
 
 type Msg
@@ -15,7 +18,7 @@ type Msg
     | UpdateSubRace String
     | UpdateClass String
     | UpdateLevel String
-    | UpdateStat StatIdentifier Int
+    | UpdateStat StatKind Int
     | CheckFreeStatInput Bool
     | CheckProficiencySkill SkillIdentifier Bool 
 
@@ -29,16 +32,6 @@ type Language
     = French
     | English
 
-type StatIdentifier
-    = Strength
-    | Dexterity
-    | Constitution
-    | Intelligence
-    | Wisdom
-    | Charisma
-type alias StatIdentifiers = List StatIdentifier
-type alias Stat = (StatIdentifier, Int)
-type alias Stats = List Stat
 
 type RaceIdentifier
     = Dragonborn
@@ -127,7 +120,7 @@ type alias ClassIdentifiers = List ClassIdentifier
 
 type alias Class =
     { identifier: ClassIdentifier 
-    , proficiencySaves: StatIdentifiers
+    , proficiencySaves: StatKinds
     , baseProficiencySkills: SkillIdentifiers
     , optionalProficiencySkills: SkillIdentifiers
     , optionalProficiencySkillsLimit: Int
@@ -164,7 +157,7 @@ type SkillIdentifier
 type alias SkillIdentifiers = List SkillIdentifier
 type alias Skill = 
     { identifier: SkillIdentifier
-    , statIdentifier: StatIdentifier
+    , statKind: StatKind
     , gameVersions: GameVersions
     , asString: String
     }
@@ -223,7 +216,7 @@ view model =
     let
         finalStats = computeFinalStats model.character
         proficiencyBonus = computeProficiency model.character.level
-        characterBaseLife = model.character.class.lifeDice + (computeModifier (getStatScore finalStats Constitution))
+        characterBaseLife = model.character.class.lifeDice + (getStatScore finalStats Constitution |> computeModifier)
         availableRaces = getGameVersionRaces model.settings.gameVersion
         availableClasses = getGameVersionClasses model.settings.gameVersion
         availableSkills = getGameVersionSkills model.settings.gameVersion
@@ -249,7 +242,7 @@ view model =
                        ]
               , div [ class "flex-row" ]
                     (List.append
-                        (List.map(\statIdentifier -> viewStatInput model.character.rolledStats statIdentifier) allStatIdentifiers) 
+                        (List.map(\statKind -> viewStatInput model.character.rolledStats statKind) StatKind.all) 
                         (if model.settings.freeStatsInput then 
                             [ Html.text "" ] 
                          else [viewValueBox "POINTS" (String.fromInt model.character.remainingPoints)]
@@ -259,7 +252,7 @@ view model =
               , h3 [] [ text "Computed stats" ]
               , div [ class "flex-row" ]
                     (List.append
-                    (List.map (\statIdentifier -> viewStatReader finalStats statIdentifier) allStatIdentifiers)
+                    (List.map (\statKind -> viewStatReader finalStats statKind) StatKind.all)
                         [viewValueBox "PRO" (printWithSign proficiencyBonus)]
                     )
               , div [ class "flex-row" ]
@@ -326,18 +319,18 @@ viewLevelSelector =
     select [ onInput UpdateLevel ] 
            (List.map (\level -> option [ value (String.fromInt level)] [ text (String.fromInt level) ]) levels)
 
-viewStatInput: Stats -> StatIdentifier -> Html Msg
-viewStatInput stats statIdentifier =
+viewStatInput: Stats -> StatKind -> Html Msg
+viewStatInput stats statKind =
     let
-        score = getStatScore stats statIdentifier
+        score = getStatScore stats statKind
     in
     div [ class "stat-box" ]
-        [ span [ class "stat-box-title" ] [ text (statToString statIdentifier) ]
+        [ span [ class "stat-box-title" ] [ text (statToString statKind) ]
         , div [ class "stat-box-body" ]
               [ span [ class "stat-box-value" ] [ text (String.fromInt score) ]
         , div [ class "stat-box-controls" ]
-              [ span [ onClick (UpdateStat statIdentifier (score + 1)) ] [ text "+" ]
-              , span [ onClick (UpdateStat statIdentifier (score - 1)) ] [ text "-" ]
+              [ span [ onClick (UpdateStat statKind (score + 1)) ] [ text "+" ]
+              , span [ onClick (UpdateStat statKind (score - 1)) ] [ text "-" ]
               ]
         ]
     ]
@@ -350,13 +343,13 @@ viewValueBox title value =
               [ span [ class "stat-box-value" ] [ text value ]]
         ]
 
-viewStatReader: Stats -> StatIdentifier -> Html Msg
-viewStatReader stats statIdentifier =
+viewStatReader: Stats -> StatKind -> Html Msg
+viewStatReader stats statKind =
     let
-        score = getStatScore stats statIdentifier
+        score = getStatScore stats statKind
     in
     div [ class "stat-box" ]
-        [ span [ class "stat-box-title" ] [ text (statToString statIdentifier) ]
+        [ span [ class "stat-box-title" ] [ text (statToString statKind) ]
         , div [ class "stat-box-body" ]
               [ span [ class "stat-box-value" ] [ text (printWithSign (computeModifier score)) ]
               , div [ class "stat-box-bonus" ]
@@ -372,27 +365,27 @@ viewCharacterBaseLife classIdentifier baseLife =
     else
         Html.text ""
 
-viewSavingThrows: Stats -> StatIdentifiers -> Int -> Html Msg
+viewSavingThrows: Stats -> StatKinds -> Int -> Html Msg
 viewSavingThrows finalStats proficiencySaves proficiencyBonus =
     div [ class "margin-right" ]
         [ h4  [] [ text "Saving throw" ]
         , ul []
-             (List.map (\statIdentifier -> 
+             (List.map (\statKind -> 
                  let 
-                     statModifier = computeModifier (getStatScore finalStats statIdentifier)
+                     statModifier = computeModifier (getStatScore finalStats statKind)
                  in
-                 (viewSavingThrow statIdentifier proficiencySaves statModifier  proficiencyBonus)
-             ) allStatIdentifiers)
+                 (viewSavingThrow statKind proficiencySaves statModifier  proficiencyBonus)
+             ) StatKind.all)
         ]
 
-viewSavingThrow: StatIdentifier -> StatIdentifiers -> Int -> Int -> Html Msg
-viewSavingThrow statIdentifier proficiencySaves statModifier proficiencyBonus =
+viewSavingThrow: StatKind -> StatKinds -> Int -> Int -> Html Msg
+viewSavingThrow statKind proficiencySaves statModifier proficiencyBonus =
     let
-        hasProficiencySave = List.member statIdentifier proficiencySaves
+        hasProficiencySave = List.member statKind proficiencySaves
         savingThrowScore = if hasProficiencySave then statModifier + proficiencyBonus else statModifier
         modifier = printWithSign savingThrowScore
     in
-    li [] [ text (statToString statIdentifier ++ " : " ++ modifier) ]
+    li [] [ text (statToString statKind ++ " : " ++ modifier) ]
 
 viewSkills: Character -> GameVersion -> Html Msg
 viewSkills character gameVersion =
@@ -411,8 +404,8 @@ viewSkill: Character -> SkillIdentifier -> Bool -> Html Msg
 viewSkill character skillIdentifier optionalProficiencySkillsLimitReached =
     let
         skill = getSkill skillIdentifier
-        statIdentifier = skill.statIdentifier
-        statScore = getStatScore (computeFinalStats character) statIdentifier
+        statKind = skill.statKind
+        statScore = getStatScore (computeFinalStats character) statKind
         hasBaseProficiencySkill = List.member skillIdentifier (List.concat [character.class.baseProficiencySkills, character.race.baseProficiencySkills])
         hasClassProficiencySkill = List.member skillIdentifier character.class.optionalProficiencySkills
         hasSelectedProficiencySkill = List.member skillIdentifier character.selectedProficiencySkills
@@ -422,7 +415,7 @@ viewSkill character skillIdentifier optionalProficiencySkillsLimitReached =
     in
     li []
        [ input [ type_ "checkbox", disabled disableCheckbox, onCheck (CheckProficiencySkill skillIdentifier), checked (hasBaseProficiencySkill || hasSelectedProficiencySkill)] []
-       , text (skill.asString ++ " (" ++ (statToString statIdentifier) ++ ") :" ++ modifier)
+       , text (skill.asString ++ " (" ++ (statToString statKind) ++ ") :" ++ modifier)
        ]
 
 
@@ -435,14 +428,14 @@ stringToId string =
 update: Msg -> Model -> Model
 update msg ({ settings, character } as model) =
     let
-        updateStat: Stats -> StatIdentifier -> Int -> Stats
-        updateStat stats statIdentifier newScore =
+        updateStat: Stats -> StatKind -> Int -> Stats
+        updateStat stats statKind newScore =
             List.map(\stat ->
-                if Tuple.first stat == statIdentifier then
+                if Tuple.first stat == statKind then
                     if settings.freeStatsInput then
-                        (statIdentifier, newScore)
+                        (statKind, newScore)
                     else
-                        (statIdentifier, (Basics.min (Basics.max 8 newScore) 15))
+                        (statKind, (Basics.min (Basics.max 8 newScore) 15))
                 else
                     stat
             ) stats
@@ -477,9 +470,9 @@ update msg ({ settings, character } as model) =
             { model | character = 
                 { character | level = (Maybe.withDefault 1 (String.toInt level)) }
             }
-        UpdateStat statIdentifier newScore ->
+        UpdateStat statKind newScore ->
             update UpdateRemainingPoints { model | character = 
-                { character | rolledStats = (updateStat character.rolledStats statIdentifier newScore) }
+                { character | rolledStats = (updateStat character.rolledStats statKind newScore) }
             }
         UpdateRemainingPoints -> 
             { model | character = 
@@ -532,14 +525,14 @@ computeStatCost value =
 
 computeFinalStats: Character -> Stats
 computeFinalStats character =
-        (List.map (\statIdentifier -> 
+        (List.map (\statKind -> 
             let 
-                finalScore = (getStatScore character.rolledStats statIdentifier) +
-                             (getStatScore character.race.statBonus statIdentifier) +
-                             (getStatScore character.subRace.statBonus statIdentifier)
+                finalScore = (getStatScore character.rolledStats statKind) +
+                             (getStatScore character.race.statBonus statKind) +
+                             (getStatScore character.subRace.statBonus statKind)
             in
-            (statIdentifier, finalScore)
-         ) allStatIdentifiers)
+            (statKind, finalScore)
+         ) StatKind.all)
 
 computeModifier: Int -> Int
 computeModifier value =
@@ -565,10 +558,10 @@ getGameVersionSkills gameVersion =
              (List.filter(\skill -> List.member gameVersion skill.gameVersions) (List.map getSkill allSkillIdentifiers))
 
 
-getStatScore: Stats -> StatIdentifier -> Int
-getStatScore stats statIdentifier =
+getStatScore: Stats -> StatKind -> Int
+getStatScore stats statKind =
     let
-        selectedStats = List.filter (\stat -> Tuple.first stat == statIdentifier) stats
+        selectedStats = List.filter (\stat -> Tuple.first stat == statKind) stats
         head = List.head selectedStats
     in
     case head of
@@ -584,15 +577,6 @@ printWithSign value =
 
 -- DATA
 
-allStatIdentifiers: StatIdentifiers
-allStatIdentifiers =
-    [ Strength
-    , Dexterity
-    , Constitution
-    , Intelligence
-    , Wisdom
-    , Charisma
-    ]
 
 allRaceIdentifiers: RaceIdentifiers
 allRaceIdentifiers = 
@@ -1207,139 +1191,139 @@ getSkill skillIdentifier =
     case skillIdentifier of
         Acrobatics ->
             { identifier = Acrobatics
-            , statIdentifier = Dexterity
+            , statKind = Dexterity
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Acrobatics"
             }
         AnimalHandling ->
             { identifier = AnimalHandling
-            , statIdentifier = Wisdom
+            , statKind = Wisdom
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Animal Handling"
             }
         Arcana ->
             { identifier = Arcana
-            , statIdentifier = Intelligence
+            , statKind = Intelligence
             , gameVersions = [DnD5, Laelith]
             , asString = "Arcana"
             }
         Athletics ->
             { identifier = Athletics
-            , statIdentifier = Strength
+            , statKind = Strength
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Athletics"
             }
         Deception ->
             { identifier = Deception
-            , statIdentifier = Charisma
+            , statKind = Charisma
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Deception"
             }
         History ->
             { identifier = History
-            , statIdentifier = Intelligence
+            , statKind = Intelligence
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "History"
             }
         Insight ->
             { identifier = Insight
-            , statIdentifier = Wisdom
+            , statKind = Wisdom
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Insight"
             }
         Intimidation ->
             { identifier = Intimidation
-            , statIdentifier = Charisma
+            , statKind = Charisma
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Intimidation"
             }
         Investigation ->
             { identifier = Investigation
-            , statIdentifier = Intelligence
+            , statKind = Intelligence
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Investigation"
             }
         Lore ->
             { identifier = Lore
-            , statIdentifier = Intelligence
+            , statKind = Intelligence
             , gameVersions = [AiME]
             , asString = "Lore"
             }
         Medicine ->
             { identifier = Medicine
-            , statIdentifier = Wisdom
+            , statKind = Wisdom
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Medicine"
             }
         Nature ->
             { identifier = Nature
-            , statIdentifier = Intelligence
+            , statKind = Intelligence
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Nature"
             }
         Perception ->
             { identifier = Perception
-            , statIdentifier = Wisdom
+            , statKind = Wisdom
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Perception"
             }
         Performance ->
             { identifier = Performance
-            , statIdentifier = Charisma
+            , statKind = Charisma
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Performance"
             }
         Persuasion ->
             { identifier = Persuasion
-            , statIdentifier = Charisma
+            , statKind = Charisma
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Persuasion"
             }
         Religion ->
             { identifier = Religion
-            , statIdentifier = Intelligence
+            , statKind = Intelligence
             , gameVersions = [DnD5, Laelith]
             , asString = "Religion"
             }
         Riddle ->
             { identifier = Riddle
-            , statIdentifier = Intelligence
+            , statKind = Intelligence
             , gameVersions = [AiME]
             , asString = "Riddle"
             }
         ShadowLore ->
             { identifier = ShadowLore
-            , statIdentifier = Intelligence
+            , statKind = Intelligence
             , gameVersions = [AiME]
             , asString = "Shadow Lore"
             }
         SleightOfHand ->
             { identifier = SleightOfHand
-            , statIdentifier = Dexterity
+            , statKind = Dexterity
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Sleight of Hand"
             }
         Stealth ->
             { identifier = Stealth
-            , statIdentifier = Dexterity
+            , statKind = Dexterity
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Stealth"
             }
         Survival ->
             { identifier = Survival
-            , statIdentifier = Wisdom
+            , statKind = Wisdom
             , gameVersions = [DnD5, Laelith, AiME]
             , asString = "Survival"
             }
         Traditions ->
             { identifier = Traditions
-            , statIdentifier = Intelligence
+            , statKind = Intelligence
             , gameVersions = [AiME]
             , asString = "Traditions"
             }
         NoSkill ->
             { identifier = NoSkill
-            , statIdentifier = Strength
+            , statKind = Strength
             , gameVersions = []
             , asString = ""
             }
@@ -1428,9 +1412,9 @@ stringToGameVersion string =
 
 -- TO STRING
 
-statToString: StatIdentifier -> String
-statToString statIdentifier =
-    case statIdentifier of
+statToString: StatKind -> String
+statToString statKind =
+    case statKind of
         Strength -> "STR"
         Dexterity -> "DEX"
         Constitution -> "CON"
