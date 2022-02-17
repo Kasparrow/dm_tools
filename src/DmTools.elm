@@ -11,6 +11,7 @@ import Models.StatKind as StatKind exposing (StatKind(..), StatKinds, all, toStr
 import Models.SkillKind as SkillKind exposing (SkillKind(..), SkillKinds, all, fromString)
 import Models.RaceKind as RaceKind exposing (RaceKind(..), RaceKinds, all, fromString)
 import Models.SubRaceKind as SubRaceKind exposing (SubRaceKind(..), SubRaceKinds, all, fromString)
+import Models.ClassKind as ClassKind exposing (ClassKind(..), ClassKinds, all, fromString)
 
 import Models.Stat as Stat exposing (Stat, Stats)
 import Models.Skill as Skill exposing (Skill, Skills, get)
@@ -31,31 +32,8 @@ type Msg
     | CheckProficiencySkill SkillKind Bool 
 
 
-
-type ClassIdentifier
-    = Barbarian
-    | Bard
-    | Cleric
-    | Druid
-    | Fighter
-    | Monk
-    | Paladin
-    | Ranger
-    | Rogue
-    | Sorcerer
-    | Warlock
-    | Wizard
-    | Scholar
-    | Slayer
-    | TreasureHunter
-    | Wanderer
-    | Warden
-    | Warrior
-    | NoClass
-type alias ClassIdentifiers = List ClassIdentifier
-
 type alias Class =
-    { identifier: ClassIdentifier 
+    { classKind: ClassKind 
     , proficiencySaves: StatKinds
     , baseProficiencySkills: SkillKinds
     , optionalProficiencySkills: SkillKinds
@@ -135,7 +113,7 @@ view model =
               , viewRaceSelector availableRaces model.character.race.raceKind
               , viewSubRaceSelector model.character.race.subRaces model.character.subRace.subRaceKind
               , h3 [] [ text "Class" ]
-              , viewClassSelector availableClasses model.character.class.identifier
+              , viewClassSelector availableClasses model.character.class.classKind
               , h3 [] [ text "Level" ]
               , viewLevelSelector
               , h3 [] [ text "Rolled stats" ]
@@ -158,7 +136,7 @@ view model =
                         [viewValueBox "PRO" (printWithSign proficiencyBonus)]
                     )
               , div [ class "flex-row" ]
-                    [ viewCharacterBaseLife model.character.class.identifier characterBaseLife ]
+                    [ viewCharacterBaseLife model.character.class.classKind characterBaseLife ]
               , div [ class "flex-row" ]
                     [ viewSavingThrows finalStats model.character.class.proficiencySaves proficiencyBonus
                     , viewSkills model.character model.settings.ruleSetKind]
@@ -199,15 +177,15 @@ viewSubRaceOption subRaceKind selectedSubRaceKind =
         NoSubRace -> option [ value "", selected (subRaceKind == selectedSubRaceKind) ] [ text "Select a subrace" ]
         _ -> viewOption (SubRace.get subRaceKind).asString
 
-viewClassSelector: ClassIdentifiers -> ClassIdentifier -> Html Msg
-viewClassSelector classIdentifiers selectedClassIdentifier =
-    select [onInput UpdateClass ] (List.map (\classIdentifier -> viewClassOption classIdentifier selectedClassIdentifier) classIdentifiers)
+viewClassSelector: ClassKinds -> ClassKind -> Html Msg
+viewClassSelector classKinds selectedClassKind =
+    select [onInput UpdateClass ] (List.map (\classKind -> viewClassOption classKind selectedClassKind) classKinds)
 
-viewClassOption: ClassIdentifier -> ClassIdentifier -> Html Msg
-viewClassOption classIdentifier selectedClassIdentifier =
-    case classIdentifier of
-        NoClass -> option [ value "", selected (classIdentifier == selectedClassIdentifier) ] [ text "Select a class" ]
-        _ -> viewOption (getClass classIdentifier).asString
+viewClassOption: ClassKind -> ClassKind -> Html Msg
+viewClassOption classKind selectedClassKind =
+    case classKind of
+        NoClass -> option [ value "", selected (classKind == selectedClassKind) ] [ text "Select a class" ]
+        _ -> viewOption (getClass classKind).asString
 
 viewOption: String -> Html Msg
 viewOption label =
@@ -260,9 +238,9 @@ viewStatReader stats statKind =
               ]
         ]
 
-viewCharacterBaseLife: ClassIdentifier -> Int -> Html Msg
-viewCharacterBaseLife classIdentifier baseLife =
-    if classIdentifier /= NoClass then
+viewCharacterBaseLife: ClassKind -> Int -> Html Msg
+viewCharacterBaseLife classKind baseLife =
+    if classKind /= NoClass then
         viewValueBox "LIFE" (String.fromInt baseLife)
     else
         Html.text ""
@@ -364,9 +342,9 @@ update msg ({ settings, character } as model) =
             { model | character = 
                 { character | subRace = (SubRace.get (SubRaceKind.fromString string)) }
             }
-        UpdateClass classIdentifier ->
+        UpdateClass string ->
             { model | character = 
-                { character | class = (getClass (stringToClass classIdentifier )), selectedProficiencySkills = [] }
+                { character | class = (getClass (ClassKind.fromString string )), selectedProficiencySkills = [] }
             }
         UpdateLevel level ->
             { model | character = 
@@ -449,16 +427,15 @@ getRuleSetRaces ruleSetKind =
     List.map (\race -> race.raceKind)
              (List.filter(\race -> List.member ruleSetKind race.ruleSetKinds) (List.map Race.get RaceKind.all))
 
-getRuleSetClasses: RuleSetKind -> ClassIdentifiers
+getRuleSetClasses: RuleSetKind -> ClassKinds
 getRuleSetClasses ruleSetKind =
-    List.map (\class -> class.identifier)
-             (List.filter(\class -> List.member ruleSetKind class.ruleSetKinds) (List.map getClass allClassIdentifiers))
+    List.map (\class -> class.classKind)
+             (List.filter(\class -> List.member ruleSetKind class.ruleSetKinds) (List.map getClass ClassKind.all))
 
 getRuleSetSkills: RuleSetKind -> SkillKinds
 getRuleSetSkills ruleSetKind =
-    List.map (\skill -> skill.identifier)
+    List.map (\skill -> skill.skillKind)
              (List.filter(\skill -> List.member ruleSetKind skill.ruleSetKinds) (List.map Skill.get SkillKind.all))
-
 
 getStatScore: Stats -> StatKind -> Int
 getStatScore stats statKind =
@@ -479,37 +456,11 @@ printWithSign value =
 
 -- DATA
 
-
-allClassIdentifiers: ClassIdentifiers
-allClassIdentifiers =
-    [ NoClass
-    , Barbarian
-    , Bard
-    , Cleric
-    , Druid
-    , Fighter
-    , Monk
-    , Paladin
-    , Ranger
-    , Rogue
-    , Sorcerer
-    , Warlock
-    , Wizard
-    , Scholar
-    , Slayer
-    , TreasureHunter
-    , Wanderer
-    , Warden
-    , Warrior
-    ]
-
-
-
-getClass: ClassIdentifier -> Class 
+getClass: ClassKind -> Class 
 getClass classIdentifier =
     case classIdentifier of
         Barbarian ->
-            { identifier = Barbarian
+            { classKind = Barbarian
             , proficiencySaves = [ Strength, Constitution ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ AnimalHandling, Athletics, Intimidation, Nature, Perception, Survival ]
@@ -519,7 +470,7 @@ getClass classIdentifier =
             , asString = "Barbarian"
             }
         Bard ->
-            { identifier = Bard
+            { classKind = Bard
             , proficiencySaves = [ Dexterity, Charisma ]
             , baseProficiencySkills =  []
             , optionalProficiencySkills = SkillKind.all
@@ -529,7 +480,7 @@ getClass classIdentifier =
             , asString = "Bard"
             }
         Cleric ->
-            { identifier = Cleric
+            { classKind = Cleric
             , proficiencySaves = [ Wisdom, Charisma ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ History, Insight, Medicine, Persuasion, Religion ]
@@ -539,7 +490,7 @@ getClass classIdentifier =
             , asString = "Cleric"
             }
         Druid ->
-            { identifier = Druid
+            { classKind = Druid
             , proficiencySaves = [ Intelligence, Wisdom ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ Arcana, AnimalHandling, Insight, Medicine, Nature, Perception, Religion, Survival ]
@@ -549,7 +500,7 @@ getClass classIdentifier =
             , asString = "Druid"
             }
         Fighter ->
-            { identifier = Fighter
+            { classKind = Fighter
             , proficiencySaves = [ Strength, Constitution ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ Acrobatics, AnimalHandling, Athletics, History, Insight, Intimidation, Perception, Survival ]
@@ -559,7 +510,7 @@ getClass classIdentifier =
             , asString = "Fighter"
             }
         Monk ->
-            { identifier = Monk
+            { classKind = Monk
             , proficiencySaves = [ Strength, Dexterity ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ Acrobatics, Athletics, History, Insight, Religion, Stealth ]
@@ -569,7 +520,7 @@ getClass classIdentifier =
             , asString = "Monk"
             }
         Paladin ->
-            { identifier = Paladin
+            { classKind = Paladin
             , proficiencySaves = [ Wisdom, Charisma ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ Athletics, Insight, Intimidation, Medicine, Persuasion ]
@@ -579,7 +530,7 @@ getClass classIdentifier =
             , asString = "Paladin"
             }
         Ranger ->
-            { identifier = Ranger
+            { classKind = Ranger
             , proficiencySaves = [ Strength, Dexterity ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ AnimalHandling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Survival ]
@@ -589,7 +540,7 @@ getClass classIdentifier =
             , asString = "Ranger"
             }
         Rogue ->
-            { identifier = Rogue
+            { classKind = Rogue
             , proficiencySaves = [ Dexterity, Intelligence ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, SleightOfHand, Stealth ]
@@ -599,7 +550,7 @@ getClass classIdentifier =
             , asString = "Rogue"
             }
         Sorcerer ->
-            { identifier = Sorcerer 
+            { classKind = Sorcerer 
             , proficiencySaves = [ Constitution, Charisma ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ Arcana, Deception, Insight, Intimidation, Persuasion ]
@@ -609,7 +560,7 @@ getClass classIdentifier =
             , asString = "Sorcerer"
             }
         Warlock ->
-            { identifier = Warlock
+            { classKind = Warlock
             , proficiencySaves = [ Wisdom, Charisma ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ Arcana, Deception, History, Intimidation, Investigation, Nature, Religion ]
@@ -619,7 +570,7 @@ getClass classIdentifier =
             , asString = "Warlock"
             }
         Wizard ->
-            { identifier = Wizard
+            { classKind = Wizard
             , proficiencySaves = [ Intelligence, Wisdom ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [ Arcana, History, Insight, Investigation, Medicine, Religion ]
@@ -629,7 +580,7 @@ getClass classIdentifier =
             , asString = "Wizard"
             }
         Scholar ->
-            { identifier = Scholar
+            { classKind = Scholar
             , proficiencySaves = [ Intelligence, Wisdom ]
             , baseProficiencySkills = [Medicine, Lore]
             , optionalProficiencySkills = [History, Riddle, Traditions, Insight, Investigation, Nature, Perception, Survival]
@@ -639,7 +590,7 @@ getClass classIdentifier =
             , asString = "Scholar"
             }
         Slayer ->
-            { identifier = Slayer
+            { classKind = Slayer
             , proficiencySaves = [ Strength, Constitution ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [AnimalHandling, Athletics, Intimidation, Nature, Perception, Survival]
@@ -649,7 +600,7 @@ getClass classIdentifier =
             , asString = "Slayer"
             }
         TreasureHunter ->
-            { identifier = TreasureHunter
+            { classKind = TreasureHunter
             , proficiencySaves = [ Dexterity, Intelligence ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [Acrobatics, Athletics, Deception, Insight, Intimidation, Perception, Persuasion, Riddle, SleightOfHand, Stealth]
@@ -659,7 +610,7 @@ getClass classIdentifier =
             , asString = "Treasure Hunter"
             }
         Wanderer ->
-            { identifier = Wanderer
+            { classKind = Wanderer
             , proficiencySaves = [ Strength, Constitution ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = [AnimalHandling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Traditions]
@@ -669,7 +620,7 @@ getClass classIdentifier =
             , asString = "Wanderer"
             }
         Warden ->
-            { identifier = Warden
+            { classKind = Warden
             , proficiencySaves = [ Dexterity, Charisma ]
             , baseProficiencySkills = []
             , optionalProficiencySkills = SkillKind.all
@@ -679,7 +630,7 @@ getClass classIdentifier =
             , asString = "Warden"
             }
         Warrior ->
-            { identifier = Warrior
+            { classKind = Warrior
             , baseProficiencySkills = []
             , proficiencySaves = [ Strength, Constitution ]
             , optionalProficiencySkills = [Acrobatics, AnimalHandling, Athletics, History, Insight, Intimidation, Perception, Survival, Traditions]
@@ -689,7 +640,7 @@ getClass classIdentifier =
             , asString = "Warrior"
             }
         NoClass ->
-            { identifier = NoClass
+            { classKind = NoClass
             , baseProficiencySkills = []
             , proficiencySaves = []
             , optionalProficiencySkills = []
@@ -701,25 +652,3 @@ getClass classIdentifier =
 
 -- IDENTIFIER FROM STRING
 
-stringToClass: String -> ClassIdentifier
-stringToClass string =
-    case string of
-        "Barbarian" -> Barbarian
-        "Bard" -> Bard
-        "Cleric" -> Cleric
-        "Druid" -> Druid
-        "Fighter" -> Fighter
-        "Monk" -> Monk
-        "Paladin" -> Paladin
-        "Ranger" -> Ranger
-        "Rogue" -> Rogue
-        "Sorcerer" -> Rogue
-        "Warlock" -> Warlock
-        "Wizard" -> Wizard
-        "Scholar" -> Scholar
-        "Slayer" -> Slayer
-        "TreasureHunter" -> TreasureHunter
-        "Wanderer" -> Wanderer
-        "Warden" -> Warden
-        "Warrior" -> Warrior
-        _ -> NoClass
