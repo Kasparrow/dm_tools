@@ -2704,7 +2704,7 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		E: func(record.E),
+		D: func(record.D),
 		ae: record.ae,
 		ab: record.ab
 	}
@@ -2974,7 +2974,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.E;
+		var message = !tag ? value : tag < 3 ? value.a : value.D;
 		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ae;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
@@ -4438,7 +4438,7 @@ var $elm$core$Basics$LT = 0;
 var $author$project$Models$StatKind$Charisma = 5;
 var $author$project$Models$StatKind$Constitution = 2;
 var $author$project$Models$StatKind$Dexterity = 1;
-var $author$project$DmTools$DnD5 = 0;
+var $author$project$Models$RuleSetKind$DnD5 = 0;
 var $elm$core$Basics$False = 1;
 var $author$project$DmTools$French = 0;
 var $author$project$Models$StatKind$Intelligence = 3;
@@ -4448,7 +4448,7 @@ var $author$project$DmTools$NoSubRace = 19;
 var $author$project$Models$StatKind$Strength = 0;
 var $author$project$Models$StatKind$Wisdom = 4;
 var $author$project$DmTools$Acrobatics = 0;
-var $author$project$DmTools$AiME = 1;
+var $author$project$Models$RuleSetKind$AiME = 1;
 var $author$project$DmTools$AnimalHandling = 1;
 var $author$project$DmTools$Arcana = 2;
 var $author$project$DmTools$Athletics = 3;
@@ -4462,7 +4462,7 @@ var $author$project$DmTools$History = 5;
 var $author$project$DmTools$Insight = 6;
 var $author$project$DmTools$Intimidation = 7;
 var $author$project$DmTools$Investigation = 8;
-var $author$project$DmTools$Laelith = 2;
+var $author$project$Models$RuleSetKind$Laelith = 2;
 var $author$project$DmTools$Lore = 9;
 var $author$project$DmTools$Medicine = 10;
 var $author$project$DmTools$Monk = 5;
@@ -4497,264 +4497,264 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 			return {
 				b: 'Barbarian',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 0,
 				i: 12,
 				j: _List_fromArray(
 					[1, 3, 7, 11, 12, 20]),
 				k: 2,
 				l: _List_fromArray(
+					[0, 2]),
+				c: _List_fromArray(
 					[0, 2])
 			};
 		case 1:
 			return {
 				b: 'Bard',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 1,
 				i: 8,
 				j: $author$project$DmTools$allSkillIdentifiers,
 				k: 3,
 				l: _List_fromArray(
-					[1, 5])
+					[1, 5]),
+				c: _List_fromArray(
+					[0, 2])
 			};
 		case 2:
 			return {
 				b: 'Cleric',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 2,
 				i: 8,
 				j: _List_fromArray(
 					[5, 6, 10, 14, 16]),
 				k: 2,
 				l: _List_fromArray(
-					[4, 5])
+					[4, 5]),
+				c: _List_fromArray(
+					[0, 2])
 			};
 		case 3:
 			return {
 				b: 'Druid',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 3,
 				i: 8,
 				j: _List_fromArray(
 					[2, 1, 6, 10, 11, 12, 16, 20]),
 				k: 2,
 				l: _List_fromArray(
-					[3, 4])
+					[3, 4]),
+				c: _List_fromArray(
+					[0, 2])
 			};
 		case 4:
 			return {
 				b: 'Fighter',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 4,
 				i: 10,
 				j: _List_fromArray(
 					[0, 1, 3, 5, 6, 7, 12, 20]),
 				k: 2,
 				l: _List_fromArray(
+					[0, 2]),
+				c: _List_fromArray(
 					[0, 2])
 			};
 		case 5:
 			return {
 				b: 'Monk',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 5,
 				i: 8,
 				j: _List_fromArray(
 					[0, 3, 5, 6, 16, 19]),
 				k: 2,
 				l: _List_fromArray(
-					[0, 1])
+					[0, 1]),
+				c: _List_fromArray(
+					[0, 2])
 			};
 		case 6:
 			return {
 				b: 'Paladin',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 6,
 				i: 10,
 				j: _List_fromArray(
 					[3, 6, 7, 10, 14]),
 				k: 2,
 				l: _List_fromArray(
-					[4, 5])
+					[4, 5]),
+				c: _List_fromArray(
+					[0, 2])
 			};
 		case 7:
 			return {
 				b: 'Ranger',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 7,
 				i: 10,
 				j: _List_fromArray(
 					[1, 3, 6, 8, 11, 12, 19, 20]),
 				k: 2,
 				l: _List_fromArray(
-					[0, 1])
+					[0, 1]),
+				c: _List_fromArray(
+					[0, 2])
 			};
 		case 8:
 			return {
 				b: 'Rogue',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 8,
 				i: 8,
 				j: _List_fromArray(
 					[0, 3, 4, 6, 7, 8, 12, 13, 14, 18, 19]),
 				k: 4,
 				l: _List_fromArray(
-					[1, 3])
+					[1, 3]),
+				c: _List_fromArray(
+					[0, 2])
 			};
 		case 9:
 			return {
 				b: 'Sorcerer',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 9,
 				i: 8,
 				j: _List_fromArray(
 					[2, 4, 6, 7, 14]),
 				k: 2,
 				l: _List_fromArray(
-					[2, 5])
+					[2, 5]),
+				c: _List_fromArray(
+					[0, 2])
 			};
 		case 10:
 			return {
 				b: 'Warlock',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 10,
 				i: 6,
 				j: _List_fromArray(
 					[2, 4, 5, 7, 8, 11, 16]),
 				k: 2,
 				l: _List_fromArray(
-					[4, 5])
+					[4, 5]),
+				c: _List_fromArray(
+					[0, 2])
 			};
 		case 11:
 			return {
 				b: 'Wizard',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2]),
 				a: 11,
 				i: 6,
 				j: _List_fromArray(
 					[2, 5, 6, 8, 10, 16]),
 				k: 2,
 				l: _List_fromArray(
-					[3, 4])
+					[3, 4]),
+				c: _List_fromArray(
+					[0, 2])
 			};
 		case 12:
 			return {
 				b: 'Scholar',
 				e: _List_fromArray(
 					[10, 9]),
-				c: _List_fromArray(
-					[1]),
 				a: 12,
 				i: 8,
 				j: _List_fromArray(
 					[5, 15, 21, 6, 8, 11, 12, 20]),
 				k: 1,
 				l: _List_fromArray(
-					[3, 4])
+					[3, 4]),
+				c: _List_fromArray(
+					[1])
 			};
 		case 13:
 			return {
 				b: 'Slayer',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[1]),
 				a: 13,
 				i: 12,
 				j: _List_fromArray(
 					[1, 3, 7, 11, 12, 20]),
 				k: 2,
 				l: _List_fromArray(
-					[0, 2])
+					[0, 2]),
+				c: _List_fromArray(
+					[1])
 			};
 		case 14:
 			return {
 				b: 'Treasure Hunter',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[1]),
 				a: 14,
 				i: 8,
 				j: _List_fromArray(
 					[0, 3, 4, 6, 7, 12, 14, 15, 18, 19]),
 				k: 4,
 				l: _List_fromArray(
-					[1, 3])
+					[1, 3]),
+				c: _List_fromArray(
+					[1])
 			};
 		case 15:
 			return {
 				b: 'Wanderer',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[1]),
 				a: 15,
 				i: 10,
 				j: _List_fromArray(
 					[1, 3, 6, 8, 11, 12, 19, 21]),
 				k: 3,
 				l: _List_fromArray(
-					[0, 2])
+					[0, 2]),
+				c: _List_fromArray(
+					[1])
 			};
 		case 16:
 			return {
 				b: 'Warden',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[1]),
 				a: 16,
 				i: 8,
 				j: $author$project$DmTools$allSkillIdentifiers,
 				k: 2,
 				l: _List_fromArray(
-					[1, 5])
+					[1, 5]),
+				c: _List_fromArray(
+					[1])
 			};
 		case 17:
 			return {
 				b: 'Warrior',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[1]),
 				a: 17,
 				i: 10,
 				j: _List_fromArray(
 					[0, 1, 3, 5, 6, 7, 12, 20, 21]),
 				k: 2,
 				l: _List_fromArray(
-					[0, 2])
+					[0, 2]),
+				c: _List_fromArray(
+					[1])
 			};
 		default:
 			return {
 				b: '',
 				e: _List_Nil,
-				c: _List_fromArray(
-					[0, 2, 1]),
 				a: 18,
 				i: 0,
 				j: _List_Nil,
 				k: 0,
-				l: _List_Nil
+				l: _List_Nil,
+				c: _List_fromArray(
+					[0, 2, 1])
 			};
 	}
 };
@@ -4803,9 +4803,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 			return {
 				b: 'Dragonborn',
 				e: _List_Nil,
+				a: 0,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 0,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(0, 2),
@@ -4818,9 +4818,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 			return {
 				b: 'Dwarf',
 				e: _List_Nil,
+				a: 1,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 1,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(2, 2)
@@ -4833,9 +4833,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Elf',
 				e: _List_fromArray(
 					[12]),
+				a: 2,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 2,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(1, 2)
@@ -4847,9 +4847,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 			return {
 				b: 'Gnome',
 				e: _List_Nil,
+				a: 3,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 3,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(3, 2)
@@ -4861,9 +4861,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 			return {
 				b: 'Half-Elf',
 				e: _List_Nil,
+				a: 4,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 4,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(5, 2)
@@ -4874,9 +4874,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 			return {
 				b: 'Halfling',
 				e: _List_Nil,
+				a: 5,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 5,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(1, 2)
@@ -4889,9 +4889,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Half-Orc',
 				e: _List_fromArray(
 					[7]),
+				a: 6,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 6,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(0, 2),
@@ -4903,9 +4903,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 			return {
 				b: 'Human',
 				e: _List_Nil,
+				a: 7,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 7,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(0, 1),
@@ -4921,9 +4921,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 			return {
 				b: 'Tiefling',
 				e: _List_Nil,
+				a: 8,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 8,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(3, 1),
@@ -4936,9 +4936,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Barding',
 				e: _List_fromArray(
 					[6]),
+				a: 9,
 				c: _List_fromArray(
 					[1]),
-				a: 9,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(2, 1)
@@ -4950,9 +4950,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Beorning',
 				e: _List_fromArray(
 					[7]),
+				a: 10,
 				c: _List_fromArray(
 					[1]),
-				a: 10,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(0, 1)
@@ -4964,9 +4964,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Dunedain',
 				e: _List_fromArray(
 					[20]),
+				a: 11,
 				c: _List_fromArray(
 					[1]),
-				a: 11,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(2, 1),
@@ -4978,9 +4978,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 			return {
 				b: 'Lonely Mountain Dwarf',
 				e: _List_Nil,
+				a: 12,
 				c: _List_fromArray(
 					[1]),
-				a: 12,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(2, 2)
@@ -4992,9 +4992,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Mirkwood Elf',
 				e: _List_fromArray(
 					[19]),
+				a: 13,
 				c: _List_fromArray(
 					[1]),
-				a: 13,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(1, 2),
@@ -5007,9 +5007,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Shire Hobbit',
 				e: _List_fromArray(
 					[19]),
+				a: 14,
 				c: _List_fromArray(
 					[1]),
-				a: 14,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(1, 2)
@@ -5021,9 +5021,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Bree Men',
 				e: _List_fromArray(
 					[12]),
+				a: 15,
 				c: _List_fromArray(
 					[1]),
-				a: 15,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(4, 1)
@@ -5035,9 +5035,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Lake Men',
 				e: _List_fromArray(
 					[14]),
+				a: 16,
 				c: _List_fromArray(
 					[1]),
-				a: 16,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(5, 1)
@@ -5049,9 +5049,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Minas Tirith Men',
 				e: _List_fromArray(
 					[5]),
+				a: 17,
 				c: _List_fromArray(
 					[1]),
-				a: 17,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(3, 1)
@@ -5063,9 +5063,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Rohan Rider',
 				e: _List_fromArray(
 					[1]),
+				a: 18,
 				c: _List_fromArray(
 					[1]),
-				a: 18,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(4, 1)
@@ -5077,9 +5077,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 				b: 'Wilderland Woodmen',
 				e: _List_fromArray(
 					[20]),
+				a: 19,
 				c: _List_fromArray(
 					[1]),
-				a: 19,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(1, 1)
@@ -5090,9 +5090,9 @@ var $author$project$DmTools$getRace = function (identifier) {
 			return {
 				b: '',
 				e: _List_Nil,
+				a: 20,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 20,
 				d: _List_Nil,
 				h: _List_Nil
 			};
@@ -5103,89 +5103,89 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 		case 0:
 			return {
 				b: 'Black Dragonborn',
+				a: 0,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 0,
 				d: _List_Nil
 			};
 		case 1:
 			return {
 				b: 'Blue Dragonborn',
+				a: 1,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 1,
 				d: _List_Nil
 			};
 		case 2:
 			return {
 				b: 'Brass Dragonborn',
+				a: 2,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 2,
 				d: _List_Nil
 			};
 		case 3:
 			return {
 				b: 'Bronze Dragonborn',
+				a: 3,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 3,
 				d: _List_Nil
 			};
 		case 4:
 			return {
 				b: 'Copper Dragonborn',
+				a: 4,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 4,
 				d: _List_Nil
 			};
 		case 5:
 			return {
 				b: 'Gold Dragonborn',
+				a: 5,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 5,
 				d: _List_Nil
 			};
 		case 6:
 			return {
 				b: 'Green Dragonborn',
+				a: 6,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 6,
 				d: _List_Nil
 			};
 		case 7:
 			return {
 				b: 'Red Dragonborn',
+				a: 7,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 7,
 				d: _List_Nil
 			};
 		case 8:
 			return {
 				b: 'Silver Dragonborn',
+				a: 8,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 8,
 				d: _List_Nil
 			};
 		case 9:
 			return {
 				b: 'White Dragonborn',
+				a: 9,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 9,
 				d: _List_Nil
 			};
 		case 10:
 			return {
 				b: 'Hills Dwarf',
+				a: 10,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 10,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(4, 1)
@@ -5194,9 +5194,9 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 		case 11:
 			return {
 				b: 'Mountains Dwarf',
+				a: 11,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 11,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(0, 1)
@@ -5205,9 +5205,9 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 		case 14:
 			return {
 				b: 'Drow',
+				a: 14,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 14,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(5, 1)
@@ -5216,9 +5216,9 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 		case 13:
 			return {
 				b: 'Wood Elf',
+				a: 13,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 13,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(4, 1)
@@ -5227,9 +5227,9 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 		case 12:
 			return {
 				b: 'High Elf',
+				a: 12,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 12,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(3, 1)
@@ -5238,9 +5238,9 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 		case 15:
 			return {
 				b: 'Deep Gnome',
+				a: 15,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 15,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(1, 1)
@@ -5249,9 +5249,9 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 		case 16:
 			return {
 				b: 'Rock Gnome',
+				a: 16,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 16,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(2, 1)
@@ -5260,9 +5260,9 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 		case 17:
 			return {
 				b: 'Lightfoot Halfling',
+				a: 17,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 17,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(5, 1)
@@ -5271,9 +5271,9 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 		case 18:
 			return {
 				b: 'Stout Halfling',
+				a: 18,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 18,
 				d: _List_fromArray(
 					[
 						_Utils_Tuple2(2, 1)
@@ -5282,9 +5282,9 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 		default:
 			return {
 				b: '',
+				a: 19,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 19,
 				d: _List_Nil
 			};
 	}
@@ -5293,7 +5293,7 @@ var $author$project$DmTools$init = {
 	g: {
 		v: $author$project$DmTools$getClass(18),
 		T: 1,
-		G: $author$project$DmTools$getRace(20),
+		F: $author$project$DmTools$getRace(20),
 		Z: 27,
 		L: _List_fromArray(
 			[
@@ -5307,7 +5307,7 @@ var $author$project$DmTools$init = {
 		A: _List_Nil,
 		M: $author$project$DmTools$getSubRace(19)
 	},
-	u: {P: false, D: 0, ao: 0}
+	u: {P: false, ao: 0, G: 0}
 };
 var $elm$core$Result$Err = function (a) {
 	return {$: 1, a: a};
@@ -6082,6 +6082,18 @@ var $elm$core$List$filter = F2(
 			_List_Nil,
 			list);
 	});
+var $author$project$Models$RuleSetKind$fromString = function (string) {
+	switch (string) {
+		case 'DnD5':
+			return 0;
+		case 'AiME':
+			return 1;
+		case 'Laelith':
+			return 2;
+		default:
+			return 0;
+	}
+};
 var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
@@ -6127,18 +6139,6 @@ var $author$project$DmTools$stringToClass = function (string) {
 			return 17;
 		default:
 			return 18;
-	}
-};
-var $author$project$DmTools$stringToGameVersion = function (string) {
-	switch (string) {
-		case 'DnD5':
-			return 0;
-		case 'AiME':
-			return 1;
-		case 'Laelith':
-			return 2;
-		default:
-			return 0;
 	}
 };
 var $author$project$DmTools$stringToRace = function (string) {
@@ -6275,7 +6275,7 @@ var $author$project$DmTools$update = F2(
 				});
 			switch (msg.$) {
 				case 0:
-					var gameVersion = msg.a;
+					var string = msg.a;
 					return _Utils_update(
 						model,
 						{
@@ -6283,13 +6283,13 @@ var $author$project$DmTools$update = F2(
 								character,
 								{
 									v: $author$project$DmTools$getClass(18),
-									G: $author$project$DmTools$getRace(20),
+									F: $author$project$DmTools$getRace(20),
 									M: $author$project$DmTools$getSubRace(19)
 								}),
 							u: _Utils_update(
 								settings,
 								{
-									D: $author$project$DmTools$stringToGameVersion(gameVersion)
+									G: $author$project$Models$RuleSetKind$fromString(string)
 								})
 						});
 				case 2:
@@ -6300,7 +6300,7 @@ var $author$project$DmTools$update = F2(
 							g: _Utils_update(
 								character,
 								{
-									G: $author$project$DmTools$getRace(
+									F: $author$project$DmTools$getRace(
 										$author$project$DmTools$stringToRace(raceIdentifier)),
 									M: $author$project$DmTools$getSubRace(19)
 								})
@@ -6473,7 +6473,7 @@ var $author$project$DmTools$computeFinalStats = function (character) {
 	return A2(
 		$elm$core$List$map,
 		function (statKind) {
-			var finalScore = (A2($author$project$DmTools$getStatScore, character.L, statKind) + A2($author$project$DmTools$getStatScore, character.G.d, statKind)) + A2($author$project$DmTools$getStatScore, character.M.d, statKind);
+			var finalScore = (A2($author$project$DmTools$getStatScore, character.L, statKind) + A2($author$project$DmTools$getStatScore, character.F.d, statKind)) + A2($author$project$DmTools$getStatScore, character.M.d, statKind);
 			return _Utils_Tuple2(statKind, finalScore);
 		},
 		$author$project$Models$StatKind$all);
@@ -6519,7 +6519,7 @@ var $elm$core$List$member = F2(
 			},
 			xs);
 	});
-var $author$project$DmTools$getGameVersionClasses = function (gameVersion) {
+var $author$project$DmTools$getRuleSetClasses = function (ruleSetKind) {
 	return A2(
 		$elm$core$List$map,
 		function (_class) {
@@ -6528,13 +6528,13 @@ var $author$project$DmTools$getGameVersionClasses = function (gameVersion) {
 		A2(
 			$elm$core$List$filter,
 			function (_class) {
-				return A2($elm$core$List$member, gameVersion, _class.c);
+				return A2($elm$core$List$member, ruleSetKind, _class.c);
 			},
 			A2($elm$core$List$map, $author$project$DmTools$getClass, $author$project$DmTools$allClassIdentifiers)));
 };
 var $author$project$DmTools$allRaceIdentifiers = _List_fromArray(
 	[20, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
-var $author$project$DmTools$getGameVersionRaces = function (gameVersion) {
+var $author$project$DmTools$getRuleSetRaces = function (ruleSetKind) {
 	return A2(
 		$elm$core$List$map,
 		function (race) {
@@ -6543,7 +6543,7 @@ var $author$project$DmTools$getGameVersionRaces = function (gameVersion) {
 		A2(
 			$elm$core$List$filter,
 			function (race) {
-				return A2($elm$core$List$member, gameVersion, race.c);
+				return A2($elm$core$List$member, ruleSetKind, race.c);
 			},
 			A2($elm$core$List$map, $author$project$DmTools$getRace, $author$project$DmTools$allRaceIdentifiers)));
 };
@@ -6553,184 +6553,184 @@ var $author$project$DmTools$getSkill = function (skillIdentifier) {
 		case 0:
 			return {
 				b: 'Acrobatics',
+				a: 0,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 0,
 				f: 1
 			};
 		case 1:
 			return {
 				b: 'Animal Handling',
+				a: 1,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 1,
 				f: 4
 			};
 		case 2:
 			return {
 				b: 'Arcana',
+				a: 2,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 2,
 				f: 3
 			};
 		case 3:
 			return {
 				b: 'Athletics',
+				a: 3,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 3,
 				f: 0
 			};
 		case 4:
 			return {
 				b: 'Deception',
+				a: 4,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 4,
 				f: 5
 			};
 		case 5:
 			return {
 				b: 'History',
+				a: 5,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 5,
 				f: 3
 			};
 		case 6:
 			return {
 				b: 'Insight',
+				a: 6,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 6,
 				f: 4
 			};
 		case 7:
 			return {
 				b: 'Intimidation',
+				a: 7,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 7,
 				f: 5
 			};
 		case 8:
 			return {
 				b: 'Investigation',
+				a: 8,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 8,
 				f: 3
 			};
 		case 9:
 			return {
 				b: 'Lore',
+				a: 9,
 				c: _List_fromArray(
 					[1]),
-				a: 9,
 				f: 3
 			};
 		case 10:
 			return {
 				b: 'Medicine',
+				a: 10,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 10,
 				f: 4
 			};
 		case 11:
 			return {
 				b: 'Nature',
+				a: 11,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 11,
 				f: 3
 			};
 		case 12:
 			return {
 				b: 'Perception',
+				a: 12,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 12,
 				f: 4
 			};
 		case 13:
 			return {
 				b: 'Performance',
+				a: 13,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 13,
 				f: 5
 			};
 		case 14:
 			return {
 				b: 'Persuasion',
+				a: 14,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 14,
 				f: 5
 			};
 		case 16:
 			return {
 				b: 'Religion',
+				a: 16,
 				c: _List_fromArray(
 					[0, 2]),
-				a: 16,
 				f: 3
 			};
 		case 15:
 			return {
 				b: 'Riddle',
+				a: 15,
 				c: _List_fromArray(
 					[1]),
-				a: 15,
 				f: 3
 			};
 		case 17:
 			return {
 				b: 'Shadow Lore',
+				a: 17,
 				c: _List_fromArray(
 					[1]),
-				a: 17,
 				f: 3
 			};
 		case 18:
 			return {
 				b: 'Sleight of Hand',
+				a: 18,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 18,
 				f: 1
 			};
 		case 19:
 			return {
 				b: 'Stealth',
+				a: 19,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 19,
 				f: 1
 			};
 		case 20:
 			return {
 				b: 'Survival',
+				a: 20,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				a: 20,
 				f: 4
 			};
 		case 21:
 			return {
 				b: 'Traditions',
+				a: 21,
 				c: _List_fromArray(
 					[1]),
-				a: 21,
 				f: 3
 			};
 		default:
-			return {b: '', c: _List_Nil, a: 22, f: 0};
+			return {b: '', a: 22, c: _List_Nil, f: 0};
 	}
 };
-var $author$project$DmTools$getGameVersionSkills = function (gameVersion) {
+var $author$project$DmTools$getRuleSetSkills = function (ruleSetKind) {
 	return A2(
 		$elm$core$List$map,
 		function (skill) {
@@ -6739,7 +6739,7 @@ var $author$project$DmTools$getGameVersionSkills = function (gameVersion) {
 		A2(
 			$elm$core$List$filter,
 			function (skill) {
-				return A2($elm$core$List$member, gameVersion, skill.c);
+				return A2($elm$core$List$member, ruleSetKind, skill.c);
 			},
 			A2($elm$core$List$map, $author$project$DmTools$getSkill, $author$project$DmTools$allSkillIdentifiers)));
 };
@@ -6944,42 +6944,6 @@ var $author$project$DmTools$viewClassSelector = F2(
 				},
 				classIdentifiers));
 	});
-var $author$project$DmTools$UpdateGameVersion = function (a) {
-	return {$: 0, a: a};
-};
-var $author$project$DmTools$viewGameVersionSelector = function (selectedGameVersion) {
-	return A2(
-		$elm$html$Html$select,
-		_List_fromArray(
-			[
-				$elm$html$Html$Events$onInput($author$project$DmTools$UpdateGameVersion)
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$option,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$value('DnD5'),
-						$elm$html$Html$Attributes$selected(!selectedGameVersion)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Dungeon & Dragon 5')
-					])),
-				A2(
-				$elm$html$Html$option,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$value('AiME'),
-						$elm$html$Html$Attributes$selected(selectedGameVersion === 1)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Adventures in Middle Earth')
-					]))
-			]));
-};
 var $author$project$DmTools$UpdateLevel = function (a) {
 	return {$: 5, a: a};
 };
@@ -7047,10 +7011,46 @@ var $author$project$DmTools$viewRaceSelector = F2(
 				},
 				raceIdentifiers));
 	});
+var $author$project$DmTools$UpdateRuleSetKind = function (a) {
+	return {$: 0, a: a};
+};
+var $author$project$DmTools$viewRuleSetSelector = function (selectedRuleSetKind) {
+	return A2(
+		$elm$html$Html$select,
+		_List_fromArray(
+			[
+				$elm$html$Html$Events$onInput($author$project$DmTools$UpdateRuleSetKind)
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$option,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$value('DnD5'),
+						$elm$html$Html$Attributes$selected(!selectedRuleSetKind)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Dungeon & Dragon 5')
+					])),
+				A2(
+				$elm$html$Html$option,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$value('AiME'),
+						$elm$html$Html$Attributes$selected(selectedRuleSetKind === 1)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Adventures in Middle Earth')
+					]))
+			]));
+};
 var $elm$html$Html$h4 = _VirtualDom_node('h4');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $elm$html$Html$li = _VirtualDom_node('li');
-var $author$project$DmTools$statToString = function (statKind) {
+var $author$project$Models$StatKind$toString = function (statKind) {
 	switch (statKind) {
 		case 0:
 			return 'STR';
@@ -7077,7 +7077,7 @@ var $author$project$DmTools$viewSavingThrow = F4(
 			_List_fromArray(
 				[
 					$elm$html$Html$text(
-					$author$project$DmTools$statToString(statKind) + (' : ' + modifier))
+					$author$project$Models$StatKind$toString(statKind) + (' : ' + modifier))
 				]));
 	});
 var $author$project$DmTools$viewSavingThrows = F3(
@@ -7135,7 +7135,7 @@ var $author$project$DmTools$viewSkill = F3(
 			skillIdentifier,
 			$elm$core$List$concat(
 				_List_fromArray(
-					[character.v.e, character.G.e])));
+					[character.v.e, character.F.e])));
 		var proficiencyBonus = (hasSelectedProficiencySkill || hasBaseProficiencySkill) ? $author$project$DmTools$computeProficiency(character.T) : 0;
 		var modifier = $author$project$DmTools$printWithSign(
 			$author$project$DmTools$computeModifier(statScore) + proficiencyBonus);
@@ -7157,11 +7157,11 @@ var $author$project$DmTools$viewSkill = F3(
 						]),
 					_List_Nil),
 					$elm$html$Html$text(
-					skill.b + (' (' + ($author$project$DmTools$statToString(statKind) + (') :' + modifier))))
+					skill.b + (' (' + ($author$project$Models$StatKind$toString(statKind) + (') :' + modifier))))
 				]));
 	});
 var $author$project$DmTools$viewSkills = F2(
-	function (character, gameVersion) {
+	function (character, ruleSetKind) {
 		var optionalProficiencySkillsLimitReached = _Utils_cmp(
 			$elm$core$List$length(character.A),
 			character.v.k) > -1;
@@ -7188,7 +7188,7 @@ var $author$project$DmTools$viewSkills = F2(
 						function (skillIdentifier) {
 							return A3($author$project$DmTools$viewSkill, character, skillIdentifier, optionalProficiencySkillsLimitReached);
 						},
-						$author$project$DmTools$getGameVersionSkills(gameVersion)))
+						$author$project$DmTools$getRuleSetSkills(ruleSetKind)))
 				]));
 	});
 var $author$project$DmTools$UpdateStat = F2(
@@ -7221,7 +7221,7 @@ var $author$project$DmTools$viewStatInput = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$author$project$DmTools$statToString(statKind))
+							$author$project$Models$StatKind$toString(statKind))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -7296,7 +7296,7 @@ var $author$project$DmTools$viewStatReader = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$author$project$DmTools$statToString(statKind))
+							$author$project$Models$StatKind$toString(statKind))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -7382,9 +7382,9 @@ var $author$project$DmTools$view = function (model) {
 	var finalStats = $author$project$DmTools$computeFinalStats(model.g);
 	var characterBaseLife = model.g.v.i + $author$project$DmTools$computeModifier(
 		A2($author$project$DmTools$getStatScore, finalStats, 2));
-	var availableSkills = $author$project$DmTools$getGameVersionSkills(model.u.D);
-	var availableRaces = $author$project$DmTools$getGameVersionRaces(model.u.D);
-	var availableClasses = $author$project$DmTools$getGameVersionClasses(model.u.D);
+	var availableSkills = $author$project$DmTools$getRuleSetSkills(model.u.G);
+	var availableRaces = $author$project$DmTools$getRuleSetRaces(model.u.G);
+	var availableClasses = $author$project$DmTools$getRuleSetClasses(model.u.G);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -7433,7 +7433,7 @@ var $author$project$DmTools$view = function (model) {
 							[
 								$elm$html$Html$text('Game Version')
 							])),
-						$author$project$DmTools$viewGameVersionSelector(model.u.D),
+						$author$project$DmTools$viewRuleSetSelector(model.u.G),
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
@@ -7441,8 +7441,8 @@ var $author$project$DmTools$view = function (model) {
 							[
 								$elm$html$Html$text('Race')
 							])),
-						A2($author$project$DmTools$viewRaceSelector, availableRaces, model.g.G.a),
-						A2($author$project$DmTools$viewSubRaceSelector, model.g.G.h, model.g.M.a),
+						A2($author$project$DmTools$viewRaceSelector, availableRaces, model.g.F.a),
+						A2($author$project$DmTools$viewSubRaceSelector, model.g.F.h, model.g.M.a),
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
@@ -7563,7 +7563,7 @@ var $author$project$DmTools$view = function (model) {
 						_List_fromArray(
 							[
 								A3($author$project$DmTools$viewSavingThrows, finalStats, model.g.v.l, proficiencyBonus),
-								A2($author$project$DmTools$viewSkills, model.g, model.u.D)
+								A2($author$project$DmTools$viewSkills, model.g, model.u.G)
 							]))
 					])),
 				A2(

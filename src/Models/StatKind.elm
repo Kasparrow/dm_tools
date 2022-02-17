@@ -1,4 +1,4 @@
-module Models.StatKind exposing (StatKind(..), StatKinds, all)
+module Models.StatKind exposing (StatKind(..), StatKinds, all, toString)
 
 type StatKind
     = Strength
@@ -13,3 +13,13 @@ type alias StatKinds = List StatKind
 all: StatKinds
 all = 
     [ Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma ]
+
+toString: StatKind -> String
+toString statKind =
+    case statKind of
+        Strength -> "STR"
+        Dexterity -> "DEX"
+        Constitution -> "CON"
+        Intelligence -> "INT"
+        Wisdom -> "WIS"
+        Charisma -> "CHA"

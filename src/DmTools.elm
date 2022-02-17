@@ -7,12 +7,13 @@ import Array
 import Browser
 
 import Models.Stat as Stat exposing (Stat, Stats)
-import Models.StatKind as StatKind exposing (StatKind(..), StatKinds, all)
+import Models.StatKind as StatKind exposing (StatKind(..), StatKinds, all, toString)
+import Models.RuleSetKind as RuleSetKind exposing (RuleSetKind(..), RuleSetKinds, all, fromString)
 
 -- TYPES
 
 type Msg
-    = UpdateGameVersion String
+    = UpdateRuleSetKind String
     | UpdateRemainingPoints
     | UpdateRace String
     | UpdateSubRace String
@@ -22,11 +23,6 @@ type Msg
     | CheckFreeStatInput Bool
     | CheckProficiencySkill SkillIdentifier Bool 
 
-type GameVersion
-    = DnD5
-    | AiME
-    | Laelith
-type alias GameVersions = List GameVersion
 
 type Language
     = French
@@ -61,7 +57,7 @@ type alias Race =
     , statBonus: Stats
     , subRaces: SubRaceIdentifiers
     , baseProficiencySkills: SkillIdentifiers
-    , gameVersions: GameVersions
+    , ruleSetKinds: RuleSetKinds
     , asString: String
     }
 type alias Races = List Race
@@ -91,7 +87,7 @@ type alias SubRaceIdentifiers = List SubRaceIdentifier
 type alias SubRace =
     { identifier: SubRaceIdentifier
     , statBonus: Stats
-    , gameVersions: GameVersions
+    , ruleSetKinds: RuleSetKinds
     , asString: String
     }
 type alias SubRaces = List SubRace
@@ -125,7 +121,7 @@ type alias Class =
     , optionalProficiencySkills: SkillIdentifiers
     , optionalProficiencySkillsLimit: Int
     , lifeDice: Int
-    , gameVersions: GameVersions
+    , ruleSetKinds: RuleSetKinds
     , asString: String
     }
 type alias Classes = List Class
@@ -158,7 +154,7 @@ type alias SkillIdentifiers = List SkillIdentifier
 type alias Skill = 
     { identifier: SkillIdentifier
     , statKind: StatKind
-    , gameVersions: GameVersions
+    , ruleSetKinds: RuleSetKinds
     , asString: String
     }
 type alias Skills = List Skill
@@ -174,7 +170,7 @@ type alias Character =
     , selectedProficiencySkills: SkillIdentifiers
     }
 type alias Settings =
-    { gameVersion: GameVersion
+    { ruleSetKind: RuleSetKind
     , freeStatsInput: Bool
     , language: Language
     }
@@ -203,7 +199,7 @@ init =
         , selectedProficiencySkills = []
         }
     , settings = 
-        { gameVersion = DnD5
+        { ruleSetKind = DnD5
         , freeStatsInput = False
         , language = French
         }
@@ -217,9 +213,9 @@ view model =
         finalStats = computeFinalStats model.character
         proficiencyBonus = computeProficiency model.character.level
         characterBaseLife = model.character.class.lifeDice + (getStatScore finalStats Constitution |> computeModifier)
-        availableRaces = getGameVersionRaces model.settings.gameVersion
-        availableClasses = getGameVersionClasses model.settings.gameVersion
-        availableSkills = getGameVersionSkills model.settings.gameVersion
+        availableRaces = getRuleSetRaces model.settings.ruleSetKind
+        availableClasses = getRuleSetClasses model.settings.ruleSetKind
+        availableSkills = getRuleSetSkills model.settings.ruleSetKind
     in
     div [ class "main-container" ]
         [ nav []
@@ -228,7 +224,7 @@ view model =
               ]
         , div [ class "content" ]
               [ h3 [] [ text "Game Version" ]
-              , viewGameVersionSelector model.settings.gameVersion
+              , viewRuleSetSelector model.settings.ruleSetKind
               , h3 [] [ text "Race" ]
               , viewRaceSelector availableRaces model.character.race.identifier
               , viewSubRaceSelector model.character.race.subRaces model.character.subRace.identifier
@@ -259,17 +255,17 @@ view model =
                     [ viewCharacterBaseLife model.character.class.identifier characterBaseLife ]
               , div [ class "flex-row" ]
                     [ viewSavingThrows finalStats model.character.class.proficiencySaves proficiencyBonus
-                    , viewSkills model.character model.settings.gameVersion]
+                    , viewSkills model.character model.settings.ruleSetKind]
               ]
         , footer []
                  [ p [] [ text "/[A-Z]IKWAN/" ] ]
         ]
 
-viewGameVersionSelector: GameVersion -> Html Msg
-viewGameVersionSelector selectedGameVersion =
-    select [ onInput UpdateGameVersion ] 
-           [ option [ value "DnD5", selected (selectedGameVersion == DnD5) ] [ text "Dungeon & Dragon 5" ]
-           , option [ value "AiME", selected (selectedGameVersion == AiME) ] [ text "Adventures in Middle Earth" ]
+viewRuleSetSelector: RuleSetKind -> Html Msg
+viewRuleSetSelector selectedRuleSetKind =
+    select [ onInput UpdateRuleSetKind ] 
+           [ option [ value "DnD5", selected (selectedRuleSetKind == DnD5) ] [ text "Dungeon & Dragon 5" ]
+           , option [ value "AiME", selected (selectedRuleSetKind == AiME) ] [ text "Adventures in Middle Earth" ]
            ]
 
 viewRaceSelector: RaceIdentifiers -> RaceIdentifier -> Html Msg
@@ -325,7 +321,7 @@ viewStatInput stats statKind =
         score = getStatScore stats statKind
     in
     div [ class "stat-box" ]
-        [ span [ class "stat-box-title" ] [ text (statToString statKind) ]
+        [ span [ class "stat-box-title" ] [ text (StatKind.toString statKind) ]
         , div [ class "stat-box-body" ]
               [ span [ class "stat-box-value" ] [ text (String.fromInt score) ]
         , div [ class "stat-box-controls" ]
@@ -349,7 +345,7 @@ viewStatReader stats statKind =
         score = getStatScore stats statKind
     in
     div [ class "stat-box" ]
-        [ span [ class "stat-box-title" ] [ text (statToString statKind) ]
+        [ span [ class "stat-box-title" ] [ text (StatKind.toString statKind) ]
         , div [ class "stat-box-body" ]
               [ span [ class "stat-box-value" ] [ text (printWithSign (computeModifier score)) ]
               , div [ class "stat-box-bonus" ]
@@ -385,10 +381,10 @@ viewSavingThrow statKind proficiencySaves statModifier proficiencyBonus =
         savingThrowScore = if hasProficiencySave then statModifier + proficiencyBonus else statModifier
         modifier = printWithSign savingThrowScore
     in
-    li [] [ text (statToString statKind ++ " : " ++ modifier) ]
+    li [] [ text (StatKind.toString statKind ++ " : " ++ modifier) ]
 
-viewSkills: Character -> GameVersion -> Html Msg
-viewSkills character gameVersion =
+viewSkills: Character -> RuleSetKind -> Html Msg
+viewSkills character ruleSetKind =
     let
         optionalProficiencySkillsLimitReached = (List.length character.selectedProficiencySkills) >= character.class.optionalProficiencySkillsLimit 
     in
@@ -397,7 +393,7 @@ viewSkills character gameVersion =
         , ul []
              (List.map (\skillIdentifier -> 
                  viewSkill character skillIdentifier optionalProficiencySkillsLimitReached
-             ) (getGameVersionSkills gameVersion))
+             ) (getRuleSetSkills ruleSetKind))
         ]
 
 viewSkill: Character -> SkillIdentifier -> Bool -> Html Msg
@@ -415,7 +411,7 @@ viewSkill character skillIdentifier optionalProficiencySkillsLimitReached =
     in
     li []
        [ input [ type_ "checkbox", disabled disableCheckbox, onCheck (CheckProficiencySkill skillIdentifier), checked (hasBaseProficiencySkill || hasSelectedProficiencySkill)] []
-       , text (skill.asString ++ " (" ++ (statToString statKind) ++ ") :" ++ modifier)
+       , text (skill.asString ++ " (" ++ (StatKind.toString statKind) ++ ") :" ++ modifier)
        ]
 
 
@@ -449,9 +445,9 @@ update msg ({ settings, character } as model) =
             List.filter (\selectedSkillIdentifier -> selectedSkillIdentifier /= skillIdentifier) selectedSkillIdentifiers
     in
     case msg of
-        UpdateGameVersion gameVersion ->
+        UpdateRuleSetKind string ->
             { model | settings =
-                { settings | gameVersion = stringToGameVersion gameVersion }, 
+                { settings | ruleSetKind = RuleSetKind.fromString string }, 
                 character = { character | race = getRace NoRace, subRace = getSubRace NoSubRace, class = getClass NoClass }
             }
         UpdateRace raceIdentifier -> 
@@ -542,20 +538,20 @@ computeProficiency: Int -> Int
 computeProficiency level =
     2 + (Basics.floor (toFloat (level - 1) / 4))
 
-getGameVersionRaces: GameVersion -> RaceIdentifiers
-getGameVersionRaces gameVersion =
+getRuleSetRaces: RuleSetKind -> RaceIdentifiers
+getRuleSetRaces ruleSetKind =
     List.map (\race -> race.identifier)
-             (List.filter(\race -> List.member gameVersion race.gameVersions) (List.map getRace allRaceIdentifiers))
+             (List.filter(\race -> List.member ruleSetKind race.ruleSetKinds) (List.map getRace allRaceIdentifiers))
 
-getGameVersionClasses: GameVersion -> ClassIdentifiers
-getGameVersionClasses gameVersion =
+getRuleSetClasses: RuleSetKind -> ClassIdentifiers
+getRuleSetClasses ruleSetKind =
     List.map (\class -> class.identifier)
-             (List.filter(\class -> List.member gameVersion class.gameVersions) (List.map getClass allClassIdentifiers))
+             (List.filter(\class -> List.member ruleSetKind class.ruleSetKinds) (List.map getClass allClassIdentifiers))
 
-getGameVersionSkills: GameVersion -> SkillIdentifiers
-getGameVersionSkills gameVersion =
+getRuleSetSkills: RuleSetKind -> SkillIdentifiers
+getRuleSetSkills ruleSetKind =
     List.map (\skill -> skill.identifier)
-             (List.filter(\skill -> List.member gameVersion skill.gameVersions) (List.map getSkill allSkillIdentifiers))
+             (List.filter(\skill -> List.member ruleSetKind skill.ruleSetKinds) (List.map getSkill allSkillIdentifiers))
 
 
 getStatScore: Stats -> StatKind -> Int
@@ -697,7 +693,7 @@ getRace identifier =
                 , WhiteDragonborn
                 ]
             , baseProficiencySkills = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Dragonborn"
             }
         Dwarf ->
@@ -705,7 +701,7 @@ getRace identifier =
             , statBonus = [ (Constitution, 2) ]
             , subRaces = [NoSubRace, HillsDwarf, MountainsDwarf]
             , baseProficiencySkills = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Dwarf"
             }
         Elf ->
@@ -713,7 +709,7 @@ getRace identifier =
             , statBonus = [ (Dexterity, 2)]
             , subRaces = [ NoSubRace, Drow, WoodElf, HighElf ]
             , baseProficiencySkills = [Perception]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Elf"
             }
         Gnome ->
@@ -721,7 +717,7 @@ getRace identifier =
             , statBonus = [ (Intelligence, 2) ]
             , subRaces = [ NoSubRace, DeepGnome, RockGnome ]
             , baseProficiencySkills = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Gnome"
             }
         HalfElf ->
@@ -729,7 +725,7 @@ getRace identifier =
             , statBonus = [ (Charisma, 2) ]
             , subRaces = []
             , baseProficiencySkills = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Half-Elf"
             }
         Halfling ->
@@ -737,7 +733,7 @@ getRace identifier =
             , statBonus = [ (Dexterity, 2) ]
             , subRaces = [ NoSubRace, LightfootHalfling, StoutHalfling ]
             , baseProficiencySkills = []
-            , gameVersions = [DnD5, Laelith ]
+            , ruleSetKinds = [DnD5, Laelith ]
             , asString = "Halfling"
             }
         HalfOrc ->
@@ -745,7 +741,7 @@ getRace identifier =
             , statBonus = [ (Strength, 2), (Constitution, 1) ]
             , subRaces = []
             , baseProficiencySkills = [Intimidation]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Half-Orc"
             }
         Human ->
@@ -760,7 +756,7 @@ getRace identifier =
                 ]
             , subRaces = []
             , baseProficiencySkills = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Human"
             }
         Tiefling ->
@@ -768,7 +764,7 @@ getRace identifier =
             , statBonus = [ (Intelligence, 1), (Charisma, 2) ]
             , subRaces = []
             , baseProficiencySkills = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Tiefling"
             }
         Barding ->
@@ -776,7 +772,7 @@ getRace identifier =
             , statBonus = [ (Constitution, 1) ]
             , subRaces = []
             , baseProficiencySkills = [Insight]
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Barding"
             }
         Beorning ->
@@ -784,7 +780,7 @@ getRace identifier =
             , statBonus = [ (Strength, 1) ]
             , subRaces = []
             , baseProficiencySkills = [Intimidation]
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Beorning"
             }
         Dunedain ->
@@ -792,7 +788,7 @@ getRace identifier =
             , statBonus = [ (Constitution, 1), (Wisdom, 1) ]
             , subRaces = []
             , baseProficiencySkills = [Survival]
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Dunedain"
             }
         LonelyMountainDwarf ->
@@ -800,7 +796,7 @@ getRace identifier =
             , statBonus = [ (Constitution, 2) ]
             , subRaces = []
             , baseProficiencySkills = []
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Lonely Mountain Dwarf"
             }
         MirkwoodElf ->
@@ -808,7 +804,7 @@ getRace identifier =
             , statBonus = [ (Dexterity, 2), (Wisdom, 1) ]
             , subRaces = []
             , baseProficiencySkills = [Stealth]
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Mirkwood Elf"
             }
         ShireHobbit ->
@@ -816,7 +812,7 @@ getRace identifier =
             , statBonus = [ (Dexterity, 2) ]
             , subRaces = []
             , baseProficiencySkills = [Stealth]
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Shire Hobbit"
             }
         BreeMen ->
@@ -824,7 +820,7 @@ getRace identifier =
             , statBonus = [ (Wisdom, 1) ]
             , subRaces = []
             , baseProficiencySkills = [Perception]
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Bree Men"
             }
         LakeMen ->
@@ -832,7 +828,7 @@ getRace identifier =
             , statBonus = [ (Charisma, 1) ]
             , subRaces = []
             , baseProficiencySkills = [Persuasion]
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Lake Men"
             }
         MinasTirithMen ->
@@ -840,7 +836,7 @@ getRace identifier =
             , statBonus = [ (Intelligence, 1) ]
             , subRaces = []
             , baseProficiencySkills = [History]
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Minas Tirith Men"
             }
         RohanRider ->
@@ -848,7 +844,7 @@ getRace identifier =
             , statBonus = [ (Wisdom, 1)]
             , subRaces = []
             , baseProficiencySkills = [AnimalHandling]
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Rohan Rider"
             }
         WilderlandWoodmen ->
@@ -856,7 +852,7 @@ getRace identifier =
             , statBonus = [ (Dexterity, 1) ]
             , subRaces = []
             , baseProficiencySkills = [Survival]
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Wilderland Woodmen"
             }
         NoRace ->
@@ -864,7 +860,7 @@ getRace identifier =
             , statBonus = []
             , subRaces = []
             , baseProficiencySkills = []
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = ""
             }
 
@@ -874,121 +870,121 @@ getSubRace identifier =
         BlackDragonborn ->
             { identifier = BlackDragonborn
             , statBonus = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Black Dragonborn"
             }
         BlueDragonborn ->
             { identifier = BlueDragonborn
             , statBonus = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Blue Dragonborn"
             }
         BrassDragonborn ->
             { identifier = BrassDragonborn
             , statBonus = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Brass Dragonborn"
             }
         BronzeDragonborn ->
             { identifier = BronzeDragonborn 
             , statBonus = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Bronze Dragonborn"
             }
         CopperDragonborn ->
             { identifier = CopperDragonborn
             , statBonus = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Copper Dragonborn"
             }
         GoldDragonborn ->
             { identifier = GoldDragonborn 
             , statBonus = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Gold Dragonborn"
             }
         GreenDragonborn ->
             { identifier = GreenDragonborn
             , statBonus = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Green Dragonborn"
             }
         RedDragonborn ->
             { identifier = RedDragonborn
             , statBonus = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Red Dragonborn"
             }
         SilverDragonborn ->
             { identifier = SilverDragonborn
             , statBonus = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Silver Dragonborn"
             }
         WhiteDragonborn ->
             { identifier = WhiteDragonborn
             , statBonus = []
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "White Dragonborn"
             }
         HillsDwarf ->
             { identifier = HillsDwarf
             , statBonus = [ (Wisdom, 1) ]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Hills Dwarf"
             }
         MountainsDwarf ->
             { identifier = MountainsDwarf
             , statBonus = [ (Strength, 1) ]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Mountains Dwarf"
             }
         Drow ->
             { identifier = Drow
             , statBonus = [ (Charisma, 1) ]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Drow"
             }
         WoodElf ->
             { identifier = WoodElf
             , statBonus = [ (Wisdom, 1) ]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Wood Elf"
             }
         HighElf ->
             { identifier = HighElf
             , statBonus = [ (Intelligence, 1) ]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "High Elf"
             }
         DeepGnome ->
             { identifier = DeepGnome
             , statBonus = [ (Dexterity, 1) ]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Deep Gnome"
             }
         RockGnome ->
             { identifier = RockGnome
             , statBonus = [ (Constitution, 1) ]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Rock Gnome"
             }
         LightfootHalfling ->
             { identifier = LightfootHalfling
             , statBonus = [ (Charisma, 1) ]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Lightfoot Halfling"
             }
         StoutHalfling ->
             { identifier = StoutHalfling
             , statBonus = [ (Constitution, 1) ]
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Stout Halfling"
             }
         NoSubRace ->
             { identifier = NoSubRace
             , statBonus = []
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = ""
             }
 
@@ -1002,7 +998,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ AnimalHandling, Athletics, Intimidation, Nature, Perception, Survival ]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 12
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Barbarian"
             }
         Bard ->
@@ -1012,7 +1008,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = allSkillIdentifiers
             , optionalProficiencySkillsLimit = 3
             , lifeDice = 8
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Bard"
             }
         Cleric ->
@@ -1022,7 +1018,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ History, Insight, Medicine, Persuasion, Religion ]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Cleric"
             }
         Druid ->
@@ -1032,7 +1028,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ Arcana, AnimalHandling, Insight, Medicine, Nature, Perception, Religion, Survival ]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Druid"
             }
         Fighter ->
@@ -1042,7 +1038,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ Acrobatics, AnimalHandling, Athletics, History, Insight, Intimidation, Perception, Survival ]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 10
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Fighter"
             }
         Monk ->
@@ -1052,7 +1048,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ Acrobatics, Athletics, History, Insight, Religion, Stealth ]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Monk"
             }
         Paladin ->
@@ -1062,7 +1058,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ Athletics, Insight, Intimidation, Medicine, Persuasion ]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 10
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Paladin"
             }
         Ranger ->
@@ -1072,7 +1068,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ AnimalHandling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Survival ]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 10
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Ranger"
             }
         Rogue ->
@@ -1082,7 +1078,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, SleightOfHand, Stealth ]
             , optionalProficiencySkillsLimit = 4
             , lifeDice = 8
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Rogue"
             }
         Sorcerer ->
@@ -1092,7 +1088,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ Arcana, Deception, Insight, Intimidation, Persuasion ]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Sorcerer"
             }
         Warlock ->
@@ -1102,7 +1098,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ Arcana, Deception, History, Intimidation, Investigation, Nature, Religion ]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 6
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Warlock"
             }
         Wizard ->
@@ -1112,7 +1108,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [ Arcana, History, Insight, Investigation, Medicine, Religion ]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 6
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Wizard"
             }
         Scholar ->
@@ -1122,7 +1118,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [History, Riddle, Traditions, Insight, Investigation, Nature, Perception, Survival]
             , optionalProficiencySkillsLimit = 1
             , lifeDice = 8
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Scholar"
             }
         Slayer ->
@@ -1132,7 +1128,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [AnimalHandling, Athletics, Intimidation, Nature, Perception, Survival]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 12
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Slayer"
             }
         TreasureHunter ->
@@ -1142,7 +1138,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [Acrobatics, Athletics, Deception, Insight, Intimidation, Perception, Persuasion, Riddle, SleightOfHand, Stealth]
             , optionalProficiencySkillsLimit = 4
             , lifeDice = 8
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Treasure Hunter"
             }
         Wanderer ->
@@ -1152,7 +1148,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [AnimalHandling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Traditions]
             , optionalProficiencySkillsLimit = 3
             , lifeDice = 10
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Wanderer"
             }
         Warden ->
@@ -1162,7 +1158,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = allSkillIdentifiers
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Warden"
             }
         Warrior ->
@@ -1172,7 +1168,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = [Acrobatics, AnimalHandling, Athletics, History, Insight, Intimidation, Perception, Survival, Traditions]
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 10
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Warrior"
             }
         NoClass ->
@@ -1182,7 +1178,7 @@ getClass classIdentifier =
             , optionalProficiencySkills = []
             , optionalProficiencySkillsLimit = 0
             , lifeDice = 0
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = ""
             }
 
@@ -1192,139 +1188,139 @@ getSkill skillIdentifier =
         Acrobatics ->
             { identifier = Acrobatics
             , statKind = Dexterity
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Acrobatics"
             }
         AnimalHandling ->
             { identifier = AnimalHandling
             , statKind = Wisdom
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Animal Handling"
             }
         Arcana ->
             { identifier = Arcana
             , statKind = Intelligence
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Arcana"
             }
         Athletics ->
             { identifier = Athletics
             , statKind = Strength
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Athletics"
             }
         Deception ->
             { identifier = Deception
             , statKind = Charisma
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Deception"
             }
         History ->
             { identifier = History
             , statKind = Intelligence
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "History"
             }
         Insight ->
             { identifier = Insight
             , statKind = Wisdom
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Insight"
             }
         Intimidation ->
             { identifier = Intimidation
             , statKind = Charisma
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Intimidation"
             }
         Investigation ->
             { identifier = Investigation
             , statKind = Intelligence
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Investigation"
             }
         Lore ->
             { identifier = Lore
             , statKind = Intelligence
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Lore"
             }
         Medicine ->
             { identifier = Medicine
             , statKind = Wisdom
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Medicine"
             }
         Nature ->
             { identifier = Nature
             , statKind = Intelligence
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Nature"
             }
         Perception ->
             { identifier = Perception
             , statKind = Wisdom
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Perception"
             }
         Performance ->
             { identifier = Performance
             , statKind = Charisma
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Performance"
             }
         Persuasion ->
             { identifier = Persuasion
             , statKind = Charisma
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Persuasion"
             }
         Religion ->
             { identifier = Religion
             , statKind = Intelligence
-            , gameVersions = [DnD5, Laelith]
+            , ruleSetKinds = [DnD5, Laelith]
             , asString = "Religion"
             }
         Riddle ->
             { identifier = Riddle
             , statKind = Intelligence
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Riddle"
             }
         ShadowLore ->
             { identifier = ShadowLore
             , statKind = Intelligence
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Shadow Lore"
             }
         SleightOfHand ->
             { identifier = SleightOfHand
             , statKind = Dexterity
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Sleight of Hand"
             }
         Stealth ->
             { identifier = Stealth
             , statKind = Dexterity
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Stealth"
             }
         Survival ->
             { identifier = Survival
             , statKind = Wisdom
-            , gameVersions = [DnD5, Laelith, AiME]
+            , ruleSetKinds = [DnD5, Laelith, AiME]
             , asString = "Survival"
             }
         Traditions ->
             { identifier = Traditions
             , statKind = Intelligence
-            , gameVersions = [AiME]
+            , ruleSetKinds = [AiME]
             , asString = "Traditions"
             }
         NoSkill ->
             { identifier = NoSkill
             , statKind = Strength
-            , gameVersions = []
+            , ruleSetKinds = []
             , asString = ""
             }
 
@@ -1402,25 +1398,6 @@ stringToClass string =
         "Warrior" -> Warrior
         _ -> NoClass
 
-stringToGameVersion: String -> GameVersion
-stringToGameVersion string =
-    case string of
-        "DnD5" -> DnD5
-        "AiME" -> AiME
-        "Laelith" -> Laelith
-        _ -> DnD5
-
--- TO STRING
-
-statToString: StatKind -> String
-statToString statKind =
-    case statKind of
-        Strength -> "STR"
-        Dexterity -> "DEX"
-        Constitution -> "CON"
-        Intelligence -> "INT"
-        Wisdom -> "WIS"
-        Charisma -> "CHA"
 
 -- I18N
 
