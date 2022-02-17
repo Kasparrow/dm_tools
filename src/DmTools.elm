@@ -23,12 +23,6 @@ type Msg
     | CheckFreeStatInput Bool
     | CheckProficiencySkill SkillIdentifier Bool 
 
-
-type Language
-    = French
-    | English
-
-
 type RaceIdentifier
     = Dragonborn
     | Dwarf
@@ -172,7 +166,6 @@ type alias Character =
 type alias Settings =
     { ruleSetKind: RuleSetKind
     , freeStatsInput: Bool
-    , language: Language
     }
 
 type alias Model = 
@@ -201,7 +194,6 @@ init =
     , settings = 
         { ruleSetKind = DnD5
         , freeStatsInput = False
-        , language = French
         }
     }
 
@@ -1397,16 +1389,3 @@ stringToClass string =
         "Warden" -> Warden
         "Warrior" -> Warrior
         _ -> NoClass
-
-
--- I18N
-
-getKey: Language -> String -> String
-getKey language key =
-    case language of
-        French ->
-            case key of
-                _ -> "Traduction non disponible"
-        English ->
-            case key of
-                _ -> "Missing translation"
