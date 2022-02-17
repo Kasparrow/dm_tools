@@ -19,17 +19,11 @@ import Models.Race as Race exposing (Race, Races, get)
 import Models.SubRace as SubRace exposing (SubRace, SubRaces, get)
 import Models.Class as Class exposing (Class, Classes, get)
 import Models.Character as Character exposing (Character)
+import Models.Settings as Settings exposing (Settings)
 
 import Models.Msg as Msg exposing (Msg(..))
 
--- TYPES
-
-
 -- MODEL
-type alias Settings =
-    { ruleSetKind: RuleSetKind
-    , freeStatsInput: Bool
-    }
 
 type alias Model = 
     { character: Character

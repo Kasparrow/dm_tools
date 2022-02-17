@@ -5293,9 +5293,9 @@ var $author$project$DmTools$init = {
 	a: {
 		l: $author$project$Models$Class$get(18),
 		O: 1,
-		y: $author$project$Models$Race$get(20),
+		x: $author$project$Models$Race$get(20),
 		T: 27,
-		D: _List_fromArray(
+		C: _List_fromArray(
 			[
 				_Utils_Tuple2(0, 8),
 				_Utils_Tuple2(1, 8),
@@ -5304,10 +5304,10 @@ var $author$project$DmTools$init = {
 				_Utils_Tuple2(4, 8),
 				_Utils_Tuple2(5, 8)
 			]),
-		u: _List_Nil,
-		F: $author$project$Models$SubRace$get(19)
+		t: _List_Nil,
+		E: $author$project$Models$SubRace$get(19)
 	},
-	j: {C: false, t: 0}
+	j: {H: false, z: 0}
 };
 var $elm$core$Result$Err = function (a) {
 	return {$: 1, a: a};
@@ -6251,7 +6251,7 @@ var $author$project$DmTools$update = F2(
 					return A2(
 						$elm$core$List$map,
 						function (stat) {
-							return _Utils_eq(stat.a, statKind) ? (settings.C ? _Utils_Tuple2(statKind, newScore) : _Utils_Tuple2(
+							return _Utils_eq(stat.a, statKind) ? (settings.H ? _Utils_Tuple2(statKind, newScore) : _Utils_Tuple2(
 								statKind,
 								A2(
 									$elm$core$Basics$min,
@@ -6283,13 +6283,13 @@ var $author$project$DmTools$update = F2(
 								character,
 								{
 									l: $author$project$Models$Class$get(18),
-									y: $author$project$Models$Race$get(20),
-									F: $author$project$Models$SubRace$get(19)
+									x: $author$project$Models$Race$get(20),
+									E: $author$project$Models$SubRace$get(19)
 								}),
 							j: _Utils_update(
 								settings,
 								{
-									t: $author$project$Models$RuleSetKind$fromString(string)
+									z: $author$project$Models$RuleSetKind$fromString(string)
 								})
 						});
 				case 2:
@@ -6300,9 +6300,9 @@ var $author$project$DmTools$update = F2(
 							a: _Utils_update(
 								character,
 								{
-									y: $author$project$Models$Race$get(
+									x: $author$project$Models$Race$get(
 										$author$project$Models$RaceKind$fromString(string)),
-									F: $author$project$Models$SubRace$get(19)
+									E: $author$project$Models$SubRace$get(19)
 								})
 						});
 				case 3:
@@ -6313,7 +6313,7 @@ var $author$project$DmTools$update = F2(
 							a: _Utils_update(
 								character,
 								{
-									F: $author$project$Models$SubRace$get(
+									E: $author$project$Models$SubRace$get(
 										$author$project$Models$SubRaceKind$fromString(string))
 								})
 						});
@@ -6327,7 +6327,7 @@ var $author$project$DmTools$update = F2(
 								{
 									l: $author$project$Models$Class$get(
 										$author$project$Models$ClassKind$fromString(string)),
-									u: _List_Nil
+									t: _List_Nil
 								})
 						});
 				case 5:
@@ -6354,7 +6354,7 @@ var $author$project$DmTools$update = F2(
 							a: _Utils_update(
 								character,
 								{
-									D: A3(updateStat, character.D, statKind, newScore)
+									C: A3(updateStat, character.C, statKind, newScore)
 								})
 						});
 					msg = $temp$msg;
@@ -6367,7 +6367,7 @@ var $author$project$DmTools$update = F2(
 							a: _Utils_update(
 								character,
 								{
-									T: 27 - $author$project$DmTools$computeRemainingPoints(character.D)
+									T: 27 - $author$project$DmTools$computeRemainingPoints(character.C)
 								})
 						});
 				case 7:
@@ -6378,7 +6378,7 @@ var $author$project$DmTools$update = F2(
 							{
 								j: _Utils_update(
 									settings,
-									{C: true})
+									{H: true})
 							});
 					} else {
 						var $temp$msg = $author$project$Models$Msg$UpdateRemainingPoints,
@@ -6387,7 +6387,7 @@ var $author$project$DmTools$update = F2(
 							{
 								j: _Utils_update(
 									settings,
-									{C: false})
+									{H: false})
 							});
 						msg = $temp$msg;
 						model = $temp$model;
@@ -6403,7 +6403,7 @@ var $author$project$DmTools$update = F2(
 								a: _Utils_update(
 									character,
 									{
-										u: A2(pushSelectedProficiencySkill, character.u, skill)
+										t: A2(pushSelectedProficiencySkill, character.t, skill)
 									})
 							});
 					} else {
@@ -6413,7 +6413,7 @@ var $author$project$DmTools$update = F2(
 								a: _Utils_update(
 									character,
 									{
-										u: A2(popSelectedProficiencySkill, character.u, skill)
+										t: A2(popSelectedProficiencySkill, character.t, skill)
 									})
 							});
 					}
@@ -6473,7 +6473,7 @@ var $author$project$DmTools$computeFinalStats = function (character) {
 	return A2(
 		$elm$core$List$map,
 		function (statKind) {
-			var finalScore = (A2($author$project$DmTools$getStatScore, character.D, statKind) + A2($author$project$DmTools$getStatScore, character.y.au, statKind)) + A2($author$project$DmTools$getStatScore, character.F.au, statKind);
+			var finalScore = (A2($author$project$DmTools$getStatScore, character.C, statKind) + A2($author$project$DmTools$getStatScore, character.x.au, statKind)) + A2($author$project$DmTools$getStatScore, character.E.au, statKind);
 			return _Utils_Tuple2(statKind, finalScore);
 		},
 		$author$project$Models$StatKind$all);
@@ -7127,14 +7127,14 @@ var $author$project$DmTools$viewSkill = F3(
 			$author$project$DmTools$getStatScore,
 			$author$project$DmTools$computeFinalStats(character),
 			statKind);
-		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillKind, character.u);
+		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillKind, character.t);
 		var hasClassProficiencySkill = A2($elm$core$List$member, skillKind, character.l.aQ);
 		var hasBaseProficiencySkill = A2(
 			$elm$core$List$member,
 			skillKind,
 			$elm$core$List$concat(
 				_List_fromArray(
-					[character.l.Z, character.y.Z])));
+					[character.l.Z, character.x.Z])));
 		var proficiencyBonus = (hasSelectedProficiencySkill || hasBaseProficiencySkill) ? $author$project$DmTools$computeProficiency(character.O) : 0;
 		var modifier = $author$project$DmTools$printWithSign(
 			$author$project$DmTools$computeModifier(statScore) + proficiencyBonus);
@@ -7162,7 +7162,7 @@ var $author$project$DmTools$viewSkill = F3(
 var $author$project$DmTools$viewSkills = F2(
 	function (character, ruleSetKind) {
 		var optionalProficiencySkillsLimitReached = _Utils_cmp(
-			$elm$core$List$length(character.u),
+			$elm$core$List$length(character.t),
 			character.l.aR) > -1;
 		return A2(
 			$elm$html$Html$div,
@@ -7381,9 +7381,9 @@ var $author$project$DmTools$view = function (model) {
 	var finalStats = $author$project$DmTools$computeFinalStats(model.a);
 	var characterBaseLife = model.a.l.aL + $author$project$DmTools$computeModifier(
 		A2($author$project$DmTools$getStatScore, finalStats, 2));
-	var availableSkills = $author$project$DmTools$getRuleSetSkills(model.j.t);
-	var availableRaces = $author$project$DmTools$getRuleSetRaces(model.j.t);
-	var availableClasses = $author$project$DmTools$getRuleSetClasses(model.j.t);
+	var availableSkills = $author$project$DmTools$getRuleSetSkills(model.j.z);
+	var availableRaces = $author$project$DmTools$getRuleSetRaces(model.j.z);
+	var availableClasses = $author$project$DmTools$getRuleSetClasses(model.j.z);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -7432,7 +7432,7 @@ var $author$project$DmTools$view = function (model) {
 							[
 								$elm$html$Html$text('Game Version')
 							])),
-						$author$project$DmTools$viewRuleSetSelector(model.j.t),
+						$author$project$DmTools$viewRuleSetSelector(model.j.z),
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
@@ -7440,8 +7440,8 @@ var $author$project$DmTools$view = function (model) {
 							[
 								$elm$html$Html$text('Race')
 							])),
-						A2($author$project$DmTools$viewRaceSelector, availableRaces, model.a.y.aq),
-						A2($author$project$DmTools$viewSubRaceSelector, model.a.y.aX, model.a.F.aW),
+						A2($author$project$DmTools$viewRaceSelector, availableRaces, model.a.x.aq),
+						A2($author$project$DmTools$viewSubRaceSelector, model.a.x.aX, model.a.E.aW),
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
@@ -7501,10 +7501,10 @@ var $author$project$DmTools$view = function (model) {
 							A2(
 								$elm$core$List$map,
 								function (statKind) {
-									return A2($author$project$DmTools$viewStatInput, model.a.D, statKind);
+									return A2($author$project$DmTools$viewStatInput, model.a.C, statKind);
 								},
 								$author$project$Models$StatKind$all),
-							model.j.C ? _List_fromArray(
+							model.j.H ? _List_fromArray(
 								[
 									$elm$html$Html$text('')
 								]) : _List_fromArray(
@@ -7562,7 +7562,7 @@ var $author$project$DmTools$view = function (model) {
 						_List_fromArray(
 							[
 								A3($author$project$DmTools$viewSavingThrows, finalStats, model.a.l.aS, proficiencyBonus),
-								A2($author$project$DmTools$viewSkills, model.a, model.j.t)
+								A2($author$project$DmTools$viewSkills, model.a, model.j.z)
 							]))
 					])),
 				A2(
