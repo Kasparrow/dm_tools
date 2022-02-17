@@ -1,4 +1,4 @@
-module Models.ClassKind exposing (ClassKind(..), ClassKinds, all, fromString)
+module Models.Rules.ClassKind exposing (ClassKind(..), ClassKinds, all, fromString)
 
 type ClassKind
     = Barbarian

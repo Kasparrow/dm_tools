@@ -1,9 +1,9 @@
-module Models.SubRace exposing (SubRace, SubRaces, get)
+module Models.Rules.SubRace exposing (SubRace, SubRaces, get)
 
-import Models.StatKind exposing(StatKind(..))
-import Models.SubRaceKind exposing(SubRaceKind(..))
-import Models.Stat exposing (Stats)
-import Models.RuleSetKind exposing (RuleSetKind(..), RuleSetKinds)
+import Models.Rules.StatKind exposing(StatKind(..))
+import Models.Rules.SubRaceKind exposing(SubRaceKind(..))
+import Models.Rules.Stat exposing (Stats)
+import Models.Rules.RuleSetKind exposing (RuleSetKind(..), RuleSetKinds)
 
 type alias SubRace =
     { subRaceKind: SubRaceKind

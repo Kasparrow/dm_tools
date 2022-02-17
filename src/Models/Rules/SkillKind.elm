@@ -1,4 +1,4 @@
-module Models.SkillKind exposing (SkillKind(..), SkillKinds, all, fromString)
+module Models.Rules.SkillKind exposing (SkillKind(..), SkillKinds, all, fromString)
 
 type SkillKind
     = Acrobatics

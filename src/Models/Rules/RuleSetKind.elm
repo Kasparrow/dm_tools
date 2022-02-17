@@ -1,4 +1,4 @@
-module Models.RuleSetKind exposing (RuleSetKind(..), RuleSetKinds, all, fromString)
+module Models.Rules.RuleSetKind exposing (RuleSetKind(..), RuleSetKinds, all, fromString)
 
 type RuleSetKind
     = DnD5

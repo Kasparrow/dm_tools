@@ -1,12 +1,12 @@
-module Models.Race exposing (Race, Races, get)
+module Models.Rules.Race exposing (Race, Races, get)
 
-import Models.SkillKind exposing (SkillKind(..), SkillKinds)
-import Models.StatKind exposing (StatKind(..))
-import Models.RuleSetKind exposing (RuleSetKind(..), RuleSetKinds)
-import Models.RaceKind exposing (RaceKind(..))
-import Models.SubRaceKind exposing (SubRaceKind(..), SubRaceKinds)
+import Models.Rules.SkillKind exposing (SkillKind(..), SkillKinds)
+import Models.Rules.StatKind exposing (StatKind(..))
+import Models.Rules.RuleSetKind exposing (RuleSetKind(..), RuleSetKinds)
+import Models.Rules.RaceKind exposing (RaceKind(..))
+import Models.Rules.SubRaceKind exposing (SubRaceKind(..), SubRaceKinds)
 
-import Models.Stat exposing (Stats)
+import Models.Rules.Stat exposing (Stats)
 
 type alias Race =
     { raceKind: RaceKind

@@ -1,4 +1,4 @@
-module Models.SubRaceKind exposing (SubRaceKind(..), SubRaceKinds, all, fromString)
+module Models.Rules.SubRaceKind exposing (SubRaceKind(..), SubRaceKinds, all, fromString)
 
 type SubRaceKind
     = BlackDragonborn

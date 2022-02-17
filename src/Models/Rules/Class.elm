@@ -1,9 +1,9 @@
-module Models.Class exposing (Class, Classes, get)
+module Models.Rules.Class exposing (Class, Classes, get)
 
-import Models.ClassKind as ClassKing exposing (ClassKind(..), ClassKinds)
-import Models.StatKind as StatKind exposing (StatKind(..), StatKinds)
-import Models.SkillKind as SkillKind exposing (SkillKind(..), SkillKinds, all)
-import Models.RuleSetKind as RuleSetKing exposing (RuleSetKind(..), RuleSetKinds)
+import Models.Rules.ClassKind as ClassKing exposing (ClassKind(..), ClassKinds)
+import Models.Rules.StatKind as StatKind exposing (StatKind(..), StatKinds)
+import Models.Rules.SkillKind as SkillKind exposing (SkillKind(..), SkillKinds, all)
+import Models.Rules.RuleSetKind as RuleSetKing exposing (RuleSetKind(..), RuleSetKinds)
 
 type alias Class =
     { classKind: ClassKind 

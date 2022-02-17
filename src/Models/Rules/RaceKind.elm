@@ -1,4 +1,4 @@
-module Models.RaceKind exposing (RaceKind(..), RaceKinds, all, fromString)
+module Models.Rules.RaceKind exposing (RaceKind(..), RaceKinds, all, fromString)
 
 type RaceKind
     = Dragonborn

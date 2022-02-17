@@ -4435,63 +4435,63 @@ var $elm$core$Set$toList = function (_v0) {
 var $elm$core$Basics$EQ = 1;
 var $elm$core$Basics$GT = 2;
 var $elm$core$Basics$LT = 0;
-var $author$project$Models$StatKind$Charisma = 5;
-var $author$project$Models$StatKind$Constitution = 2;
-var $author$project$Models$StatKind$Dexterity = 1;
-var $author$project$Models$RuleSetKind$DnD5 = 0;
+var $author$project$Models$Rules$StatKind$Charisma = 5;
+var $author$project$Models$Rules$StatKind$Constitution = 2;
+var $author$project$Models$Rules$StatKind$Dexterity = 1;
+var $author$project$Models$Rules$RuleSetKind$DnD5 = 0;
 var $elm$core$Basics$False = 1;
-var $author$project$Models$StatKind$Intelligence = 3;
-var $author$project$Models$ClassKind$NoClass = 18;
-var $author$project$Models$RaceKind$NoRace = 20;
-var $author$project$Models$SubRaceKind$NoSubRace = 19;
-var $author$project$Models$StatKind$Strength = 0;
-var $author$project$Models$StatKind$Wisdom = 4;
-var $author$project$Models$SkillKind$Acrobatics = 0;
-var $author$project$Models$RuleSetKind$AiME = 1;
-var $author$project$Models$SkillKind$AnimalHandling = 1;
-var $author$project$Models$SkillKind$Arcana = 2;
-var $author$project$Models$SkillKind$Athletics = 3;
-var $author$project$Models$ClassKind$Barbarian = 0;
-var $author$project$Models$ClassKind$Bard = 1;
-var $author$project$Models$ClassKind$Cleric = 2;
-var $author$project$Models$SkillKind$Deception = 4;
-var $author$project$Models$ClassKind$Druid = 3;
-var $author$project$Models$ClassKind$Fighter = 4;
-var $author$project$Models$SkillKind$History = 5;
-var $author$project$Models$SkillKind$Insight = 6;
-var $author$project$Models$SkillKind$Intimidation = 7;
-var $author$project$Models$SkillKind$Investigation = 8;
-var $author$project$Models$RuleSetKind$Laelith = 2;
-var $author$project$Models$SkillKind$Lore = 9;
-var $author$project$Models$SkillKind$Medicine = 10;
-var $author$project$Models$ClassKind$Monk = 5;
-var $author$project$Models$SkillKind$Nature = 11;
-var $author$project$Models$ClassKind$Paladin = 6;
-var $author$project$Models$SkillKind$Perception = 12;
-var $author$project$Models$SkillKind$Performance = 13;
-var $author$project$Models$SkillKind$Persuasion = 14;
-var $author$project$Models$ClassKind$Ranger = 7;
-var $author$project$Models$SkillKind$Religion = 16;
-var $author$project$Models$SkillKind$Riddle = 15;
-var $author$project$Models$ClassKind$Rogue = 8;
-var $author$project$Models$ClassKind$Scholar = 12;
-var $author$project$Models$ClassKind$Slayer = 13;
-var $author$project$Models$SkillKind$SleightOfHand = 18;
-var $author$project$Models$ClassKind$Sorcerer = 9;
-var $author$project$Models$SkillKind$Stealth = 19;
-var $author$project$Models$SkillKind$Survival = 20;
-var $author$project$Models$SkillKind$Traditions = 21;
-var $author$project$Models$ClassKind$TreasureHunter = 14;
-var $author$project$Models$ClassKind$Wanderer = 15;
-var $author$project$Models$ClassKind$Warden = 16;
-var $author$project$Models$ClassKind$Warlock = 10;
-var $author$project$Models$ClassKind$Warrior = 17;
-var $author$project$Models$ClassKind$Wizard = 11;
-var $author$project$Models$SkillKind$NoSkill = 22;
-var $author$project$Models$SkillKind$ShadowLore = 17;
-var $author$project$Models$SkillKind$all = _List_fromArray(
+var $author$project$Models$Rules$StatKind$Intelligence = 3;
+var $author$project$Models$Rules$ClassKind$NoClass = 18;
+var $author$project$Models$Rules$RaceKind$NoRace = 20;
+var $author$project$Models$Rules$SubRaceKind$NoSubRace = 19;
+var $author$project$Models$Rules$StatKind$Strength = 0;
+var $author$project$Models$Rules$StatKind$Wisdom = 4;
+var $author$project$Models$Rules$SkillKind$Acrobatics = 0;
+var $author$project$Models$Rules$RuleSetKind$AiME = 1;
+var $author$project$Models$Rules$SkillKind$AnimalHandling = 1;
+var $author$project$Models$Rules$SkillKind$Arcana = 2;
+var $author$project$Models$Rules$SkillKind$Athletics = 3;
+var $author$project$Models$Rules$ClassKind$Barbarian = 0;
+var $author$project$Models$Rules$ClassKind$Bard = 1;
+var $author$project$Models$Rules$ClassKind$Cleric = 2;
+var $author$project$Models$Rules$SkillKind$Deception = 4;
+var $author$project$Models$Rules$ClassKind$Druid = 3;
+var $author$project$Models$Rules$ClassKind$Fighter = 4;
+var $author$project$Models$Rules$SkillKind$History = 5;
+var $author$project$Models$Rules$SkillKind$Insight = 6;
+var $author$project$Models$Rules$SkillKind$Intimidation = 7;
+var $author$project$Models$Rules$SkillKind$Investigation = 8;
+var $author$project$Models$Rules$RuleSetKind$Laelith = 2;
+var $author$project$Models$Rules$SkillKind$Lore = 9;
+var $author$project$Models$Rules$SkillKind$Medicine = 10;
+var $author$project$Models$Rules$ClassKind$Monk = 5;
+var $author$project$Models$Rules$SkillKind$Nature = 11;
+var $author$project$Models$Rules$ClassKind$Paladin = 6;
+var $author$project$Models$Rules$SkillKind$Perception = 12;
+var $author$project$Models$Rules$SkillKind$Performance = 13;
+var $author$project$Models$Rules$SkillKind$Persuasion = 14;
+var $author$project$Models$Rules$ClassKind$Ranger = 7;
+var $author$project$Models$Rules$SkillKind$Religion = 16;
+var $author$project$Models$Rules$SkillKind$Riddle = 15;
+var $author$project$Models$Rules$ClassKind$Rogue = 8;
+var $author$project$Models$Rules$ClassKind$Scholar = 12;
+var $author$project$Models$Rules$ClassKind$Slayer = 13;
+var $author$project$Models$Rules$SkillKind$SleightOfHand = 18;
+var $author$project$Models$Rules$ClassKind$Sorcerer = 9;
+var $author$project$Models$Rules$SkillKind$Stealth = 19;
+var $author$project$Models$Rules$SkillKind$Survival = 20;
+var $author$project$Models$Rules$SkillKind$Traditions = 21;
+var $author$project$Models$Rules$ClassKind$TreasureHunter = 14;
+var $author$project$Models$Rules$ClassKind$Wanderer = 15;
+var $author$project$Models$Rules$ClassKind$Warden = 16;
+var $author$project$Models$Rules$ClassKind$Warlock = 10;
+var $author$project$Models$Rules$ClassKind$Warrior = 17;
+var $author$project$Models$Rules$ClassKind$Wizard = 11;
+var $author$project$Models$Rules$SkillKind$NoSkill = 22;
+var $author$project$Models$Rules$SkillKind$ShadowLore = 17;
+var $author$project$Models$Rules$SkillKind$all = _List_fromArray(
 	[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]);
-var $author$project$Models$Class$get = function (classKind) {
+var $author$project$Models$Rules$Class$get = function (classKind) {
 	switch (classKind) {
 		case 0:
 			return {
@@ -4513,7 +4513,7 @@ var $author$project$Models$Class$get = function (classKind) {
 				Z: _List_Nil,
 				P: 1,
 				aL: 8,
-				aQ: $author$project$Models$SkillKind$all,
+				aQ: $author$project$Models$Rules$SkillKind$all,
 				aR: 3,
 				aS: _List_fromArray(
 					[1, 5]),
@@ -4723,7 +4723,7 @@ var $author$project$Models$Class$get = function (classKind) {
 				Z: _List_Nil,
 				P: 16,
 				aL: 8,
-				aQ: $author$project$Models$SkillKind$all,
+				aQ: $author$project$Models$Rules$SkillKind$all,
 				aR: 2,
 				aS: _List_fromArray(
 					[1, 5]),
@@ -4758,46 +4758,46 @@ var $author$project$Models$Class$get = function (classKind) {
 			};
 	}
 };
-var $author$project$Models$RaceKind$Barding = 9;
-var $author$project$Models$RaceKind$Beorning = 10;
-var $author$project$Models$SubRaceKind$BlackDragonborn = 0;
-var $author$project$Models$SubRaceKind$BlueDragonborn = 1;
-var $author$project$Models$SubRaceKind$BrassDragonborn = 2;
-var $author$project$Models$RaceKind$BreeMen = 15;
-var $author$project$Models$SubRaceKind$BronzeDragonborn = 3;
-var $author$project$Models$SubRaceKind$CopperDragonborn = 4;
-var $author$project$Models$SubRaceKind$DeepGnome = 15;
-var $author$project$Models$RaceKind$Dragonborn = 0;
-var $author$project$Models$SubRaceKind$Drow = 14;
-var $author$project$Models$RaceKind$Dunedain = 11;
-var $author$project$Models$RaceKind$Dwarf = 1;
-var $author$project$Models$RaceKind$Elf = 2;
-var $author$project$Models$RaceKind$Gnome = 3;
-var $author$project$Models$SubRaceKind$GoldDragonborn = 5;
-var $author$project$Models$SubRaceKind$GreenDragonborn = 6;
-var $author$project$Models$RaceKind$HalfElf = 4;
-var $author$project$Models$RaceKind$HalfOrc = 6;
-var $author$project$Models$RaceKind$Halfling = 5;
-var $author$project$Models$SubRaceKind$HighElf = 12;
-var $author$project$Models$SubRaceKind$HillsDwarf = 10;
-var $author$project$Models$RaceKind$Human = 7;
-var $author$project$Models$RaceKind$LakeMen = 16;
-var $author$project$Models$SubRaceKind$LightfootHalfling = 17;
-var $author$project$Models$RaceKind$LonelyMountainDwarf = 12;
-var $author$project$Models$RaceKind$MinasTirithMen = 17;
-var $author$project$Models$RaceKind$MirkwoodElf = 13;
-var $author$project$Models$SubRaceKind$MountainsDwarf = 11;
-var $author$project$Models$SubRaceKind$RedDragonborn = 7;
-var $author$project$Models$SubRaceKind$RockGnome = 16;
-var $author$project$Models$RaceKind$RohanRider = 18;
-var $author$project$Models$RaceKind$ShireHobbit = 14;
-var $author$project$Models$SubRaceKind$SilverDragonborn = 8;
-var $author$project$Models$SubRaceKind$StoutHalfling = 18;
-var $author$project$Models$RaceKind$Tiefling = 8;
-var $author$project$Models$SubRaceKind$WhiteDragonborn = 9;
-var $author$project$Models$RaceKind$WilderlandWoodmen = 19;
-var $author$project$Models$SubRaceKind$WoodElf = 13;
-var $author$project$Models$Race$get = function (raceKind) {
+var $author$project$Models$Rules$RaceKind$Barding = 9;
+var $author$project$Models$Rules$RaceKind$Beorning = 10;
+var $author$project$Models$Rules$SubRaceKind$BlackDragonborn = 0;
+var $author$project$Models$Rules$SubRaceKind$BlueDragonborn = 1;
+var $author$project$Models$Rules$SubRaceKind$BrassDragonborn = 2;
+var $author$project$Models$Rules$RaceKind$BreeMen = 15;
+var $author$project$Models$Rules$SubRaceKind$BronzeDragonborn = 3;
+var $author$project$Models$Rules$SubRaceKind$CopperDragonborn = 4;
+var $author$project$Models$Rules$SubRaceKind$DeepGnome = 15;
+var $author$project$Models$Rules$RaceKind$Dragonborn = 0;
+var $author$project$Models$Rules$SubRaceKind$Drow = 14;
+var $author$project$Models$Rules$RaceKind$Dunedain = 11;
+var $author$project$Models$Rules$RaceKind$Dwarf = 1;
+var $author$project$Models$Rules$RaceKind$Elf = 2;
+var $author$project$Models$Rules$RaceKind$Gnome = 3;
+var $author$project$Models$Rules$SubRaceKind$GoldDragonborn = 5;
+var $author$project$Models$Rules$SubRaceKind$GreenDragonborn = 6;
+var $author$project$Models$Rules$RaceKind$HalfElf = 4;
+var $author$project$Models$Rules$RaceKind$HalfOrc = 6;
+var $author$project$Models$Rules$RaceKind$Halfling = 5;
+var $author$project$Models$Rules$SubRaceKind$HighElf = 12;
+var $author$project$Models$Rules$SubRaceKind$HillsDwarf = 10;
+var $author$project$Models$Rules$RaceKind$Human = 7;
+var $author$project$Models$Rules$RaceKind$LakeMen = 16;
+var $author$project$Models$Rules$SubRaceKind$LightfootHalfling = 17;
+var $author$project$Models$Rules$RaceKind$LonelyMountainDwarf = 12;
+var $author$project$Models$Rules$RaceKind$MinasTirithMen = 17;
+var $author$project$Models$Rules$RaceKind$MirkwoodElf = 13;
+var $author$project$Models$Rules$SubRaceKind$MountainsDwarf = 11;
+var $author$project$Models$Rules$SubRaceKind$RedDragonborn = 7;
+var $author$project$Models$Rules$SubRaceKind$RockGnome = 16;
+var $author$project$Models$Rules$RaceKind$RohanRider = 18;
+var $author$project$Models$Rules$RaceKind$ShireHobbit = 14;
+var $author$project$Models$Rules$SubRaceKind$SilverDragonborn = 8;
+var $author$project$Models$Rules$SubRaceKind$StoutHalfling = 18;
+var $author$project$Models$Rules$RaceKind$Tiefling = 8;
+var $author$project$Models$Rules$SubRaceKind$WhiteDragonborn = 9;
+var $author$project$Models$Rules$RaceKind$WilderlandWoodmen = 19;
+var $author$project$Models$Rules$SubRaceKind$WoodElf = 13;
+var $author$project$Models$Rules$Race$get = function (raceKind) {
 	switch (raceKind) {
 		case 0:
 			return {
@@ -5098,7 +5098,7 @@ var $author$project$Models$Race$get = function (raceKind) {
 			};
 	}
 };
-var $author$project$Models$SubRace$get = function (subRaceKind) {
+var $author$project$Models$Rules$SubRace$get = function (subRaceKind) {
 	switch (subRaceKind) {
 		case 0:
 			return {
@@ -5291,9 +5291,9 @@ var $author$project$Models$SubRace$get = function (subRaceKind) {
 };
 var $author$project$DmTools$init = {
 	a: {
-		l: $author$project$Models$Class$get(18),
+		l: $author$project$Models$Rules$Class$get(18),
 		O: 1,
-		x: $author$project$Models$Race$get(20),
+		x: $author$project$Models$Rules$Race$get(20),
 		T: 27,
 		C: _List_fromArray(
 			[
@@ -5305,7 +5305,7 @@ var $author$project$DmTools$init = {
 				_Utils_Tuple2(5, 8)
 			]),
 		t: _List_Nil,
-		E: $author$project$Models$SubRace$get(19)
+		E: $author$project$Models$Rules$SubRace$get(19)
 	},
 	j: {H: false, z: 0}
 };
@@ -6082,7 +6082,7 @@ var $elm$core$List$filter = F2(
 			_List_Nil,
 			list);
 	});
-var $author$project$Models$ClassKind$fromString = function (string) {
+var $author$project$Models$Rules$ClassKind$fromString = function (string) {
 	switch (string) {
 		case 'Barbarian':
 			return 0;
@@ -6124,7 +6124,7 @@ var $author$project$Models$ClassKind$fromString = function (string) {
 			return 18;
 	}
 };
-var $author$project$Models$RaceKind$fromString = function (string) {
+var $author$project$Models$Rules$RaceKind$fromString = function (string) {
 	switch (string) {
 		case 'Dragonborn':
 			return 0;
@@ -6170,7 +6170,7 @@ var $author$project$Models$RaceKind$fromString = function (string) {
 			return 20;
 	}
 };
-var $author$project$Models$RuleSetKind$fromString = function (string) {
+var $author$project$Models$Rules$RuleSetKind$fromString = function (string) {
 	switch (string) {
 		case 'DnD5':
 			return 0;
@@ -6182,7 +6182,7 @@ var $author$project$Models$RuleSetKind$fromString = function (string) {
 			return 0;
 	}
 };
-var $author$project$Models$SubRaceKind$fromString = function (string) {
+var $author$project$Models$Rules$SubRaceKind$fromString = function (string) {
 	switch (string) {
 		case 'BlackDragonborn':
 			return 0;
@@ -6282,14 +6282,14 @@ var $author$project$DmTools$update = F2(
 							a: _Utils_update(
 								character,
 								{
-									l: $author$project$Models$Class$get(18),
-									x: $author$project$Models$Race$get(20),
-									E: $author$project$Models$SubRace$get(19)
+									l: $author$project$Models$Rules$Class$get(18),
+									x: $author$project$Models$Rules$Race$get(20),
+									E: $author$project$Models$Rules$SubRace$get(19)
 								}),
 							j: _Utils_update(
 								settings,
 								{
-									z: $author$project$Models$RuleSetKind$fromString(string)
+									z: $author$project$Models$Rules$RuleSetKind$fromString(string)
 								})
 						});
 				case 2:
@@ -6300,9 +6300,9 @@ var $author$project$DmTools$update = F2(
 							a: _Utils_update(
 								character,
 								{
-									x: $author$project$Models$Race$get(
-										$author$project$Models$RaceKind$fromString(string)),
-									E: $author$project$Models$SubRace$get(19)
+									x: $author$project$Models$Rules$Race$get(
+										$author$project$Models$Rules$RaceKind$fromString(string)),
+									E: $author$project$Models$Rules$SubRace$get(19)
 								})
 						});
 				case 3:
@@ -6313,8 +6313,8 @@ var $author$project$DmTools$update = F2(
 							a: _Utils_update(
 								character,
 								{
-									E: $author$project$Models$SubRace$get(
-										$author$project$Models$SubRaceKind$fromString(string))
+									E: $author$project$Models$Rules$SubRace$get(
+										$author$project$Models$Rules$SubRaceKind$fromString(string))
 								})
 						});
 				case 4:
@@ -6325,8 +6325,8 @@ var $author$project$DmTools$update = F2(
 							a: _Utils_update(
 								character,
 								{
-									l: $author$project$Models$Class$get(
-										$author$project$Models$ClassKind$fromString(string)),
+									l: $author$project$Models$Rules$Class$get(
+										$author$project$Models$Rules$ClassKind$fromString(string)),
 									t: _List_Nil
 								})
 						});
@@ -6424,7 +6424,7 @@ var $author$project$Models$Msg$CheckFreeStatInput = function (a) {
 	return {$: 7, a: a};
 };
 var $elm$html$Html$a = _VirtualDom_node('a');
-var $author$project$Models$StatKind$all = _List_fromArray(
+var $author$project$Models$Rules$StatKind$all = _List_fromArray(
 	[0, 1, 2, 3, 4, 5]);
 var $elm$core$List$append = F2(
 	function (xs, ys) {
@@ -6476,7 +6476,7 @@ var $author$project$DmTools$computeFinalStats = function (character) {
 			var finalScore = (A2($author$project$DmTools$getStatScore, character.C, statKind) + A2($author$project$DmTools$getStatScore, character.x.au, statKind)) + A2($author$project$DmTools$getStatScore, character.E.au, statKind);
 			return _Utils_Tuple2(statKind, finalScore);
 		},
-		$author$project$Models$StatKind$all);
+		$author$project$Models$Rules$StatKind$all);
 };
 var $author$project$DmTools$computeModifier = function (value) {
 	return $elm$core$Basics$floor((value - 10) / 2);
@@ -6487,7 +6487,7 @@ var $author$project$DmTools$computeProficiency = function (level) {
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$footer = _VirtualDom_node('footer');
 var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
-var $author$project$Models$ClassKind$all = _List_fromArray(
+var $author$project$Models$Rules$ClassKind$all = _List_fromArray(
 	[18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
 var $elm$core$List$any = F2(
 	function (isOkay, list) {
@@ -6530,9 +6530,9 @@ var $author$project$DmTools$getRuleSetClasses = function (ruleSetKind) {
 			function (_class) {
 				return A2($elm$core$List$member, ruleSetKind, _class.U);
 			},
-			A2($elm$core$List$map, $author$project$Models$Class$get, $author$project$Models$ClassKind$all)));
+			A2($elm$core$List$map, $author$project$Models$Rules$Class$get, $author$project$Models$Rules$ClassKind$all)));
 };
-var $author$project$Models$RaceKind$all = _List_fromArray(
+var $author$project$Models$Rules$RaceKind$all = _List_fromArray(
 	[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
 var $author$project$DmTools$getRuleSetRaces = function (ruleSetKind) {
 	return A2(
@@ -6545,9 +6545,9 @@ var $author$project$DmTools$getRuleSetRaces = function (ruleSetKind) {
 			function (race) {
 				return A2($elm$core$List$member, ruleSetKind, race.U);
 			},
-			A2($elm$core$List$map, $author$project$Models$Race$get, $author$project$Models$RaceKind$all)));
+			A2($elm$core$List$map, $author$project$Models$Rules$Race$get, $author$project$Models$Rules$RaceKind$all)));
 };
-var $author$project$Models$Skill$get = function (skillKind) {
+var $author$project$Models$Rules$Skill$get = function (skillKind) {
 	switch (skillKind) {
 		case 0:
 			return {
@@ -6740,7 +6740,7 @@ var $author$project$DmTools$getRuleSetSkills = function (ruleSetKind) {
 			function (skill) {
 				return A2($elm$core$List$member, ruleSetKind, skill.U);
 			},
-			A2($elm$core$List$map, $author$project$Models$Skill$get, $author$project$Models$SkillKind$all)));
+			A2($elm$core$List$map, $author$project$Models$Rules$Skill$get, $author$project$Models$Rules$SkillKind$all)));
 };
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$html$Html$Attributes$href = function (url) {
@@ -6925,7 +6925,7 @@ var $author$project$DmTools$viewClassOption = F2(
 					]));
 		} else {
 			return $author$project$DmTools$viewOption(
-				$author$project$Models$Class$get(classKind).N);
+				$author$project$Models$Rules$Class$get(classKind).N);
 		}
 	});
 var $author$project$DmTools$viewClassSelector = F2(
@@ -6992,7 +6992,7 @@ var $author$project$DmTools$viewRaceOption = F2(
 					]));
 		} else {
 			return $author$project$DmTools$viewOption(
-				$author$project$Models$Race$get(raceKind).N);
+				$author$project$Models$Rules$Race$get(raceKind).N);
 		}
 	});
 var $author$project$DmTools$viewRaceSelector = F2(
@@ -7049,7 +7049,7 @@ var $author$project$DmTools$viewRuleSetSelector = function (selectedRuleSetKind)
 var $elm$html$Html$h4 = _VirtualDom_node('h4');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $elm$html$Html$li = _VirtualDom_node('li');
-var $author$project$Models$StatKind$toString = function (statKind) {
+var $author$project$Models$Rules$StatKind$toString = function (statKind) {
 	switch (statKind) {
 		case 0:
 			return 'STR';
@@ -7076,7 +7076,7 @@ var $author$project$DmTools$viewSavingThrow = F4(
 			_List_fromArray(
 				[
 					$elm$html$Html$text(
-					$author$project$Models$StatKind$toString(statKind) + (' : ' + modifier))
+					$author$project$Models$Rules$StatKind$toString(statKind) + (' : ' + modifier))
 				]));
 	});
 var $author$project$DmTools$viewSavingThrows = F3(
@@ -7106,7 +7106,7 @@ var $author$project$DmTools$viewSavingThrows = F3(
 								A2($author$project$DmTools$getStatScore, finalStats, statKind));
 							return A4($author$project$DmTools$viewSavingThrow, statKind, proficiencySaves, statModifier, proficiencyBonus);
 						},
-						$author$project$Models$StatKind$all))
+						$author$project$Models$Rules$StatKind$all))
 				]));
 	});
 var $author$project$Models$Msg$CheckProficiencySkill = F2(
@@ -7121,7 +7121,7 @@ var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty(
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$DmTools$viewSkill = F3(
 	function (character, skillKind, optionalProficiencySkillsLimitReached) {
-		var skill = $author$project$Models$Skill$get(skillKind);
+		var skill = $author$project$Models$Rules$Skill$get(skillKind);
 		var statKind = skill.aV;
 		var statScore = A2(
 			$author$project$DmTools$getStatScore,
@@ -7156,7 +7156,7 @@ var $author$project$DmTools$viewSkill = F3(
 						]),
 					_List_Nil),
 					$elm$html$Html$text(
-					skill.N + (' (' + ($author$project$Models$StatKind$toString(statKind) + (') :' + modifier))))
+					skill.N + (' (' + ($author$project$Models$Rules$StatKind$toString(statKind) + (') :' + modifier))))
 				]));
 	});
 var $author$project$DmTools$viewSkills = F2(
@@ -7220,7 +7220,7 @@ var $author$project$DmTools$viewStatInput = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$author$project$Models$StatKind$toString(statKind))
+							$author$project$Models$Rules$StatKind$toString(statKind))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -7295,7 +7295,7 @@ var $author$project$DmTools$viewStatReader = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$author$project$Models$StatKind$toString(statKind))
+							$author$project$Models$Rules$StatKind$toString(statKind))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -7358,7 +7358,7 @@ var $author$project$DmTools$viewSubRaceOption = F2(
 					]));
 		} else {
 			return $author$project$DmTools$viewOption(
-				$author$project$Models$SubRace$get(subRaceKind).N);
+				$author$project$Models$Rules$SubRace$get(subRaceKind).N);
 		}
 	});
 var $author$project$DmTools$viewSubRaceSelector = F2(
@@ -7503,7 +7503,7 @@ var $author$project$DmTools$view = function (model) {
 								function (statKind) {
 									return A2($author$project$DmTools$viewStatInput, model.a.C, statKind);
 								},
-								$author$project$Models$StatKind$all),
+								$author$project$Models$Rules$StatKind$all),
 							model.j.H ? _List_fromArray(
 								[
 									$elm$html$Html$text('')
@@ -7535,7 +7535,7 @@ var $author$project$DmTools$view = function (model) {
 								function (statKind) {
 									return A2($author$project$DmTools$viewStatReader, finalStats, statKind);
 								},
-								$author$project$Models$StatKind$all),
+								$author$project$Models$Rules$StatKind$all),
 							_List_fromArray(
 								[
 									A2(

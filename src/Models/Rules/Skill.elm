@@ -1,8 +1,8 @@
-module Models.Skill exposing (Skill, Skills, get)
+module Models.Rules.Skill exposing (Skill, Skills, get)
 
-import Models.SkillKind exposing (SkillKind(..))
-import Models.StatKind exposing (StatKind(..))
-import Models.RuleSetKind exposing (RuleSetKind(..), RuleSetKinds)
+import Models.Rules.SkillKind exposing (SkillKind(..))
+import Models.Rules.StatKind exposing (StatKind(..))
+import Models.Rules.RuleSetKind exposing (RuleSetKind(..), RuleSetKinds)
 
 type alias Skill = 
     { skillKind: SkillKind

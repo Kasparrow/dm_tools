@@ -1,4 +1,4 @@
-module Models.StatKind exposing (StatKind(..), StatKinds, all, toString)
+module Models.Rules.StatKind exposing (StatKind(..), StatKinds, all, toString)
 
 type StatKind
     = Strength

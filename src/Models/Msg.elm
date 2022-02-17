@@ -1,7 +1,7 @@
 module Models.Msg exposing (Msg(..))
 
-import Models.SkillKind as SkillKind exposing (SkillKind)
-import Models.StatKind as StatKind exposing (StatKind)
+import Models.Rules.SkillKind as SkillKind exposing (SkillKind)
+import Models.Rules.StatKind as StatKind exposing (StatKind)
 
 type Msg
     = UpdateRuleSet String
