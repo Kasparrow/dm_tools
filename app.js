@@ -519,11 +519,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.ad.U === region.ai.U)
+	if (region.ac.T === region.ah.T)
 	{
-		return 'on line ' + region.ad.U;
+		return 'on line ' + region.ac.T;
 	}
-	return 'on lines ' + region.ad.U + ' through ' + region.ai.U;
+	return 'on lines ' + region.ac.T + ' through ' + region.ah.T;
 }
 
 
@@ -1857,7 +1857,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aP,
+		impl.aO,
 		impl.aX,
 		impl.aV,
 		function() { return function() {} }
@@ -2704,9 +2704,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		D: func(record.D),
-		ae: record.ae,
-		ab: record.ab
+		C: func(record.C),
+		ad: record.ad,
+		aa: record.aa
 	}
 });
 
@@ -2974,11 +2974,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.D;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ae;
+		var message = !tag ? value : tag < 3 ? value.a : value.C;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ad;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.ab) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.aa) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3928,7 +3928,7 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aP,
+		impl.aO,
 		impl.aX,
 		impl.aV,
 		function(sendToApp, initialModel) {
@@ -3964,11 +3964,11 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aP,
+		impl.aO,
 		impl.aX,
 		impl.aV,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.ac && impl.ac(sendToApp)
+			var divertHrefToApp = impl.ab && impl.ab(sendToApp)
 			var view = impl.aY;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -3977,7 +3977,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aI);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aH);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
@@ -4038,12 +4038,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aR;
-	var onUrlRequest = impl.aS;
+	var onUrlChange = impl.aQ;
+	var onUrlRequest = impl.aR;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		ac: function(sendToApp)
+		ab: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.av === next.av
-							&& curr.am === next.am
-							&& curr.as.a === next.as.a
+							&& curr.au === next.au
+							&& curr.al === next.al
+							&& curr.ar.a === next.ar.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4069,9 +4069,9 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aP: function(flags)
+		aO: function(flags)
 		{
-			return A3(impl.aP, flags, _Browser_getUrl(), key);
+			return A3(impl.aO, flags, _Browser_getUrl(), key);
 		},
 		aY: impl.aY,
 		aX: impl.aX,
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aN: 'hidden', aJ: 'visibilitychange' }
+		? { aM: 'hidden', aI: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aN: 'mozHidden', aJ: 'mozvisibilitychange' }
+		? { aM: 'mozHidden', aI: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aN: 'msHidden', aJ: 'msvisibilitychange' }
+		? { aM: 'msHidden', aI: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aN: 'webkitHidden', aJ: 'webkitvisibilitychange' }
-		: { aN: 'hidden', aJ: 'visibilitychange' };
+		? { aM: 'webkitHidden', aI: 'webkitvisibilitychange' }
+		: { aM: 'hidden', aI: 'visibilitychange' };
 }
 
 
@@ -4232,12 +4232,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		az: _Browser_getScene(),
-		aC: {
-			aE: _Browser_window.pageXOffset,
-			aF: _Browser_window.pageYOffset,
-			aD: _Browser_doc.documentElement.clientWidth,
-			al: _Browser_doc.documentElement.clientHeight
+		ay: _Browser_getScene(),
+		aB: {
+			aD: _Browser_window.pageXOffset,
+			aE: _Browser_window.pageYOffset,
+			aC: _Browser_doc.documentElement.clientWidth,
+			ak: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4247,8 +4247,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		aD: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		al: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aC: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		ak: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4271,15 +4271,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			az: {
-				aD: node.scrollWidth,
-				al: node.scrollHeight
+			ay: {
+				aC: node.scrollWidth,
+				ak: node.scrollHeight
 			},
-			aC: {
-				aE: node.scrollLeft,
-				aF: node.scrollTop,
-				aD: node.clientWidth,
-				al: node.clientHeight
+			aB: {
+				aD: node.scrollLeft,
+				aE: node.scrollTop,
+				aC: node.clientWidth,
+				ak: node.clientHeight
 			}
 		};
 	});
@@ -4309,18 +4309,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			az: _Browser_getScene(),
-			aC: {
-				aE: x,
-				aF: y,
-				aD: _Browser_doc.documentElement.clientWidth,
-				al: _Browser_doc.documentElement.clientHeight
+			ay: _Browser_getScene(),
+			aB: {
+				aD: x,
+				aE: y,
+				aC: _Browser_doc.documentElement.clientWidth,
+				ak: _Browser_doc.documentElement.clientHeight
 			},
-			aL: {
-				aE: x + rect.left,
-				aF: y + rect.top,
-				aD: rect.width,
-				al: rect.height
+			aK: {
+				aD: x + rect.left,
+				aE: y + rect.top,
+				aC: rect.width,
+				ak: rect.height
 			}
 		};
 	});
@@ -4498,11 +4498,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Barbarian',
 				e: _List_Nil,
 				a: 0,
-				i: 12,
-				j: _List_fromArray(
+				h: 12,
+				i: _List_fromArray(
 					[1, 3, 7, 11, 12, 20]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[0, 2]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4512,10 +4512,10 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Bard',
 				e: _List_Nil,
 				a: 1,
-				i: 8,
-				j: $author$project$Models$SkillKind$all,
-				k: 3,
-				l: _List_fromArray(
+				h: 8,
+				i: $author$project$Models$SkillKind$all,
+				j: 3,
+				k: _List_fromArray(
 					[1, 5]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4525,11 +4525,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Cleric',
 				e: _List_Nil,
 				a: 2,
-				i: 8,
-				j: _List_fromArray(
+				h: 8,
+				i: _List_fromArray(
 					[5, 6, 10, 14, 16]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[4, 5]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4539,11 +4539,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Druid',
 				e: _List_Nil,
 				a: 3,
-				i: 8,
-				j: _List_fromArray(
+				h: 8,
+				i: _List_fromArray(
 					[2, 1, 6, 10, 11, 12, 16, 20]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[3, 4]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4553,11 +4553,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Fighter',
 				e: _List_Nil,
 				a: 4,
-				i: 10,
-				j: _List_fromArray(
+				h: 10,
+				i: _List_fromArray(
 					[0, 1, 3, 5, 6, 7, 12, 20]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[0, 2]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4567,11 +4567,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Monk',
 				e: _List_Nil,
 				a: 5,
-				i: 8,
-				j: _List_fromArray(
+				h: 8,
+				i: _List_fromArray(
 					[0, 3, 5, 6, 16, 19]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[0, 1]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4581,11 +4581,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Paladin',
 				e: _List_Nil,
 				a: 6,
-				i: 10,
-				j: _List_fromArray(
+				h: 10,
+				i: _List_fromArray(
 					[3, 6, 7, 10, 14]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[4, 5]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4595,11 +4595,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Ranger',
 				e: _List_Nil,
 				a: 7,
-				i: 10,
-				j: _List_fromArray(
+				h: 10,
+				i: _List_fromArray(
 					[1, 3, 6, 8, 11, 12, 19, 20]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[0, 1]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4609,11 +4609,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Rogue',
 				e: _List_Nil,
 				a: 8,
-				i: 8,
-				j: _List_fromArray(
+				h: 8,
+				i: _List_fromArray(
 					[0, 3, 4, 6, 7, 8, 12, 13, 14, 18, 19]),
-				k: 4,
-				l: _List_fromArray(
+				j: 4,
+				k: _List_fromArray(
 					[1, 3]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4623,11 +4623,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Sorcerer',
 				e: _List_Nil,
 				a: 9,
-				i: 8,
-				j: _List_fromArray(
+				h: 8,
+				i: _List_fromArray(
 					[2, 4, 6, 7, 14]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[2, 5]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4637,11 +4637,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Warlock',
 				e: _List_Nil,
 				a: 10,
-				i: 6,
-				j: _List_fromArray(
+				h: 6,
+				i: _List_fromArray(
 					[2, 4, 5, 7, 8, 11, 16]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[4, 5]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4651,11 +4651,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Wizard',
 				e: _List_Nil,
 				a: 11,
-				i: 6,
-				j: _List_fromArray(
+				h: 6,
+				i: _List_fromArray(
 					[2, 5, 6, 8, 10, 16]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[3, 4]),
 				c: _List_fromArray(
 					[0, 2])
@@ -4666,11 +4666,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				e: _List_fromArray(
 					[10, 9]),
 				a: 12,
-				i: 8,
-				j: _List_fromArray(
+				h: 8,
+				i: _List_fromArray(
 					[5, 15, 21, 6, 8, 11, 12, 20]),
-				k: 1,
-				l: _List_fromArray(
+				j: 1,
+				k: _List_fromArray(
 					[3, 4]),
 				c: _List_fromArray(
 					[1])
@@ -4680,11 +4680,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Slayer',
 				e: _List_Nil,
 				a: 13,
-				i: 12,
-				j: _List_fromArray(
+				h: 12,
+				i: _List_fromArray(
 					[1, 3, 7, 11, 12, 20]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[0, 2]),
 				c: _List_fromArray(
 					[1])
@@ -4694,11 +4694,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Treasure Hunter',
 				e: _List_Nil,
 				a: 14,
-				i: 8,
-				j: _List_fromArray(
+				h: 8,
+				i: _List_fromArray(
 					[0, 3, 4, 6, 7, 12, 14, 15, 18, 19]),
-				k: 4,
-				l: _List_fromArray(
+				j: 4,
+				k: _List_fromArray(
 					[1, 3]),
 				c: _List_fromArray(
 					[1])
@@ -4708,11 +4708,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Wanderer',
 				e: _List_Nil,
 				a: 15,
-				i: 10,
-				j: _List_fromArray(
+				h: 10,
+				i: _List_fromArray(
 					[1, 3, 6, 8, 11, 12, 19, 21]),
-				k: 3,
-				l: _List_fromArray(
+				j: 3,
+				k: _List_fromArray(
 					[0, 2]),
 				c: _List_fromArray(
 					[1])
@@ -4722,10 +4722,10 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Warden',
 				e: _List_Nil,
 				a: 16,
-				i: 8,
-				j: $author$project$Models$SkillKind$all,
-				k: 2,
-				l: _List_fromArray(
+				h: 8,
+				i: $author$project$Models$SkillKind$all,
+				j: 2,
+				k: _List_fromArray(
 					[1, 5]),
 				c: _List_fromArray(
 					[1])
@@ -4735,11 +4735,11 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: 'Warrior',
 				e: _List_Nil,
 				a: 17,
-				i: 10,
-				j: _List_fromArray(
+				h: 10,
+				i: _List_fromArray(
 					[0, 1, 3, 5, 6, 7, 12, 20, 21]),
-				k: 2,
-				l: _List_fromArray(
+				j: 2,
+				k: _List_fromArray(
 					[0, 2]),
 				c: _List_fromArray(
 					[1])
@@ -4749,10 +4749,10 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				b: '',
 				e: _List_Nil,
 				a: 18,
-				i: 0,
-				j: _List_Nil,
-				k: 0,
-				l: _List_Nil,
+				h: 0,
+				i: _List_Nil,
+				j: 0,
+				k: _List_Nil,
 				c: _List_fromArray(
 					[0, 2, 1])
 			};
@@ -4811,7 +4811,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 						_Utils_Tuple2(0, 2),
 						_Utils_Tuple2(5, 1)
 					]),
-				h: _List_fromArray(
+				g: _List_fromArray(
 					[19, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 			};
 		case 1:
@@ -4825,7 +4825,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(2, 2)
 					]),
-				h: _List_fromArray(
+				g: _List_fromArray(
 					[19, 10, 11])
 			};
 		case 2:
@@ -4840,7 +4840,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(1, 2)
 					]),
-				h: _List_fromArray(
+				g: _List_fromArray(
 					[19, 14, 13, 12])
 			};
 		case 3:
@@ -4854,7 +4854,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(3, 2)
 					]),
-				h: _List_fromArray(
+				g: _List_fromArray(
 					[19, 15, 16])
 			};
 		case 4:
@@ -4868,7 +4868,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(5, 2)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 5:
 			return {
@@ -4881,7 +4881,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(1, 2)
 					]),
-				h: _List_fromArray(
+				g: _List_fromArray(
 					[19, 17, 18])
 			};
 		case 6:
@@ -4897,7 +4897,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 						_Utils_Tuple2(0, 2),
 						_Utils_Tuple2(2, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 7:
 			return {
@@ -4915,7 +4915,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 						_Utils_Tuple2(4, 1),
 						_Utils_Tuple2(5, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 8:
 			return {
@@ -4929,7 +4929,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 						_Utils_Tuple2(3, 1),
 						_Utils_Tuple2(5, 2)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 9:
 			return {
@@ -4943,7 +4943,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(2, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 10:
 			return {
@@ -4957,7 +4957,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(0, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 11:
 			return {
@@ -4972,7 +4972,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 						_Utils_Tuple2(2, 1),
 						_Utils_Tuple2(4, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 12:
 			return {
@@ -4985,7 +4985,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(2, 2)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 13:
 			return {
@@ -5000,7 +5000,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 						_Utils_Tuple2(1, 2),
 						_Utils_Tuple2(4, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 14:
 			return {
@@ -5014,7 +5014,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(1, 2)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 15:
 			return {
@@ -5028,7 +5028,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(4, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 16:
 			return {
@@ -5042,7 +5042,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(5, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 17:
 			return {
@@ -5056,7 +5056,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(3, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 18:
 			return {
@@ -5070,7 +5070,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(4, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		case 19:
 			return {
@@ -5084,7 +5084,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 					[
 						_Utils_Tuple2(1, 1)
 					]),
-				h: _List_Nil
+				g: _List_Nil
 			};
 		default:
 			return {
@@ -5094,7 +5094,7 @@ var $author$project$DmTools$getRace = function (identifier) {
 				c: _List_fromArray(
 					[0, 2, 1]),
 				d: _List_Nil,
-				h: _List_Nil
+				g: _List_Nil
 			};
 	}
 };
@@ -5290,12 +5290,12 @@ var $author$project$DmTools$getSubRace = function (identifier) {
 	}
 };
 var $author$project$DmTools$init = {
-	g: {
-		v: $author$project$DmTools$getClass(18),
-		T: 1,
-		F: $author$project$DmTools$getRace(20),
-		Z: 27,
-		L: _List_fromArray(
+	f: {
+		u: $author$project$DmTools$getClass(18),
+		S: 1,
+		E: $author$project$DmTools$getRace(20),
+		Y: 27,
+		K: _List_fromArray(
 			[
 				_Utils_Tuple2(0, 8),
 				_Utils_Tuple2(1, 8),
@@ -5304,10 +5304,10 @@ var $author$project$DmTools$init = {
 				_Utils_Tuple2(4, 8),
 				_Utils_Tuple2(5, 8)
 			]),
-		A: _List_Nil,
-		M: $author$project$DmTools$getSubRace(19)
+		z: _List_Nil,
+		L: $author$project$DmTools$getSubRace(19)
 	},
-	u: {P: false, G: 0}
+	t: {O: false, F: 0}
 };
 var $elm$core$Result$Err = function (a) {
 	return {$: 1, a: a};
@@ -5634,25 +5634,25 @@ var $elm$core$Array$treeFromBuilder = F2(
 	});
 var $elm$core$Array$builderToArray = F2(
 	function (reverseNodeList, builder) {
-		if (!builder.m) {
+		if (!builder.l) {
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.o),
+				$elm$core$Elm$JsArray$length(builder.n),
 				$elm$core$Array$shiftStep,
 				$elm$core$Elm$JsArray$empty,
-				builder.o);
+				builder.n);
 		} else {
-			var treeLen = builder.m * $elm$core$Array$branchFactor;
+			var treeLen = builder.l * $elm$core$Array$branchFactor;
 			var depth = $elm$core$Basics$floor(
 				A2($elm$core$Basics$logBase, $elm$core$Array$branchFactor, treeLen - 1));
-			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.p) : builder.p;
-			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.m);
+			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.o) : builder.o;
+			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.l);
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.o) + treeLen,
+				$elm$core$Elm$JsArray$length(builder.n) + treeLen,
 				A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep),
 				tree,
-				builder.o);
+				builder.n);
 		}
 	});
 var $elm$core$Basics$idiv = _Basics_idiv;
@@ -5665,7 +5665,7 @@ var $elm$core$Array$initializeHelp = F5(
 				return A2(
 					$elm$core$Array$builderToArray,
 					false,
-					{p: nodeList, m: (len / $elm$core$Array$branchFactor) | 0, o: tail});
+					{o: nodeList, l: (len / $elm$core$Array$branchFactor) | 0, n: tail});
 			} else {
 				var leaf = $elm$core$Array$Leaf(
 					A3($elm$core$Elm$JsArray$initialize, $elm$core$Array$branchFactor, fromIndex, fn));
@@ -5732,7 +5732,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {ak: fragment, am: host, aq: path, as: port_, av: protocol, aw: query};
+		return {aj: fragment, al: host, ap: path, ar: port_, au: protocol, av: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -6017,8 +6017,8 @@ var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $elm$browser$Browser$sandbox = function (impl) {
 	return _Browser_element(
 		{
-			aP: function (_v0) {
-				return _Utils_Tuple2(impl.aP, $elm$core$Platform$Cmd$none);
+			aO: function (_v0) {
+				return _Utils_Tuple2(impl.aO, $elm$core$Platform$Cmd$none);
 			},
 			aV: function (_v1) {
 				return $elm$core$Platform$Sub$none;
@@ -6244,14 +6244,14 @@ var $author$project$DmTools$update = F2(
 	function (msg, model) {
 		update:
 		while (true) {
-			var settings = model.u;
-			var character = model.g;
+			var settings = model.t;
+			var character = model.f;
 			var updateStat = F3(
 				function (stats, statKind, newScore) {
 					return A2(
 						$elm$core$List$map,
 						function (stat) {
-							return _Utils_eq(stat.a, statKind) ? (settings.P ? _Utils_Tuple2(statKind, newScore) : _Utils_Tuple2(
+							return _Utils_eq(stat.a, statKind) ? (settings.O ? _Utils_Tuple2(statKind, newScore) : _Utils_Tuple2(
 								statKind,
 								A2(
 									$elm$core$Basics$min,
@@ -6279,17 +6279,17 @@ var $author$project$DmTools$update = F2(
 					return _Utils_update(
 						model,
 						{
-							g: _Utils_update(
+							f: _Utils_update(
 								character,
 								{
-									v: $author$project$DmTools$getClass(18),
-									F: $author$project$DmTools$getRace(20),
-									M: $author$project$DmTools$getSubRace(19)
+									u: $author$project$DmTools$getClass(18),
+									E: $author$project$DmTools$getRace(20),
+									L: $author$project$DmTools$getSubRace(19)
 								}),
-							u: _Utils_update(
+							t: _Utils_update(
 								settings,
 								{
-									G: $author$project$Models$RuleSetKind$fromString(string)
+									F: $author$project$Models$RuleSetKind$fromString(string)
 								})
 						});
 				case 2:
@@ -6297,12 +6297,12 @@ var $author$project$DmTools$update = F2(
 					return _Utils_update(
 						model,
 						{
-							g: _Utils_update(
+							f: _Utils_update(
 								character,
 								{
-									F: $author$project$DmTools$getRace(
+									E: $author$project$DmTools$getRace(
 										$author$project$DmTools$stringToRace(raceIdentifier)),
-									M: $author$project$DmTools$getSubRace(19)
+									L: $author$project$DmTools$getSubRace(19)
 								})
 						});
 				case 3:
@@ -6310,10 +6310,10 @@ var $author$project$DmTools$update = F2(
 					return _Utils_update(
 						model,
 						{
-							g: _Utils_update(
+							f: _Utils_update(
 								character,
 								{
-									M: $author$project$DmTools$getSubRace(
+									L: $author$project$DmTools$getSubRace(
 										$author$project$DmTools$stringToSubRace(subRaceIdentifier))
 								})
 						});
@@ -6322,12 +6322,12 @@ var $author$project$DmTools$update = F2(
 					return _Utils_update(
 						model,
 						{
-							g: _Utils_update(
+							f: _Utils_update(
 								character,
 								{
-									v: $author$project$DmTools$getClass(
+									u: $author$project$DmTools$getClass(
 										$author$project$DmTools$stringToClass(classIdentifier)),
-									A: _List_Nil
+									z: _List_Nil
 								})
 						});
 				case 5:
@@ -6335,10 +6335,10 @@ var $author$project$DmTools$update = F2(
 					return _Utils_update(
 						model,
 						{
-							g: _Utils_update(
+							f: _Utils_update(
 								character,
 								{
-									T: A2(
+									S: A2(
 										$elm$core$Maybe$withDefault,
 										1,
 										$elm$core$String$toInt(level))
@@ -6351,10 +6351,10 @@ var $author$project$DmTools$update = F2(
 						$temp$model = _Utils_update(
 						model,
 						{
-							g: _Utils_update(
+							f: _Utils_update(
 								character,
 								{
-									L: A3(updateStat, character.L, statKind, newScore)
+									K: A3(updateStat, character.K, statKind, newScore)
 								})
 						});
 					msg = $temp$msg;
@@ -6364,10 +6364,10 @@ var $author$project$DmTools$update = F2(
 					return _Utils_update(
 						model,
 						{
-							g: _Utils_update(
+							f: _Utils_update(
 								character,
 								{
-									Z: 27 - $author$project$DmTools$computeRemainingPoints(character.L)
+									Y: 27 - $author$project$DmTools$computeRemainingPoints(character.K)
 								})
 						});
 				case 7:
@@ -6376,18 +6376,18 @@ var $author$project$DmTools$update = F2(
 						return _Utils_update(
 							model,
 							{
-								u: _Utils_update(
+								t: _Utils_update(
 									settings,
-									{P: true})
+									{O: true})
 							});
 					} else {
 						var $temp$msg = $author$project$DmTools$UpdateRemainingPoints,
 							$temp$model = _Utils_update(
 							model,
 							{
-								u: _Utils_update(
+								t: _Utils_update(
 									settings,
-									{P: false})
+									{O: false})
 							});
 						msg = $temp$msg;
 						model = $temp$model;
@@ -6400,20 +6400,20 @@ var $author$project$DmTools$update = F2(
 						return _Utils_update(
 							model,
 							{
-								g: _Utils_update(
+								f: _Utils_update(
 									character,
 									{
-										A: A2(pushSelectedProficiencySkill, character.A, skill)
+										z: A2(pushSelectedProficiencySkill, character.z, skill)
 									})
 							});
 					} else {
 						return _Utils_update(
 							model,
 							{
-								g: _Utils_update(
+								f: _Utils_update(
 									character,
 									{
-										A: A2(popSelectedProficiencySkill, character.A, skill)
+										z: A2(popSelectedProficiencySkill, character.z, skill)
 									})
 							});
 					}
@@ -6473,7 +6473,7 @@ var $author$project$DmTools$computeFinalStats = function (character) {
 	return A2(
 		$elm$core$List$map,
 		function (statKind) {
-			var finalScore = (A2($author$project$DmTools$getStatScore, character.L, statKind) + A2($author$project$DmTools$getStatScore, character.F.d, statKind)) + A2($author$project$DmTools$getStatScore, character.M.d, statKind);
+			var finalScore = (A2($author$project$DmTools$getStatScore, character.K, statKind) + A2($author$project$DmTools$getStatScore, character.E.d, statKind)) + A2($author$project$DmTools$getStatScore, character.L.d, statKind);
 			return _Utils_Tuple2(statKind, finalScore);
 		},
 		$author$project$Models$StatKind$all);
@@ -6547,7 +6547,7 @@ var $author$project$DmTools$getRuleSetRaces = function (ruleSetKind) {
 			},
 			A2($elm$core$List$map, $author$project$DmTools$getRace, $author$project$DmTools$allRaceIdentifiers)));
 };
-var $author$project$DmTools$getSkill = function (skillKind) {
+var $author$project$Models$Skill$get = function (skillKind) {
 	switch (skillKind) {
 		case 0:
 			return {
@@ -6555,7 +6555,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 0,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 1
+				aU: 1
 			};
 		case 1:
 			return {
@@ -6563,7 +6563,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 1,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 4
+				aU: 4
 			};
 		case 2:
 			return {
@@ -6571,7 +6571,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 2,
 				c: _List_fromArray(
 					[0, 2]),
-				f: 3
+				aU: 3
 			};
 		case 3:
 			return {
@@ -6579,7 +6579,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 3,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 0
+				aU: 0
 			};
 		case 4:
 			return {
@@ -6587,7 +6587,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 4,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 5
+				aU: 5
 			};
 		case 5:
 			return {
@@ -6595,7 +6595,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 5,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 3
+				aU: 3
 			};
 		case 6:
 			return {
@@ -6603,7 +6603,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 6,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 4
+				aU: 4
 			};
 		case 7:
 			return {
@@ -6611,7 +6611,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 7,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 5
+				aU: 5
 			};
 		case 8:
 			return {
@@ -6619,7 +6619,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 8,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 3
+				aU: 3
 			};
 		case 9:
 			return {
@@ -6627,7 +6627,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 9,
 				c: _List_fromArray(
 					[1]),
-				f: 3
+				aU: 3
 			};
 		case 10:
 			return {
@@ -6635,7 +6635,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 10,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 4
+				aU: 4
 			};
 		case 11:
 			return {
@@ -6643,7 +6643,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 11,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 3
+				aU: 3
 			};
 		case 12:
 			return {
@@ -6651,7 +6651,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 12,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 4
+				aU: 4
 			};
 		case 13:
 			return {
@@ -6659,7 +6659,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 13,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 5
+				aU: 5
 			};
 		case 14:
 			return {
@@ -6667,7 +6667,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 14,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 5
+				aU: 5
 			};
 		case 16:
 			return {
@@ -6675,7 +6675,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 16,
 				c: _List_fromArray(
 					[0, 2]),
-				f: 3
+				aU: 3
 			};
 		case 15:
 			return {
@@ -6683,7 +6683,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 15,
 				c: _List_fromArray(
 					[1]),
-				f: 3
+				aU: 3
 			};
 		case 17:
 			return {
@@ -6691,7 +6691,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 17,
 				c: _List_fromArray(
 					[1]),
-				f: 3
+				aU: 3
 			};
 		case 18:
 			return {
@@ -6699,7 +6699,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 18,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 1
+				aU: 1
 			};
 		case 19:
 			return {
@@ -6707,7 +6707,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 19,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 1
+				aU: 1
 			};
 		case 20:
 			return {
@@ -6715,7 +6715,7 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 20,
 				c: _List_fromArray(
 					[0, 2, 1]),
-				f: 4
+				aU: 4
 			};
 		case 21:
 			return {
@@ -6723,10 +6723,10 @@ var $author$project$DmTools$getSkill = function (skillKind) {
 				a: 21,
 				c: _List_fromArray(
 					[1]),
-				f: 3
+				aU: 3
 			};
 		default:
-			return {b: '', a: 22, c: _List_Nil, f: 0};
+			return {b: '', a: 22, c: _List_Nil, aU: 0};
 	}
 };
 var $author$project$DmTools$getRuleSetSkills = function (ruleSetKind) {
@@ -6740,7 +6740,7 @@ var $author$project$DmTools$getRuleSetSkills = function (ruleSetKind) {
 			function (skill) {
 				return A2($elm$core$List$member, ruleSetKind, skill.c);
 			},
-			A2($elm$core$List$map, $author$project$DmTools$getSkill, $author$project$Models$SkillKind$all)));
+			A2($elm$core$List$map, $author$project$Models$Skill$get, $author$project$Models$SkillKind$all)));
 };
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$html$Html$Attributes$href = function (url) {
@@ -7121,21 +7121,21 @@ var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty(
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$DmTools$viewSkill = F3(
 	function (character, skillKind, optionalProficiencySkillsLimitReached) {
-		var skill = $author$project$DmTools$getSkill(skillKind);
-		var statKind = skill.f;
+		var skill = $author$project$Models$Skill$get(skillKind);
+		var statKind = skill.aU;
 		var statScore = A2(
 			$author$project$DmTools$getStatScore,
 			$author$project$DmTools$computeFinalStats(character),
 			statKind);
-		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillKind, character.A);
-		var hasClassProficiencySkill = A2($elm$core$List$member, skillKind, character.v.j);
+		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillKind, character.z);
+		var hasClassProficiencySkill = A2($elm$core$List$member, skillKind, character.u.i);
 		var hasBaseProficiencySkill = A2(
 			$elm$core$List$member,
 			skillKind,
 			$elm$core$List$concat(
 				_List_fromArray(
-					[character.v.e, character.F.e])));
-		var proficiencyBonus = (hasSelectedProficiencySkill || hasBaseProficiencySkill) ? $author$project$DmTools$computeProficiency(character.T) : 0;
+					[character.u.e, character.E.e])));
+		var proficiencyBonus = (hasSelectedProficiencySkill || hasBaseProficiencySkill) ? $author$project$DmTools$computeProficiency(character.S) : 0;
 		var modifier = $author$project$DmTools$printWithSign(
 			$author$project$DmTools$computeModifier(statScore) + proficiencyBonus);
 		var disableCheckbox = hasBaseProficiencySkill || ((!hasSelectedProficiencySkill) && ((!hasClassProficiencySkill) || optionalProficiencySkillsLimitReached));
@@ -7162,8 +7162,8 @@ var $author$project$DmTools$viewSkill = F3(
 var $author$project$DmTools$viewSkills = F2(
 	function (character, ruleSetKind) {
 		var optionalProficiencySkillsLimitReached = _Utils_cmp(
-			$elm$core$List$length(character.A),
-			character.v.k) > -1;
+			$elm$core$List$length(character.z),
+			character.u.j) > -1;
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -7377,13 +7377,13 @@ var $author$project$DmTools$viewSubRaceSelector = F2(
 				subRaceIdentifiers)) : $elm$html$Html$text('');
 	});
 var $author$project$DmTools$view = function (model) {
-	var proficiencyBonus = $author$project$DmTools$computeProficiency(model.g.T);
-	var finalStats = $author$project$DmTools$computeFinalStats(model.g);
-	var characterBaseLife = model.g.v.i + $author$project$DmTools$computeModifier(
+	var proficiencyBonus = $author$project$DmTools$computeProficiency(model.f.S);
+	var finalStats = $author$project$DmTools$computeFinalStats(model.f);
+	var characterBaseLife = model.f.u.h + $author$project$DmTools$computeModifier(
 		A2($author$project$DmTools$getStatScore, finalStats, 2));
-	var availableSkills = $author$project$DmTools$getRuleSetSkills(model.u.G);
-	var availableRaces = $author$project$DmTools$getRuleSetRaces(model.u.G);
-	var availableClasses = $author$project$DmTools$getRuleSetClasses(model.u.G);
+	var availableSkills = $author$project$DmTools$getRuleSetSkills(model.t.F);
+	var availableRaces = $author$project$DmTools$getRuleSetRaces(model.t.F);
+	var availableClasses = $author$project$DmTools$getRuleSetClasses(model.t.F);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -7432,7 +7432,7 @@ var $author$project$DmTools$view = function (model) {
 							[
 								$elm$html$Html$text('Game Version')
 							])),
-						$author$project$DmTools$viewRuleSetSelector(model.u.G),
+						$author$project$DmTools$viewRuleSetSelector(model.t.F),
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
@@ -7440,8 +7440,8 @@ var $author$project$DmTools$view = function (model) {
 							[
 								$elm$html$Html$text('Race')
 							])),
-						A2($author$project$DmTools$viewRaceSelector, availableRaces, model.g.F.a),
-						A2($author$project$DmTools$viewSubRaceSelector, model.g.F.h, model.g.M.a),
+						A2($author$project$DmTools$viewRaceSelector, availableRaces, model.f.E.a),
+						A2($author$project$DmTools$viewSubRaceSelector, model.f.E.g, model.f.L.a),
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
@@ -7449,7 +7449,7 @@ var $author$project$DmTools$view = function (model) {
 							[
 								$elm$html$Html$text('Class')
 							])),
-						A2($author$project$DmTools$viewClassSelector, availableClasses, model.g.v.a),
+						A2($author$project$DmTools$viewClassSelector, availableClasses, model.f.u.a),
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
@@ -7501,10 +7501,10 @@ var $author$project$DmTools$view = function (model) {
 							A2(
 								$elm$core$List$map,
 								function (statKind) {
-									return A2($author$project$DmTools$viewStatInput, model.g.L, statKind);
+									return A2($author$project$DmTools$viewStatInput, model.f.K, statKind);
 								},
 								$author$project$Models$StatKind$all),
-							model.u.P ? _List_fromArray(
+							model.t.O ? _List_fromArray(
 								[
 									$elm$html$Html$text('')
 								]) : _List_fromArray(
@@ -7512,7 +7512,7 @@ var $author$project$DmTools$view = function (model) {
 									A2(
 									$author$project$DmTools$viewValueBox,
 									'POINTS',
-									$elm$core$String$fromInt(model.g.Z))
+									$elm$core$String$fromInt(model.f.Y))
 								]))),
 						A2($elm$html$Html$br, _List_Nil, _List_Nil),
 						A2(
@@ -7551,7 +7551,7 @@ var $author$project$DmTools$view = function (model) {
 							]),
 						_List_fromArray(
 							[
-								A2($author$project$DmTools$viewCharacterBaseLife, model.g.v.a, characterBaseLife)
+								A2($author$project$DmTools$viewCharacterBaseLife, model.f.u.a, characterBaseLife)
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -7561,8 +7561,8 @@ var $author$project$DmTools$view = function (model) {
 							]),
 						_List_fromArray(
 							[
-								A3($author$project$DmTools$viewSavingThrows, finalStats, model.g.v.l, proficiencyBonus),
-								A2($author$project$DmTools$viewSkills, model.g, model.u.G)
+								A3($author$project$DmTools$viewSavingThrows, finalStats, model.f.u.k, proficiencyBonus),
+								A2($author$project$DmTools$viewSkills, model.f, model.t.F)
 							]))
 					])),
 				A2(
@@ -7581,6 +7581,6 @@ var $author$project$DmTools$view = function (model) {
 			]));
 };
 var $author$project$DmTools$main = $elm$browser$Browser$sandbox(
-	{aP: $author$project$DmTools$init, aX: $author$project$DmTools$update, aY: $author$project$DmTools$view});
+	{aO: $author$project$DmTools$init, aX: $author$project$DmTools$update, aY: $author$project$DmTools$view});
 _Platform_export({'DmTools':{'init':$author$project$DmTools$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));

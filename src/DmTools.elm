@@ -10,6 +10,7 @@ import Models.RuleSetKind as RuleSetKind exposing (RuleSetKind(..), RuleSetKinds
 import Models.Stat as Stat exposing (Stat, Stats)
 import Models.StatKind as StatKind exposing (StatKind(..), StatKinds, all, toString)
 import Models.SkillKind as SkillKind exposing (SkillKind(..), SkillKinds, all, fromString)
+import Models.Skill as Skill exposing (Skill, Skills, get)
 
 -- TYPES
 
@@ -121,13 +122,6 @@ type alias Class =
     }
 type alias Classes = List Class
 
-type alias Skill = 
-    { identifier: SkillKind
-    , statKind: StatKind
-    , ruleSetKinds: RuleSetKinds
-    , asString: String
-    }
-type alias Skills = List Skill
 
 -- MODEL
 type alias Character = 
@@ -367,7 +361,7 @@ viewSkills character ruleSetKind =
 viewSkill: Character -> SkillKind -> Bool -> Html Msg
 viewSkill character skillKind optionalProficiencySkillsLimitReached =
     let
-        skill = getSkill skillKind
+        skill = Skill.get skillKind
         statKind = skill.statKind
         statScore = getStatScore (computeFinalStats character) statKind
         hasBaseProficiencySkill = List.member skillKind (List.concat [character.class.baseProficiencySkills, character.race.baseProficiencySkills])
@@ -519,7 +513,7 @@ getRuleSetClasses ruleSetKind =
 getRuleSetSkills: RuleSetKind -> SkillKinds
 getRuleSetSkills ruleSetKind =
     List.map (\skill -> skill.identifier)
-             (List.filter(\skill -> List.member ruleSetKind skill.ruleSetKinds) (List.map getSkill SkillKind.all))
+             (List.filter(\skill -> List.member ruleSetKind skill.ruleSetKinds) (List.map Skill.get SkillKind.all))
 
 
 getStatScore: Stats -> StatKind -> Int
@@ -1123,147 +1117,6 @@ getClass classIdentifier =
             , asString = ""
             }
 
-getSkill: SkillKind -> Skill
-getSkill skillKind =
-    case skillKind of
-        Acrobatics ->
-            { identifier = Acrobatics
-            , statKind = Dexterity
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Acrobatics"
-            }
-        AnimalHandling ->
-            { identifier = AnimalHandling
-            , statKind = Wisdom
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Animal Handling"
-            }
-        Arcana ->
-            { identifier = Arcana
-            , statKind = Intelligence
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Arcana"
-            }
-        Athletics ->
-            { identifier = Athletics
-            , statKind = Strength
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Athletics"
-            }
-        Deception ->
-            { identifier = Deception
-            , statKind = Charisma
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Deception"
-            }
-        History ->
-            { identifier = History
-            , statKind = Intelligence
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "History"
-            }
-        Insight ->
-            { identifier = Insight
-            , statKind = Wisdom
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Insight"
-            }
-        Intimidation ->
-            { identifier = Intimidation
-            , statKind = Charisma
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Intimidation"
-            }
-        Investigation ->
-            { identifier = Investigation
-            , statKind = Intelligence
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Investigation"
-            }
-        Lore ->
-            { identifier = Lore
-            , statKind = Intelligence
-            , ruleSetKinds = [AiME]
-            , asString = "Lore"
-            }
-        Medicine ->
-            { identifier = Medicine
-            , statKind = Wisdom
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Medicine"
-            }
-        Nature ->
-            { identifier = Nature
-            , statKind = Intelligence
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Nature"
-            }
-        Perception ->
-            { identifier = Perception
-            , statKind = Wisdom
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Perception"
-            }
-        Performance ->
-            { identifier = Performance
-            , statKind = Charisma
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Performance"
-            }
-        Persuasion ->
-            { identifier = Persuasion
-            , statKind = Charisma
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Persuasion"
-            }
-        Religion ->
-            { identifier = Religion
-            , statKind = Intelligence
-            , ruleSetKinds = [DnD5, Laelith]
-            , asString = "Religion"
-            }
-        Riddle ->
-            { identifier = Riddle
-            , statKind = Intelligence
-            , ruleSetKinds = [AiME]
-            , asString = "Riddle"
-            }
-        ShadowLore ->
-            { identifier = ShadowLore
-            , statKind = Intelligence
-            , ruleSetKinds = [AiME]
-            , asString = "Shadow Lore"
-            }
-        SleightOfHand ->
-            { identifier = SleightOfHand
-            , statKind = Dexterity
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Sleight of Hand"
-            }
-        Stealth ->
-            { identifier = Stealth
-            , statKind = Dexterity
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Stealth"
-            }
-        Survival ->
-            { identifier = Survival
-            , statKind = Wisdom
-            , ruleSetKinds = [DnD5, Laelith, AiME]
-            , asString = "Survival"
-            }
-        Traditions ->
-            { identifier = Traditions
-            , statKind = Intelligence
-            , ruleSetKinds = [AiME]
-            , asString = "Traditions"
-            }
-        NoSkill ->
-            { identifier = NoSkill
-            , statKind = Strength
-            , ruleSetKinds = []
-            , asString = ""
-            }
 
 -- IDENTIFIER FROM STRING
 
