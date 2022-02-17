@@ -6,9 +6,10 @@ import Html.Events exposing (onInput, onClick, onCheck, on)
 import Array
 import Browser
 
+import Models.RuleSetKind as RuleSetKind exposing (RuleSetKind(..), RuleSetKinds, all, fromString)
 import Models.Stat as Stat exposing (Stat, Stats)
 import Models.StatKind as StatKind exposing (StatKind(..), StatKinds, all, toString)
-import Models.RuleSetKind as RuleSetKind exposing (RuleSetKind(..), RuleSetKinds, all, fromString)
+import Models.SkillKind as SkillKind exposing (SkillKind(..), SkillKinds, all, fromString)
 
 -- TYPES
 
@@ -21,7 +22,7 @@ type Msg
     | UpdateLevel String
     | UpdateStat StatKind Int
     | CheckFreeStatInput Bool
-    | CheckProficiencySkill SkillIdentifier Bool 
+    | CheckProficiencySkill SkillKind Bool 
 
 type RaceIdentifier
     = Dragonborn
@@ -50,7 +51,7 @@ type alias Race =
     { identifier: RaceIdentifier
     , statBonus: Stats
     , subRaces: SubRaceIdentifiers
-    , baseProficiencySkills: SkillIdentifiers
+    , baseProficiencySkills: SkillKinds
     , ruleSetKinds: RuleSetKinds
     , asString: String
     }
@@ -111,8 +112,8 @@ type alias ClassIdentifiers = List ClassIdentifier
 type alias Class =
     { identifier: ClassIdentifier 
     , proficiencySaves: StatKinds
-    , baseProficiencySkills: SkillIdentifiers
-    , optionalProficiencySkills: SkillIdentifiers
+    , baseProficiencySkills: SkillKinds
+    , optionalProficiencySkills: SkillKinds
     , optionalProficiencySkillsLimit: Int
     , lifeDice: Int
     , ruleSetKinds: RuleSetKinds
@@ -120,33 +121,8 @@ type alias Class =
     }
 type alias Classes = List Class
 
-type SkillIdentifier
-    = Acrobatics
-    | AnimalHandling
-    | Arcana
-    | Athletics
-    | Deception
-    | History
-    | Insight
-    | Intimidation
-    | Investigation
-    | Lore
-    | Medicine
-    | Nature
-    | Perception
-    | Performance
-    | Persuasion
-    | Riddle
-    | Religion
-    | ShadowLore
-    | SleightOfHand
-    | Stealth
-    | Survival
-    | Traditions
-    | NoSkill
-type alias SkillIdentifiers = List SkillIdentifier
 type alias Skill = 
-    { identifier: SkillIdentifier
+    { identifier: SkillKind
     , statKind: StatKind
     , ruleSetKinds: RuleSetKinds
     , asString: String
@@ -161,7 +137,7 @@ type alias Character =
     , class: Class
     , remainingPoints: Int
     , level: Int
-    , selectedProficiencySkills: SkillIdentifiers
+    , selectedProficiencySkills: SkillKinds
     }
 type alias Settings =
     { ruleSetKind: RuleSetKind
@@ -383,26 +359,26 @@ viewSkills character ruleSetKind =
     div [ class "margin-right" ]
         [ h4 [] [text "Skills" ]
         , ul []
-             (List.map (\skillIdentifier -> 
-                 viewSkill character skillIdentifier optionalProficiencySkillsLimitReached
+             (List.map (\skillKind -> 
+                 viewSkill character skillKind optionalProficiencySkillsLimitReached
              ) (getRuleSetSkills ruleSetKind))
         ]
 
-viewSkill: Character -> SkillIdentifier -> Bool -> Html Msg
-viewSkill character skillIdentifier optionalProficiencySkillsLimitReached =
+viewSkill: Character -> SkillKind -> Bool -> Html Msg
+viewSkill character skillKind optionalProficiencySkillsLimitReached =
     let
-        skill = getSkill skillIdentifier
+        skill = getSkill skillKind
         statKind = skill.statKind
         statScore = getStatScore (computeFinalStats character) statKind
-        hasBaseProficiencySkill = List.member skillIdentifier (List.concat [character.class.baseProficiencySkills, character.race.baseProficiencySkills])
-        hasClassProficiencySkill = List.member skillIdentifier character.class.optionalProficiencySkills
-        hasSelectedProficiencySkill = List.member skillIdentifier character.selectedProficiencySkills
+        hasBaseProficiencySkill = List.member skillKind (List.concat [character.class.baseProficiencySkills, character.race.baseProficiencySkills])
+        hasClassProficiencySkill = List.member skillKind character.class.optionalProficiencySkills
+        hasSelectedProficiencySkill = List.member skillKind character.selectedProficiencySkills
         proficiencyBonus = if (hasSelectedProficiencySkill || hasBaseProficiencySkill) then (computeProficiency character.level) else 0
         modifier = printWithSign ((computeModifier statScore) + proficiencyBonus)
         disableCheckbox = (hasBaseProficiencySkill || not hasSelectedProficiencySkill && (not hasClassProficiencySkill || optionalProficiencySkillsLimitReached))
     in
     li []
-       [ input [ type_ "checkbox", disabled disableCheckbox, onCheck (CheckProficiencySkill skillIdentifier), checked (hasBaseProficiencySkill || hasSelectedProficiencySkill)] []
+       [ input [ type_ "checkbox", disabled disableCheckbox, onCheck (CheckProficiencySkill skillKind), checked (hasBaseProficiencySkill || hasSelectedProficiencySkill)] []
        , text (skill.asString ++ " (" ++ (StatKind.toString statKind) ++ ") :" ++ modifier)
        ]
 
@@ -428,13 +404,13 @@ update msg ({ settings, character } as model) =
                     stat
             ) stats
 
-        pushSelectedProficiencySkill: SkillIdentifiers -> SkillIdentifier -> SkillIdentifiers
-        pushSelectedProficiencySkill selectedSkillIdentifiers skillIdentifier =
-            skillIdentifier :: selectedSkillIdentifiers
+        pushSelectedProficiencySkill: SkillKinds -> SkillKind -> SkillKinds
+        pushSelectedProficiencySkill selectedSkillKinds skillKind =
+            skillKind :: selectedSkillKinds
 
-        popSelectedProficiencySkill: SkillIdentifiers -> SkillIdentifier -> SkillIdentifiers
-        popSelectedProficiencySkill selectedSkillIdentifiers skillIdentifier =
-            List.filter (\selectedSkillIdentifier -> selectedSkillIdentifier /= skillIdentifier) selectedSkillIdentifiers
+        popSelectedProficiencySkill: SkillKinds -> SkillKind -> SkillKinds
+        popSelectedProficiencySkill selectedSkillKinds skillKind =
+            List.filter (\selectedSkillKind -> selectedSkillKind /= skillKind) selectedSkillKinds
     in
     case msg of
         UpdateRuleSetKind string ->
@@ -540,10 +516,10 @@ getRuleSetClasses ruleSetKind =
     List.map (\class -> class.identifier)
              (List.filter(\class -> List.member ruleSetKind class.ruleSetKinds) (List.map getClass allClassIdentifiers))
 
-getRuleSetSkills: RuleSetKind -> SkillIdentifiers
+getRuleSetSkills: RuleSetKind -> SkillKinds
 getRuleSetSkills ruleSetKind =
     List.map (\skill -> skill.identifier)
-             (List.filter(\skill -> List.member ruleSetKind skill.ruleSetKinds) (List.map getSkill allSkillIdentifiers))
+             (List.filter(\skill -> List.member ruleSetKind skill.ruleSetKinds) (List.map getSkill SkillKind.all))
 
 
 getStatScore: Stats -> StatKind -> Int
@@ -637,33 +613,6 @@ allClassIdentifiers =
     , Warden
     , Warrior
     ]
-
-allSkillIdentifiers: SkillIdentifiers
-allSkillIdentifiers = 
-    [ Acrobatics
-    , AnimalHandling
-    , Arcana
-    , Athletics
-    , Deception
-    , History
-    , Insight
-    , Intimidation
-    , Investigation
-    , Lore
-    , Medicine
-    , Nature
-    , Perception
-    , Performance
-    , Persuasion
-    , Religion
-    , Riddle
-    , ShadowLore
-    , SleightOfHand
-    , Stealth
-    , Survival
-    , Traditions
-    ]
-
 
 getRace: RaceIdentifier -> Race
 getRace identifier =
@@ -997,7 +946,7 @@ getClass classIdentifier =
             { identifier = Bard
             , proficiencySaves = [ Dexterity, Charisma ]
             , baseProficiencySkills =  []
-            , optionalProficiencySkills = allSkillIdentifiers
+            , optionalProficiencySkills = SkillKind.all
             , optionalProficiencySkillsLimit = 3
             , lifeDice = 8
             , ruleSetKinds = [DnD5, Laelith]
@@ -1147,7 +1096,7 @@ getClass classIdentifier =
             { identifier = Warden
             , proficiencySaves = [ Dexterity, Charisma ]
             , baseProficiencySkills = []
-            , optionalProficiencySkills = allSkillIdentifiers
+            , optionalProficiencySkills = SkillKind.all
             , optionalProficiencySkillsLimit = 2
             , lifeDice = 8
             , ruleSetKinds = [AiME]
@@ -1174,9 +1123,9 @@ getClass classIdentifier =
             , asString = ""
             }
 
-getSkill: SkillIdentifier -> Skill
-getSkill skillIdentifier =
-    case skillIdentifier of
+getSkill: SkillKind -> Skill
+getSkill skillKind =
+    case skillKind of
         Acrobatics ->
             { identifier = Acrobatics
             , statKind = Dexterity

@@ -4446,50 +4446,51 @@ var $author$project$DmTools$NoRace = 20;
 var $author$project$DmTools$NoSubRace = 19;
 var $author$project$Models$StatKind$Strength = 0;
 var $author$project$Models$StatKind$Wisdom = 4;
-var $author$project$DmTools$Acrobatics = 0;
+var $author$project$Models$SkillKind$Acrobatics = 0;
 var $author$project$Models$RuleSetKind$AiME = 1;
-var $author$project$DmTools$AnimalHandling = 1;
-var $author$project$DmTools$Arcana = 2;
-var $author$project$DmTools$Athletics = 3;
+var $author$project$Models$SkillKind$AnimalHandling = 1;
+var $author$project$Models$SkillKind$Arcana = 2;
+var $author$project$Models$SkillKind$Athletics = 3;
 var $author$project$DmTools$Barbarian = 0;
 var $author$project$DmTools$Bard = 1;
 var $author$project$DmTools$Cleric = 2;
-var $author$project$DmTools$Deception = 4;
+var $author$project$Models$SkillKind$Deception = 4;
 var $author$project$DmTools$Druid = 3;
 var $author$project$DmTools$Fighter = 4;
-var $author$project$DmTools$History = 5;
-var $author$project$DmTools$Insight = 6;
-var $author$project$DmTools$Intimidation = 7;
-var $author$project$DmTools$Investigation = 8;
+var $author$project$Models$SkillKind$History = 5;
+var $author$project$Models$SkillKind$Insight = 6;
+var $author$project$Models$SkillKind$Intimidation = 7;
+var $author$project$Models$SkillKind$Investigation = 8;
 var $author$project$Models$RuleSetKind$Laelith = 2;
-var $author$project$DmTools$Lore = 9;
-var $author$project$DmTools$Medicine = 10;
+var $author$project$Models$SkillKind$Lore = 9;
+var $author$project$Models$SkillKind$Medicine = 10;
 var $author$project$DmTools$Monk = 5;
-var $author$project$DmTools$Nature = 11;
+var $author$project$Models$SkillKind$Nature = 11;
 var $author$project$DmTools$Paladin = 6;
-var $author$project$DmTools$Perception = 12;
-var $author$project$DmTools$Performance = 13;
-var $author$project$DmTools$Persuasion = 14;
+var $author$project$Models$SkillKind$Perception = 12;
+var $author$project$Models$SkillKind$Performance = 13;
+var $author$project$Models$SkillKind$Persuasion = 14;
 var $author$project$DmTools$Ranger = 7;
-var $author$project$DmTools$Religion = 16;
-var $author$project$DmTools$Riddle = 15;
+var $author$project$Models$SkillKind$Religion = 16;
+var $author$project$Models$SkillKind$Riddle = 15;
 var $author$project$DmTools$Rogue = 8;
 var $author$project$DmTools$Scholar = 12;
 var $author$project$DmTools$Slayer = 13;
-var $author$project$DmTools$SleightOfHand = 18;
+var $author$project$Models$SkillKind$SleightOfHand = 18;
 var $author$project$DmTools$Sorcerer = 9;
-var $author$project$DmTools$Stealth = 19;
-var $author$project$DmTools$Survival = 20;
-var $author$project$DmTools$Traditions = 21;
+var $author$project$Models$SkillKind$Stealth = 19;
+var $author$project$Models$SkillKind$Survival = 20;
+var $author$project$Models$SkillKind$Traditions = 21;
 var $author$project$DmTools$TreasureHunter = 14;
 var $author$project$DmTools$Wanderer = 15;
 var $author$project$DmTools$Warden = 16;
 var $author$project$DmTools$Warlock = 10;
 var $author$project$DmTools$Warrior = 17;
 var $author$project$DmTools$Wizard = 11;
-var $author$project$DmTools$ShadowLore = 17;
-var $author$project$DmTools$allSkillIdentifiers = _List_fromArray(
-	[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 15, 17, 18, 19, 20, 21]);
+var $author$project$Models$SkillKind$NoSkill = 22;
+var $author$project$Models$SkillKind$ShadowLore = 17;
+var $author$project$Models$SkillKind$all = _List_fromArray(
+	[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]);
 var $author$project$DmTools$getClass = function (classIdentifier) {
 	switch (classIdentifier) {
 		case 0:
@@ -4512,7 +4513,7 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				e: _List_Nil,
 				a: 1,
 				i: 8,
-				j: $author$project$DmTools$allSkillIdentifiers,
+				j: $author$project$Models$SkillKind$all,
 				k: 3,
 				l: _List_fromArray(
 					[1, 5]),
@@ -4722,7 +4723,7 @@ var $author$project$DmTools$getClass = function (classIdentifier) {
 				e: _List_Nil,
 				a: 16,
 				i: 8,
-				j: $author$project$DmTools$allSkillIdentifiers,
+				j: $author$project$Models$SkillKind$all,
 				k: 2,
 				l: _List_fromArray(
 					[1, 5]),
@@ -6260,17 +6261,17 @@ var $author$project$DmTools$update = F2(
 						stats);
 				});
 			var pushSelectedProficiencySkill = F2(
-				function (selectedSkillIdentifiers, skillIdentifier) {
-					return A2($elm$core$List$cons, skillIdentifier, selectedSkillIdentifiers);
+				function (selectedSkillKinds, skillKind) {
+					return A2($elm$core$List$cons, skillKind, selectedSkillKinds);
 				});
 			var popSelectedProficiencySkill = F2(
-				function (selectedSkillIdentifiers, skillIdentifier) {
+				function (selectedSkillKinds, skillKind) {
 					return A2(
 						$elm$core$List$filter,
-						function (selectedSkillIdentifier) {
-							return !_Utils_eq(selectedSkillIdentifier, skillIdentifier);
+						function (selectedSkillKind) {
+							return !_Utils_eq(selectedSkillKind, skillKind);
 						},
-						selectedSkillIdentifiers);
+						selectedSkillKinds);
 				});
 			switch (msg.$) {
 				case 0:
@@ -6546,9 +6547,8 @@ var $author$project$DmTools$getRuleSetRaces = function (ruleSetKind) {
 			},
 			A2($elm$core$List$map, $author$project$DmTools$getRace, $author$project$DmTools$allRaceIdentifiers)));
 };
-var $author$project$DmTools$NoSkill = 22;
-var $author$project$DmTools$getSkill = function (skillIdentifier) {
-	switch (skillIdentifier) {
+var $author$project$DmTools$getSkill = function (skillKind) {
+	switch (skillKind) {
 		case 0:
 			return {
 				b: 'Acrobatics',
@@ -6740,7 +6740,7 @@ var $author$project$DmTools$getRuleSetSkills = function (ruleSetKind) {
 			function (skill) {
 				return A2($elm$core$List$member, ruleSetKind, skill.c);
 			},
-			A2($elm$core$List$map, $author$project$DmTools$getSkill, $author$project$DmTools$allSkillIdentifiers)));
+			A2($elm$core$List$map, $author$project$DmTools$getSkill, $author$project$Models$SkillKind$all)));
 };
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$html$Html$Attributes$href = function (url) {
@@ -7120,18 +7120,18 @@ var $elm$core$List$concat = function (lists) {
 var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$DmTools$viewSkill = F3(
-	function (character, skillIdentifier, optionalProficiencySkillsLimitReached) {
-		var skill = $author$project$DmTools$getSkill(skillIdentifier);
+	function (character, skillKind, optionalProficiencySkillsLimitReached) {
+		var skill = $author$project$DmTools$getSkill(skillKind);
 		var statKind = skill.f;
 		var statScore = A2(
 			$author$project$DmTools$getStatScore,
 			$author$project$DmTools$computeFinalStats(character),
 			statKind);
-		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillIdentifier, character.A);
-		var hasClassProficiencySkill = A2($elm$core$List$member, skillIdentifier, character.v.j);
+		var hasSelectedProficiencySkill = A2($elm$core$List$member, skillKind, character.A);
+		var hasClassProficiencySkill = A2($elm$core$List$member, skillKind, character.v.j);
 		var hasBaseProficiencySkill = A2(
 			$elm$core$List$member,
-			skillIdentifier,
+			skillKind,
 			$elm$core$List$concat(
 				_List_fromArray(
 					[character.v.e, character.F.e])));
@@ -7151,7 +7151,7 @@ var $author$project$DmTools$viewSkill = F3(
 							$elm$html$Html$Attributes$type_('checkbox'),
 							$elm$html$Html$Attributes$disabled(disableCheckbox),
 							$elm$html$Html$Events$onCheck(
-							$author$project$DmTools$CheckProficiencySkill(skillIdentifier)),
+							$author$project$DmTools$CheckProficiencySkill(skillKind)),
 							$elm$html$Html$Attributes$checked(hasBaseProficiencySkill || hasSelectedProficiencySkill)
 						]),
 					_List_Nil),
@@ -7184,8 +7184,8 @@ var $author$project$DmTools$viewSkills = F2(
 					_List_Nil,
 					A2(
 						$elm$core$List$map,
-						function (skillIdentifier) {
-							return A3($author$project$DmTools$viewSkill, character, skillIdentifier, optionalProficiencySkillsLimitReached);
+						function (skillKind) {
+							return A3($author$project$DmTools$viewSkill, character, skillKind, optionalProficiencySkillsLimitReached);
 						},
 						$author$project$DmTools$getRuleSetSkills(ruleSetKind)))
 				]));
