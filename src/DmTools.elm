@@ -12,12 +12,14 @@ import Models.Rules.SkillKind as SkillKind exposing (SkillKind(..), SkillKinds, 
 import Models.Rules.RaceKind as RaceKind exposing (RaceKind(..), RaceKinds, all, fromString)
 import Models.Rules.SubRaceKind as SubRaceKind exposing (SubRaceKind(..), SubRaceKinds, all, fromString)
 import Models.Rules.ClassKind as ClassKind exposing (ClassKind(..), ClassKinds, all, fromString)
+import Models.Rules.BackgroundKind as BackgroundKind exposing (BackgroundKind(..), BackgroundKinds, all, fromString)
 
 import Models.Rules.Stat as Stat exposing (Stat, Stats)
 import Models.Rules.Skill as Skill exposing (Skill, Skills, get)
 import Models.Rules.Race as Race exposing (Race, Races, get)
 import Models.Rules.SubRace as SubRace exposing (SubRace, SubRaces, get)
 import Models.Rules.Class as Class exposing (Class, Classes, get)
+import Models.Rules.Background as Background exposing (Background, Backgrounds, get)
 import Models.Character as Character exposing (Character)
 import Models.Settings as Settings exposing (Settings)
 
@@ -44,6 +46,7 @@ init =
         , race = Race.get NoRace
         , subRace = SubRace.get NoSubRace
         , class = Class.get NoClass
+        , background = Background.get NoBackground
         , remainingPoints = 27
         , level = 1
         , selectedProficiencySkills = []
@@ -65,6 +68,7 @@ view model =
         availableRaces = getRuleSetRaces model.settings.ruleSetKind
         availableClasses = getRuleSetClasses model.settings.ruleSetKind
         availableSkills = getRuleSetSkills model.settings.ruleSetKind
+        availableBackgrounds = getRuleSetBackgrounds model.settings.ruleSetKind
     in
     div [ class "main-container" ]
         [ nav []
@@ -79,6 +83,8 @@ view model =
               , viewSubRaceSelector model.character.race.subRaces model.character.subRace.subRaceKind
               , h3 [] [ text "Class" ]
               , viewClassSelector availableClasses model.character.class.classKind
+              , h3 [] [ text "Background" ]
+              , viewBackgroundSelector availableBackgrounds model.character.background.backgroundKind
               , h3 [] [ text "Level" ]
               , viewLevelSelector
               , h3 [] [ text "Rolled stats" ]
@@ -151,6 +157,16 @@ viewClassOption classKind selectedClassKind =
     case classKind of
         NoClass -> option [ value "", selected (classKind == selectedClassKind) ] [ text "Select a class" ]
         _ -> viewOption (Class.get classKind).asString
+
+viewBackgroundSelector: BackgroundKinds -> BackgroundKind -> Html Msg
+viewBackgroundSelector backgroundKinds selectedBackgroundKind =
+    select [onInput UpdateBackground ] (List.map (\backgroundKind -> viewBackgroundOption backgroundKind selectedBackgroundKind) backgroundKinds)
+
+viewBackgroundOption: BackgroundKind -> BackgroundKind -> Html Msg
+viewBackgroundOption backgroundKind selectedBackgroundKind =
+    case backgroundKind of
+        NoBackground -> option [ value "", selected (backgroundKind == selectedBackgroundKind) ] [ text "Select a background" ]
+        _ -> viewOption (Background.get backgroundKind).asString
 
 viewOption: String -> Html Msg
 viewOption label =
@@ -253,13 +269,14 @@ viewSkill character skillKind optionalProficiencySkillsLimitReached =
         statScore = getStatScore (computeFinalStats character) statKind
         hasBaseProficiencySkill = List.member skillKind (List.concat [character.class.baseProficiencySkills, character.race.baseProficiencySkills])
         hasClassProficiencySkill = List.member skillKind character.class.optionalProficiencySkills
+        hasBackgroundProficiencySkill = List.member skillKind character.background.baseProficiencySkills
         hasSelectedProficiencySkill = List.member skillKind character.selectedProficiencySkills
-        proficiencyBonus = if (hasSelectedProficiencySkill || hasBaseProficiencySkill) then (computeProficiency character.level) else 0
+        proficiencyBonus = if (hasSelectedProficiencySkill || hasBaseProficiencySkill || hasBackgroundProficiencySkill) then (computeProficiency character.level) else 0
         modifier = printWithSign ((computeModifier statScore) + proficiencyBonus)
-        disableCheckbox = (hasBaseProficiencySkill || not hasSelectedProficiencySkill && (not hasClassProficiencySkill || optionalProficiencySkillsLimitReached))
+        disableCheckbox = (hasBaseProficiencySkill || hasBackgroundProficiencySkill || not hasSelectedProficiencySkill && (not hasClassProficiencySkill || optionalProficiencySkillsLimitReached))
     in
     li []
-       [ input [ type_ "checkbox", disabled disableCheckbox, onCheck (CheckProficiencySkill skillKind), checked (hasBaseProficiencySkill || hasSelectedProficiencySkill)] []
+       [ input [ type_ "checkbox", disabled disableCheckbox, onCheck (CheckProficiencySkill skillKind), checked (hasBaseProficiencySkill || hasSelectedProficiencySkill || hasBackgroundProficiencySkill)] []
        , text (skill.asString ++ " (" ++ (StatKind.toString statKind) ++ ") :" ++ modifier)
        ]
 
@@ -310,6 +327,10 @@ update msg ({ settings, character } as model) =
         UpdateClass string ->
             { model | character = 
                 { character | class = (Class.get (ClassKind.fromString string )), selectedProficiencySkills = [] }
+            }
+        UpdateBackground string ->
+            { model | character = 
+                { character | background = (Background.get (BackgroundKind.fromString string )), selectedProficiencySkills = [] }
             }
         UpdateLevel level ->
             { model | character = 
@@ -401,6 +422,11 @@ getRuleSetSkills: RuleSetKind -> SkillKinds
 getRuleSetSkills ruleSetKind =
     List.map (\skill -> skill.skillKind)
              (List.filter(\skill -> List.member ruleSetKind skill.ruleSetKinds) (List.map Skill.get SkillKind.all))
+
+getRuleSetBackgrounds: RuleSetKind -> BackgroundKinds
+getRuleSetBackgrounds ruleSetKind =
+    List.map (\background -> background.backgroundKind)
+             (List.filter(\background -> List.member ruleSetKind background.ruleSetKinds) (List.map Background.get BackgroundKind.all))
 
 getStatScore: Stats -> StatKind -> Int
 getStatScore stats statKind =

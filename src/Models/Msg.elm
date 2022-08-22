@@ -9,6 +9,7 @@ type Msg
     | UpdateRace String
     | UpdateSubRace String
     | UpdateClass String
+    | UpdateBackground String
     | UpdateLevel String
     | UpdateStat StatKind Int
     | CheckFreeStatInput Bool
