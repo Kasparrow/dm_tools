@@ -6986,14 +6986,54 @@ var $elm$html$Html$Events$onCheck = function (tagger) {
 		A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetChecked));
 };
 var $elm$html$Html$p = _VirtualDom_node('p');
-var $elm$core$Basics$ge = _Utils_ge;
 var $author$project$DmTools$printWithSign = function (value) {
-	return (value >= 0) ? ('+' + $elm$core$String$fromInt(value)) : $elm$core$String$fromInt(value);
+	return (value > 0) ? ('+' + $elm$core$String$fromInt(value)) : $elm$core$String$fromInt(value);
 };
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $author$project$Components$Atoms$DataDisplay$valueBox = F2(
+	function (title, value) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('stat-box')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$span,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('stat-box-title')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(title)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('stat-box-body')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$span,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('stat-box-value')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(value)
+								]))
+						]))
+				]));
+	});
 var $author$project$Models$Msg$UpdateBackground = function (a) {
 	return {$: 5, a: a};
 };
@@ -7099,51 +7139,10 @@ var $author$project$DmTools$viewBackgroundSelector = F2(
 				},
 				backgroundKinds));
 	});
-var $author$project$DmTools$viewValueBox = F2(
-	function (title, value) {
-		return A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('stat-box')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$span,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('stat-box-title')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text(title)
-						])),
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('stat-box-body')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$span,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('stat-box-value')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text(value)
-								]))
-						]))
-				]));
-	});
 var $author$project$DmTools$viewCharacterBaseLife = F2(
 	function (classKind, baseLife) {
 		return (classKind !== 18) ? A2(
-			$author$project$DmTools$viewValueBox,
+			$author$project$Components$Atoms$DataDisplay$valueBox,
 			'LIFE',
 			$elm$core$String$fromInt(baseLife)) : $elm$html$Html$text('');
 	});
@@ -7351,6 +7350,7 @@ var $author$project$DmTools$viewSavingThrows = F3(
 						$author$project$Models$Rules$StatKind$all))
 				]));
 	});
+var $elm$core$Basics$ge = _Utils_ge;
 var $author$project$Models$Msg$CheckProficiencySkill = F2(
 	function (a, b) {
 		return {$: 9, a: a, b: b};
@@ -7522,9 +7522,8 @@ var $author$project$DmTools$viewStatInput = F2(
 		var onDecrease = A2($author$project$Models$Msg$UpdateStat, statKind, statValue - 1);
 		return A4($author$project$Components$Atoms$Input$statInput, statName, statValue, onIncrease, onDecrease);
 	});
-var $author$project$DmTools$viewStatReader = F2(
-	function (stats, statKind) {
-		var score = A2($author$project$DmTools$getStatScore, stats, statKind);
+var $author$project$Components$Atoms$DataDisplay$statReader = F3(
+	function (name, value, bonus) {
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -7541,8 +7540,7 @@ var $author$project$DmTools$viewStatReader = F2(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(
-							$author$project$Models$Rules$StatKind$toString(statKind))
+							$elm$html$Html$text(name)
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -7560,9 +7558,7 @@ var $author$project$DmTools$viewStatReader = F2(
 								]),
 							_List_fromArray(
 								[
-									$elm$html$Html$text(
-									$author$project$DmTools$printWithSign(
-										$author$project$DmTools$computeModifier(score)))
+									$elm$html$Html$text(value)
 								])),
 							A2(
 							$elm$html$Html$div,
@@ -7577,13 +7573,24 @@ var $author$project$DmTools$viewStatReader = F2(
 									_List_Nil,
 									_List_fromArray(
 										[
-											$elm$html$Html$text(
-											$elm$core$String$fromInt(score))
+											$elm$html$Html$text(bonus)
 										])),
 									A2($elm$html$Html$span, _List_Nil, _List_Nil)
 								]))
 						]))
 				]));
+	});
+var $author$project$DmTools$viewStatReader = F2(
+	function (stats, statKind) {
+		var statValue = A2($author$project$DmTools$getStatScore, stats, statKind);
+		var statName = $author$project$Models$Rules$StatKind$toString(statKind);
+		var statModifier = $author$project$DmTools$printWithSign(
+			$author$project$DmTools$computeModifier(statValue));
+		return A3(
+			$author$project$Components$Atoms$DataDisplay$statReader,
+			statName,
+			statModifier,
+			$elm$core$String$fromInt(statValue));
 	});
 var $author$project$Models$Msg$UpdateSubRace = function (a) {
 	return {$: 3, a: a};
@@ -7766,7 +7773,7 @@ var $author$project$DmTools$view = function (model) {
 								]) : _List_fromArray(
 								[
 									A2(
-									$author$project$DmTools$viewValueBox,
+									$author$project$Components$Atoms$DataDisplay$valueBox,
 									'POINTS',
 									$elm$core$String$fromInt(model.a.W))
 								]))),
@@ -7795,7 +7802,7 @@ var $author$project$DmTools$view = function (model) {
 							_List_fromArray(
 								[
 									A2(
-									$author$project$DmTools$viewValueBox,
+									$author$project$Components$Atoms$DataDisplay$valueBox,
 									'PRO',
 									$author$project$DmTools$printWithSign(proficiencyBonus))
 								]))),

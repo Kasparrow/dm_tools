@@ -24,6 +24,7 @@ import Models.Character as Character exposing (Character)
 import Models.Settings as Settings exposing (Settings)
 
 import Components.Atoms.Input as Input exposing(statInput)
+import Components.Atoms.DataDisplay as DataDisplay exposing(valueBox, statReader)
 
 import Models.Msg as Msg exposing (Msg(..))
 
@@ -98,7 +99,7 @@ view model =
                         (List.map(\statKind -> viewStatInput model.character.rolledStats statKind) StatKind.all) 
                         (if model.settings.freeStatsInput then 
                             [ Html.text "" ] 
-                         else [viewValueBox "POINTS" (String.fromInt model.character.remainingPoints)]
+                         else [DataDisplay.valueBox "POINTS" (String.fromInt model.character.remainingPoints)]
                          )
                     )
               , br [] []
@@ -106,7 +107,7 @@ view model =
               , div [ class "flex-row" ]
                     (List.append
                     (List.map (\statKind -> viewStatReader finalStats statKind) StatKind.all)
-                        [viewValueBox "PRO" (printWithSign proficiencyBonus)]
+                        [DataDisplay.valueBox "PRO" (printWithSign proficiencyBonus)]
                     )
               , div [ class "flex-row" ]
                     [ viewCharacterBaseLife model.character.class.classKind characterBaseLife ]
@@ -192,33 +193,19 @@ viewStatInput stats statKind =
     in
     Input.statInput statName statValue onIncrease onDecrease
 
-viewValueBox: String -> String -> Html Msg
-viewValueBox title value =
-    div [ class "stat-box" ]
-        [ span [ class "stat-box-title" ] [ text title ]
-        , div [ class "stat-box-body" ]
-              [ span [ class "stat-box-value" ] [ text value ]]
-        ]
-
 viewStatReader: Stats -> StatKind -> Html Msg
 viewStatReader stats statKind =
     let
-        score = getStatScore stats statKind
+        statName = StatKind.toString statKind
+        statValue = getStatScore stats statKind
+        statModifier = printWithSign (computeModifier statValue)
     in
-    div [ class "stat-box" ]
-        [ span [ class "stat-box-title" ] [ text (StatKind.toString statKind) ]
-        , div [ class "stat-box-body" ]
-              [ span [ class "stat-box-value" ] [ text (printWithSign (computeModifier score)) ]
-              , div [ class "stat-box-bonus" ]
-                    [ span [] [ text (String.fromInt score) ]
-                    , span [] []]
-              ]
-        ]
+    DataDisplay.statReader statName statModifier (String.fromInt statValue)
 
 viewCharacterBaseLife: ClassKind -> Int -> Html Msg
 viewCharacterBaseLife classKind baseLife =
     if classKind /= NoClass then
-        viewValueBox "LIFE" (String.fromInt baseLife)
+        DataDisplay.valueBox "LIFE" (String.fromInt baseLife)
     else
         Html.text ""
 
@@ -436,7 +423,7 @@ getStatScore stats statKind =
 
 printWithSign: Int -> String
 printWithSign value =
-    if value >= 0 then
+    if value > 0 then
         "+" ++ (String.fromInt value)
     else
         String.fromInt value
