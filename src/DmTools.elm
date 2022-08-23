@@ -80,14 +80,29 @@ view model =
         availableRaces =
             getRuleSetRaces model.settings.ruleSetKind
 
+        selectedRace =
+            model.character.race.raceKind
+
+        availableSubRaces =
+            model.character.race.subRaces
+
+        selectedSubRace =
+            model.character.subRace.subRaceKind
+
         availableClasses =
             getRuleSetClasses model.settings.ruleSetKind
+
+        selectedClass =
+            model.character.class.classKind
 
         availableSkills =
             getRuleSetSkills model.settings.ruleSetKind
 
         availableBackgrounds =
             getRuleSetBackgrounds model.settings.ruleSetKind
+
+        selectedBackground =
+            model.character.background.backgroundKind
     in
     div [ class "main-container" ]
         [ nav []
@@ -97,10 +112,10 @@ view model =
         , div [ class "content" ]
             [ h3 [] [ text "Game Version" ]
             , viewRuleSetSelector model.settings.ruleSetKind
-            , Input.entitySelector availableRaces model.character.race.raceKind NoRace "Race" UpdateRace Race.get
-            , Input.entitySelector model.character.race.subRaces model.character.subRace.subRaceKind NoSubRace "SubRace" UpdateSubRace SubRace.get
-            , Input.entitySelector availableClasses model.character.class.classKind NoClass "Class" UpdateClass Class.get
-            , Input.entitySelector availableBackgrounds model.character.background.backgroundKind NoBackground "Background" UpdateBackground Background.get
+            , Input.entitySelector "Race" availableRaces selectedRace NoRace UpdateRace Race.get
+            , Input.entitySelector "SubRace" availableSubRaces selectedSubRace NoSubRace UpdateSubRace SubRace.get
+            , Input.entitySelector "Class" availableClasses selectedClass NoClass UpdateClass Class.get
+            , Input.entitySelector "Background" availableBackgrounds selectedBackground NoBackground UpdateBackground Background.get
             , h3 [] [ text "Level" ]
             , viewLevelSelector
             , h3 [] [ text "Rolled stats" ]

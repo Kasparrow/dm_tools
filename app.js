@@ -6750,7 +6750,7 @@ var $author$project$Components$Atoms$Input$stringToId = function (string) {
 };
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Components$Atoms$Input$viewEntityOption = F5(
-	function (getter, kind, selectedKind, noKind, entityName) {
+	function (entityName, kind, selectedKind, noKind, getter) {
 		var label = getter(kind).aE;
 		return _Utils_eq(kind, noKind) ? A2(
 			$elm$html$Html$option,
@@ -6776,7 +6776,7 @@ var $author$project$Components$Atoms$Input$viewEntityOption = F5(
 				]));
 	});
 var $author$project$Components$Atoms$Input$entitySelector = F6(
-	function (entityKinds, selectedKind, noKind, entityName, handler, getter) {
+	function (entityName, entityKinds, selectedKind, noKind, handler, getter) {
 		return ($elm$core$List$length(entityKinds) > 0) ? A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -6801,7 +6801,7 @@ var $author$project$Components$Atoms$Input$entitySelector = F6(
 					A2(
 						$elm$core$List$map,
 						function (entityKind) {
-							return A5($author$project$Components$Atoms$Input$viewEntityOption, getter, entityKind, selectedKind, noKind, entityName);
+							return A5($author$project$Components$Atoms$Input$viewEntityOption, entityName, entityKind, selectedKind, noKind, getter);
 						},
 						entityKinds))
 				])) : $elm$html$Html$text('');
@@ -7535,10 +7535,15 @@ var $author$project$DmTools$viewStatReader = F2(
 			$elm$core$String$fromInt(statValue));
 	});
 var $author$project$DmTools$view = function (model) {
+	var selectedSubRace = model.a.E.aY;
+	var selectedRace = model.a.y.ar;
+	var selectedClass = model.a.l.R;
+	var selectedBackground = model.a.N._;
 	var proficiencyBonus = $author$project$DmTools$computeProficiency(model.a.O);
 	var finalStats = $author$project$DmTools$computeFinalStats(model.a);
 	var characterBaseLife = model.a.l.aN + $author$project$DmTools$computeModifier(
 		A2($author$project$DmTools$getStatScore, finalStats, 2));
+	var availableSubRaces = model.a.y.aZ;
 	var availableSkills = $author$project$DmTools$getRuleSetSkills(model.h.u);
 	var availableRaces = $author$project$DmTools$getRuleSetRaces(model.h.u);
 	var availableClasses = $author$project$DmTools$getRuleSetClasses(model.h.u);
@@ -7592,10 +7597,10 @@ var $author$project$DmTools$view = function (model) {
 								$elm$html$Html$text('Game Version')
 							])),
 						$author$project$DmTools$viewRuleSetSelector(model.h.u),
-						A6($author$project$Components$Atoms$Input$entitySelector, availableRaces, model.a.y.ar, 20, 'Race', $author$project$Models$Msg$UpdateRace, $author$project$Models$Rules$Race$get),
-						A6($author$project$Components$Atoms$Input$entitySelector, model.a.y.aZ, model.a.E.aY, 19, 'SubRace', $author$project$Models$Msg$UpdateSubRace, $author$project$Models$Rules$SubRace$get),
-						A6($author$project$Components$Atoms$Input$entitySelector, availableClasses, model.a.l.R, 18, 'Class', $author$project$Models$Msg$UpdateClass, $author$project$Models$Rules$Class$get),
-						A6($author$project$Components$Atoms$Input$entitySelector, availableBackgrounds, model.a.N._, 13, 'Background', $author$project$Models$Msg$UpdateBackground, $author$project$Models$Rules$Background$get),
+						A6($author$project$Components$Atoms$Input$entitySelector, 'Race', availableRaces, selectedRace, 20, $author$project$Models$Msg$UpdateRace, $author$project$Models$Rules$Race$get),
+						A6($author$project$Components$Atoms$Input$entitySelector, 'SubRace', availableSubRaces, selectedSubRace, 19, $author$project$Models$Msg$UpdateSubRace, $author$project$Models$Rules$SubRace$get),
+						A6($author$project$Components$Atoms$Input$entitySelector, 'Class', availableClasses, selectedClass, 18, $author$project$Models$Msg$UpdateClass, $author$project$Models$Rules$Class$get),
+						A6($author$project$Components$Atoms$Input$entitySelector, 'Background', availableBackgrounds, selectedBackground, 13, $author$project$Models$Msg$UpdateBackground, $author$project$Models$Rules$Background$get),
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
