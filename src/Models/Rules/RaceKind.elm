@@ -31,7 +31,8 @@ type alias RaceKinds =
 
 all : RaceKinds
 all =
-    [ Dragonborn
+    [ NoRace
+    , Dragonborn
     , Dwarf
     , Elf
     , Gnome
@@ -51,7 +52,6 @@ all =
     , MinasTirithMen
     , RohanRider
     , WilderlandWoodmen
-    , NoRace
     ]
 
 

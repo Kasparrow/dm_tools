@@ -3,7 +3,7 @@ module DmTools exposing (main)
 import Array
 import Browser
 import Components.Atoms.DataDisplay as DataDisplay exposing (statReader, valueBox)
-import Components.Atoms.Input as Input exposing (statInput)
+import Components.Atoms.Input as Input exposing (entitySelector, statInput)
 import Html exposing (Html, a, br, div, footer, h1, h3, h4, img, input, label, li, nav, option, p, select, span, text, ul)
 import Html.Attributes exposing (..)
 import Html.Events exposing (on, onCheck, onClick, onInput)
@@ -97,13 +97,10 @@ view model =
         , div [ class "content" ]
             [ h3 [] [ text "Game Version" ]
             , viewRuleSetSelector model.settings.ruleSetKind
-            , h3 [] [ text "Race" ]
-            , viewRaceSelector availableRaces model.character.race.raceKind
-            , viewSubRaceSelector model.character.race.subRaces model.character.subRace.subRaceKind
-            , h3 [] [ text "Class" ]
-            , viewClassSelector availableClasses model.character.class.classKind
-            , h3 [] [ text "Background" ]
-            , viewBackgroundSelector availableBackgrounds model.character.background.backgroundKind
+            , Input.entitySelector availableRaces model.character.race.raceKind NoRace "Race" UpdateRace Race.get
+            , Input.entitySelector model.character.race.subRaces model.character.subRace.subRaceKind NoSubRace "SubRace" UpdateSubRace SubRace.get
+            , Input.entitySelector availableClasses model.character.class.classKind NoClass "Class" UpdateClass Class.get
+            , Input.entitySelector availableBackgrounds model.character.background.backgroundKind NoBackground "Background" UpdateBackground Background.get
             , h3 [] [ text "Level" ]
             , viewLevelSelector
             , h3 [] [ text "Rolled stats" ]
@@ -146,79 +143,6 @@ viewRuleSetSelector selectedRuleSetKind =
         [ option [ value "DnD5", selected (selectedRuleSetKind == DnD5) ] [ text "Dungeon & Dragon 5" ]
         , option [ value "AiME", selected (selectedRuleSetKind == AiME) ] [ text "Adventures in Middle Earth" ]
         ]
-
-
-viewRaceSelector : RaceKinds -> RaceKind -> Html Msg
-viewRaceSelector raceKinds selectedRaceKind =
-    select [ onInput UpdateRace ] (List.map (\raceKind -> viewRaceOption raceKind selectedRaceKind) raceKinds)
-
-
-viewRaceOption : RaceKind -> RaceKind -> Html Msg
-viewRaceOption raceKind selectedRaceKind =
-    case raceKind of
-        NoRace ->
-            option [ value "", selected (raceKind == selectedRaceKind) ] [ text "Select a race" ]
-
-        _ ->
-            viewOption (Race.get raceKind).asString
-
-
-viewSubRaceSelector : SubRaceKinds -> SubRaceKind -> Html Msg
-viewSubRaceSelector subRaceKinds selectedSubRaceKind =
-    if List.length subRaceKinds > 0 then
-        select [ onInput UpdateSubRace ]
-            (List.map
-                (\subRaceKind -> viewSubRaceOption subRaceKind selectedSubRaceKind)
-                subRaceKinds
-            )
-
-    else
-        Html.text ""
-
-
-viewSubRaceOption : SubRaceKind -> SubRaceKind -> Html Msg
-viewSubRaceOption subRaceKind selectedSubRaceKind =
-    case subRaceKind of
-        NoSubRace ->
-            option [ value "", selected (subRaceKind == selectedSubRaceKind) ] [ text "Select a subrace" ]
-
-        _ ->
-            viewOption (SubRace.get subRaceKind).asString
-
-
-viewClassSelector : ClassKinds -> ClassKind -> Html Msg
-viewClassSelector classKinds selectedClassKind =
-    select [ onInput UpdateClass ] (List.map (\classKind -> viewClassOption classKind selectedClassKind) classKinds)
-
-
-viewClassOption : ClassKind -> ClassKind -> Html Msg
-viewClassOption classKind selectedClassKind =
-    case classKind of
-        NoClass ->
-            option [ value "", selected (classKind == selectedClassKind) ] [ text "Select a class" ]
-
-        _ ->
-            viewOption (Class.get classKind).asString
-
-
-viewBackgroundSelector : BackgroundKinds -> BackgroundKind -> Html Msg
-viewBackgroundSelector backgroundKinds selectedBackgroundKind =
-    select [ onInput UpdateBackground ] (List.map (\backgroundKind -> viewBackgroundOption backgroundKind selectedBackgroundKind) backgroundKinds)
-
-
-viewBackgroundOption : BackgroundKind -> BackgroundKind -> Html Msg
-viewBackgroundOption backgroundKind selectedBackgroundKind =
-    case backgroundKind of
-        NoBackground ->
-            option [ value "", selected (backgroundKind == selectedBackgroundKind) ] [ text "Select a background" ]
-
-        _ ->
-            viewOption (Background.get backgroundKind).asString
-
-
-viewOption : String -> Html Msg
-viewOption label =
-    option [ value (stringToId label) ] [ text label ]
 
 
 viewLevelSelector : Html Msg
