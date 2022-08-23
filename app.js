@@ -7443,9 +7443,8 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $author$project$DmTools$viewStatInput = F2(
-	function (stats, statKind) {
-		var score = A2($author$project$DmTools$getStatScore, stats, statKind);
+var $author$project$Components$Atoms$Input$statInput = F4(
+	function (name, value, onIncrement, onDecrease) {
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -7462,8 +7461,7 @@ var $author$project$DmTools$viewStatInput = F2(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(
-							$author$project$Models$Rules$StatKind$toString(statKind))
+							$elm$html$Html$text(name)
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -7482,7 +7480,7 @@ var $author$project$DmTools$viewStatInput = F2(
 							_List_fromArray(
 								[
 									$elm$html$Html$text(
-									$elm$core$String$fromInt(score))
+									$elm$core$String$fromInt(value))
 								])),
 							A2(
 							$elm$html$Html$div,
@@ -7496,8 +7494,7 @@ var $author$project$DmTools$viewStatInput = F2(
 									$elm$html$Html$span,
 									_List_fromArray(
 										[
-											$elm$html$Html$Events$onClick(
-											A2($author$project$Models$Msg$UpdateStat, statKind, score + 1))
+											$elm$html$Html$Events$onClick(onIncrement)
 										]),
 									_List_fromArray(
 										[
@@ -7507,8 +7504,7 @@ var $author$project$DmTools$viewStatInput = F2(
 									$elm$html$Html$span,
 									_List_fromArray(
 										[
-											$elm$html$Html$Events$onClick(
-											A2($author$project$Models$Msg$UpdateStat, statKind, score - 1))
+											$elm$html$Html$Events$onClick(onDecrease)
 										]),
 									_List_fromArray(
 										[
@@ -7517,6 +7513,14 @@ var $author$project$DmTools$viewStatInput = F2(
 								]))
 						]))
 				]));
+	});
+var $author$project$DmTools$viewStatInput = F2(
+	function (stats, statKind) {
+		var statValue = A2($author$project$DmTools$getStatScore, stats, statKind);
+		var statName = $author$project$Models$Rules$StatKind$toString(statKind);
+		var onIncrease = A2($author$project$Models$Msg$UpdateStat, statKind, statValue + 1);
+		var onDecrease = A2($author$project$Models$Msg$UpdateStat, statKind, statValue - 1);
+		return A4($author$project$Components$Atoms$Input$statInput, statName, statValue, onIncrease, onDecrease);
 	});
 var $author$project$DmTools$viewStatReader = F2(
 	function (stats, statKind) {

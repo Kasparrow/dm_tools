@@ -23,6 +23,8 @@ import Models.Rules.Background as Background exposing (Background, Backgrounds, 
 import Models.Character as Character exposing (Character)
 import Models.Settings as Settings exposing (Settings)
 
+import Components.Atoms.Input as Input exposing(statInput)
+
 import Models.Msg as Msg exposing (Msg(..))
 
 -- MODEL
@@ -183,18 +185,12 @@ viewLevelSelector =
 viewStatInput: Stats -> StatKind -> Html Msg
 viewStatInput stats statKind =
     let
-        score = getStatScore stats statKind
+        statName = StatKind.toString statKind
+        statValue = getStatScore stats statKind
+        onIncrease = (UpdateStat statKind (statValue + 1))
+        onDecrease = (UpdateStat statKind (statValue - 1))
     in
-    div [ class "stat-box" ]
-        [ span [ class "stat-box-title" ] [ text (StatKind.toString statKind) ]
-        , div [ class "stat-box-body" ]
-              [ span [ class "stat-box-value" ] [ text (String.fromInt score) ]
-        , div [ class "stat-box-controls" ]
-              [ span [ onClick (UpdateStat statKind (score + 1)) ] [ text "+" ]
-              , span [ onClick (UpdateStat statKind (score - 1)) ] [ text "-" ]
-              ]
-        ]
-    ]
+    Input.statInput statName statValue onIncrease onDecrease
 
 viewValueBox: String -> String -> Html Msg
 viewValueBox title value =
