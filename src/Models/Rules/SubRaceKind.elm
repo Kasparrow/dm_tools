@@ -1,5 +1,6 @@
 module Models.Rules.SubRaceKind exposing (SubRaceKind(..), SubRaceKinds, all, fromString)
 
+
 type SubRaceKind
     = BlackDragonborn
     | BlueDragonborn
@@ -22,9 +23,12 @@ type SubRaceKind
     | StoutHalfling
     | NoSubRace
 
-type alias SubRaceKinds = List SubRaceKind
 
-all: SubRaceKinds
+type alias SubRaceKinds =
+    List SubRaceKind
+
+
+all : SubRaceKinds
 all =
     [ NoSubRace
     , BlackDragonborn
@@ -48,26 +52,66 @@ all =
     , StoutHalfling
     ]
 
-fromString: String -> SubRaceKind
+
+fromString : String -> SubRaceKind
 fromString string =
     case string of
-        "BlackDragonborn" -> BlackDragonborn
-        "BlueDragonborn" -> BlueDragonborn
-        "BrassDragonborn" -> BrassDragonborn
-        "BronzeDragonborn" -> BronzeDragonborn
-        "CopperDragonborn" -> CopperDragonborn
-        "GoldDragonborn" -> GoldDragonborn
-        "GreenDragonborn" -> GreenDragonborn
-        "RedDragonborn" -> RedDragonborn
-        "SilverDragonborn" -> SilverDragonborn
-        "WhiteDragonborn" -> WhiteDragonborn
-        "HillsDwarf" -> HillsDwarf
-        "MountainsDwarf" -> MountainsDwarf
-        "Drow" -> Drow
-        "HighElf" -> HighElf
-        "WoodElf" -> WoodElf
-        "DeepGnome" -> DeepGnome
-        "RockGnome" -> RockGnome
-        "LightfootHalfling" -> LightfootHalfling
-        "StoutHalfling" -> StoutHalfling
-        _ -> NoSubRace
+        "BlackDragonborn" ->
+            BlackDragonborn
+
+        "BlueDragonborn" ->
+            BlueDragonborn
+
+        "BrassDragonborn" ->
+            BrassDragonborn
+
+        "BronzeDragonborn" ->
+            BronzeDragonborn
+
+        "CopperDragonborn" ->
+            CopperDragonborn
+
+        "GoldDragonborn" ->
+            GoldDragonborn
+
+        "GreenDragonborn" ->
+            GreenDragonborn
+
+        "RedDragonborn" ->
+            RedDragonborn
+
+        "SilverDragonborn" ->
+            SilverDragonborn
+
+        "WhiteDragonborn" ->
+            WhiteDragonborn
+
+        "HillsDwarf" ->
+            HillsDwarf
+
+        "MountainsDwarf" ->
+            MountainsDwarf
+
+        "Drow" ->
+            Drow
+
+        "HighElf" ->
+            HighElf
+
+        "WoodElf" ->
+            WoodElf
+
+        "DeepGnome" ->
+            DeepGnome
+
+        "RockGnome" ->
+            RockGnome
+
+        "LightfootHalfling" ->
+            LightfootHalfling
+
+        "StoutHalfling" ->
+            StoutHalfling
+
+        _ ->
+            NoSubRace

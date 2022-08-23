@@ -1,5 +1,6 @@
 module Models.Rules.BackgroundKind exposing (BackgroundKind(..), BackgroundKinds, all, fromString)
 
+
 type BackgroundKind
     = Acolyte
     | Charlatan
@@ -16,9 +17,12 @@ type BackgroundKind
     | Urchin
     | NoBackground
 
-type alias BackgroundKinds = List BackgroundKind
 
-all: BackgroundKinds
+type alias BackgroundKinds =
+    List BackgroundKind
+
+
+all : BackgroundKinds
 all =
     [ NoBackground
     , Acolyte
@@ -36,20 +40,48 @@ all =
     , Urchin
     ]
 
-fromString: String -> BackgroundKind
+
+fromString : String -> BackgroundKind
 fromString string =
     case string of
-        "Acolyte" -> Acolyte
-        "Charlatan" -> Charlatan
-        "Criminal" -> Criminal
-        "Entertainer" -> Entertainer
-        "FolkHero" -> FolkHero
-        "GuildArtisan" -> GuildArtisan
-        "Hermit" -> Hermit
-        "Noble" -> Noble
-        "Outlander" -> Outlander
-        "Sage" -> Sage
-        "Sailor" -> Sailor
-        "Soldier" -> Soldier
-        "Urchin" -> Urchin
-        _ -> NoBackground
+        "Acolyte" ->
+            Acolyte
+
+        "Charlatan" ->
+            Charlatan
+
+        "Criminal" ->
+            Criminal
+
+        "Entertainer" ->
+            Entertainer
+
+        "FolkHero" ->
+            FolkHero
+
+        "GuildArtisan" ->
+            GuildArtisan
+
+        "Hermit" ->
+            Hermit
+
+        "Noble" ->
+            Noble
+
+        "Outlander" ->
+            Outlander
+
+        "Sage" ->
+            Sage
+
+        "Sailor" ->
+            Sailor
+
+        "Soldier" ->
+            Soldier
+
+        "Urchin" ->
+            Urchin
+
+        _ ->
+            NoBackground

@@ -3,6 +3,7 @@ module Models.Msg exposing (Msg(..))
 import Models.Rules.SkillKind as SkillKind exposing (SkillKind)
 import Models.Rules.StatKind as StatKind exposing (StatKind)
 
+
 type Msg
     = UpdateRuleSet String
     | UpdateRemainingPoints
@@ -13,4 +14,4 @@ type Msg
     | UpdateLevel String
     | UpdateStat StatKind Int
     | CheckFreeStatInput Bool
-    | CheckProficiencySkill SkillKind Bool 
+    | CheckProficiencySkill SkillKind Bool

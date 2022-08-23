@@ -1,5 +1,6 @@
 module Models.Rules.RaceKind exposing (RaceKind(..), RaceKinds, all, fromString)
 
+
 type RaceKind
     = Dragonborn
     | Dwarf
@@ -23,9 +24,12 @@ type RaceKind
     | WilderlandWoodmen
     | NoRace
 
-type alias RaceKinds = List RaceKind
 
-all: RaceKinds
+type alias RaceKinds =
+    List RaceKind
+
+
+all : RaceKinds
 all =
     [ Dragonborn
     , Dwarf
@@ -50,27 +54,69 @@ all =
     , NoRace
     ]
 
-fromString: String -> RaceKind
+
+fromString : String -> RaceKind
 fromString string =
     case string of
-        "Dragonborn" -> Dragonborn
-        "Dwarf" -> Dwarf
-        "Elf" -> Elf
-        "Gnome" -> Gnome
-        "HalfElf" -> HalfElf
-        "Halfling" -> Halfling
-        "HalfOrc" -> HalfOrc
-        "Human" -> Human
-        "Tiefling" -> Tiefling
-        "Barding" -> Barding
-        "Beorning" -> Beorning
-        "Dunedain" -> Dunedain
-        "LonelyMountainDwarf" -> LonelyMountainDwarf
-        "MirkwoodElf" -> MirkwoodElf
-        "ShireHobbit" -> ShireHobbit
-        "BreeMen" -> BreeMen
-        "LakeMen" -> LakeMen
-        "MinasTirithMen" -> MinasTirithMen
-        "RohanRider" -> RohanRider
-        "WilderlandWoodmen" -> WilderlandWoodmen
-        _ -> NoRace
+        "Dragonborn" ->
+            Dragonborn
+
+        "Dwarf" ->
+            Dwarf
+
+        "Elf" ->
+            Elf
+
+        "Gnome" ->
+            Gnome
+
+        "HalfElf" ->
+            HalfElf
+
+        "Halfling" ->
+            Halfling
+
+        "HalfOrc" ->
+            HalfOrc
+
+        "Human" ->
+            Human
+
+        "Tiefling" ->
+            Tiefling
+
+        "Barding" ->
+            Barding
+
+        "Beorning" ->
+            Beorning
+
+        "Dunedain" ->
+            Dunedain
+
+        "LonelyMountainDwarf" ->
+            LonelyMountainDwarf
+
+        "MirkwoodElf" ->
+            MirkwoodElf
+
+        "ShireHobbit" ->
+            ShireHobbit
+
+        "BreeMen" ->
+            BreeMen
+
+        "LakeMen" ->
+            LakeMen
+
+        "MinasTirithMen" ->
+            MinasTirithMen
+
+        "RohanRider" ->
+            RohanRider
+
+        "WilderlandWoodmen" ->
+            WilderlandWoodmen
+
+        _ ->
+            NoRace
