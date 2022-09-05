@@ -543,7 +543,7 @@ getStatScore stats statKind =
 
 printWithSign : Int -> String
 printWithSign value =
-    if value > 0 then
+    if value >= 0 then
         "+" ++ String.fromInt value
 
     else

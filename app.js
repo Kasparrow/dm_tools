@@ -7111,8 +7111,9 @@ var $elm$html$Html$Events$onCheck = function (tagger) {
 		A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetChecked));
 };
 var $elm$html$Html$p = _VirtualDom_node('p');
+var $elm$core$Basics$ge = _Utils_ge;
 var $author$project$DmTools$printWithSign = function (value) {
-	return (value > 0) ? ('+' + $elm$core$String$fromInt(value)) : $elm$core$String$fromInt(value);
+	return (value >= 0) ? ('+' + $elm$core$String$fromInt(value)) : $elm$core$String$fromInt(value);
 };
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
@@ -7292,7 +7293,6 @@ var $author$project$DmTools$viewSavingThrows = F3(
 						$author$project$Models$Rules$StatKind$all))
 				]));
 	});
-var $elm$core$Basics$ge = _Utils_ge;
 var $author$project$Models$Msg$CheckProficiencySkill = F2(
 	function (a, b) {
 		return {$: 9, a: a, b: b};
