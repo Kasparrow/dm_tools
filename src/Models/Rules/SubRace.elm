@@ -1,4 +1,4 @@
-module Models.Rules.SubRace exposing (SubRace, SubRaces, get)
+module Models.Rules.SubRace exposing (SubRace, SubRaces, get, none)
 
 import Models.Rules.RuleSetKind exposing (RuleSetKind(..), RuleSetKinds)
 import Models.Rules.Stat exposing (Stats)
@@ -7,9 +7,7 @@ import Models.Rules.SubRaceKind exposing (SubRaceKind(..))
 
 
 type alias SubRace =
-    { subRaceKind : SubRaceKind
-    , statBonus : Stats
-    , ruleSetKinds : RuleSetKinds
+    { statBonus : Stats
     , asString : String
     }
 
@@ -22,141 +20,102 @@ get : SubRaceKind -> SubRace
 get subRaceKind =
     case subRaceKind of
         BlackDragonborn ->
-            { subRaceKind = BlackDragonborn
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = []
             , asString = "Black Dragonborn"
             }
 
         BlueDragonborn ->
-            { subRaceKind = BlueDragonborn
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = []
             , asString = "Blue Dragonborn"
             }
 
         BrassDragonborn ->
-            { subRaceKind = BrassDragonborn
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = []
             , asString = "Brass Dragonborn"
             }
 
         BronzeDragonborn ->
-            { subRaceKind = BronzeDragonborn
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = []
             , asString = "Bronze Dragonborn"
             }
 
         CopperDragonborn ->
-            { subRaceKind = CopperDragonborn
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = []
             , asString = "Copper Dragonborn"
             }
 
         GoldDragonborn ->
-            { subRaceKind = GoldDragonborn
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = []
             , asString = "Gold Dragonborn"
             }
 
         GreenDragonborn ->
-            { subRaceKind = GreenDragonborn
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = []
             , asString = "Green Dragonborn"
             }
 
         RedDragonborn ->
-            { subRaceKind = RedDragonborn
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = []
             , asString = "Red Dragonborn"
             }
 
         SilverDragonborn ->
-            { subRaceKind = SilverDragonborn
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = []
             , asString = "Silver Dragonborn"
             }
 
         WhiteDragonborn ->
-            { subRaceKind = WhiteDragonborn
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = []
             , asString = "White Dragonborn"
             }
 
         HillsDwarf ->
-            { subRaceKind = HillsDwarf
-            , statBonus = [ ( Wisdom, 1 ) ]
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = [ ( Wisdom, 1 ) ]
             , asString = "Hills Dwarf"
             }
 
         MountainsDwarf ->
-            { subRaceKind = MountainsDwarf
-            , statBonus = [ ( Strength, 1 ) ]
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = [ ( Strength, 1 ) ]
             , asString = "Mountains Dwarf"
             }
 
         Drow ->
-            { subRaceKind = Drow
-            , statBonus = [ ( Charisma, 1 ) ]
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = [ ( Charisma, 1 ) ]
             , asString = "Drow"
             }
 
         WoodElf ->
-            { subRaceKind = WoodElf
-            , statBonus = [ ( Wisdom, 1 ) ]
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = [ ( Wisdom, 1 ) ]
             , asString = "Wood Elf"
             }
 
         HighElf ->
-            { subRaceKind = HighElf
-            , statBonus = [ ( Intelligence, 1 ) ]
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = [ ( Intelligence, 1 ) ]
             , asString = "High Elf"
             }
 
         DeepGnome ->
-            { subRaceKind = DeepGnome
-            , statBonus = [ ( Dexterity, 1 ) ]
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = [ ( Dexterity, 1 ) ]
             , asString = "Deep Gnome"
             }
 
         RockGnome ->
-            { subRaceKind = RockGnome
-            , statBonus = [ ( Constitution, 1 ) ]
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = [ ( Constitution, 1 ) ]
             , asString = "Rock Gnome"
             }
 
         LightfootHalfling ->
-            { subRaceKind = LightfootHalfling
-            , statBonus = [ ( Charisma, 1 ) ]
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = [ ( Charisma, 1 ) ]
             , asString = "Lightfoot Halfling"
             }
 
         StoutHalfling ->
-            { subRaceKind = StoutHalfling
-            , statBonus = [ ( Constitution, 1 ) ]
-            , ruleSetKinds = [ DnD5, Laelith ]
+            { statBonus = [ ( Constitution, 1 ) ]
             , asString = "Stout Halfling"
             }
 
-        NoSubRace ->
-            { subRaceKind = NoSubRace
-            , statBonus = []
-            , ruleSetKinds = [ DnD5, Laelith, AiME ]
-            , asString = ""
-            }
+
+none =
+    { statBonus = []
+    , asString = ""
+    }

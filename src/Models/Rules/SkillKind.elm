@@ -24,7 +24,6 @@ type SkillKind
     | Stealth
     | Survival
     | Traditions
-    | NoSkill
 
 
 type alias SkillKinds =
@@ -55,78 +54,77 @@ all =
     , Stealth
     , Survival
     , Traditions
-    , NoSkill
     ]
 
 
-fromString : String -> SkillKind
+fromString : String -> Maybe SkillKind
 fromString string =
     case string of
         "Acrobatics" ->
-            Acrobatics
+            Just Acrobatics
 
         "AnimalHandling" ->
-            AnimalHandling
+            Just AnimalHandling
 
         "Arcana" ->
-            Arcana
+            Just Arcana
 
         "Athletics" ->
-            Athletics
+            Just Athletics
 
         "Deception" ->
-            Deception
+            Just Deception
 
         "History" ->
-            History
+            Just History
 
         "Insight" ->
-            Insight
+            Just Insight
 
         "Intimidation" ->
-            Intimidation
+            Just Intimidation
 
         "Investigation" ->
-            Investigation
+            Just Investigation
 
         "Lore" ->
-            Lore
+            Just Lore
 
         "Medicine" ->
-            Medicine
+            Just Medicine
 
         "Nature" ->
-            Nature
+            Just Nature
 
         "Perception" ->
-            Perception
+            Just Perception
 
         "Performance" ->
-            Performance
+            Just Performance
 
         "Persuasion" ->
-            Persuasion
+            Just Persuasion
 
         "Riddle" ->
-            Riddle
+            Just Riddle
 
         "Religion" ->
-            Religion
+            Just Religion
 
         "ShadowLore" ->
-            ShadowLore
+            Just ShadowLore
 
         "SleightOfHand" ->
-            SleightOfHand
+            Just SleightOfHand
 
         "Stealth" ->
-            Stealth
+            Just Stealth
 
         "Survival" ->
-            Survival
+            Just Survival
 
         "Traditions" ->
-            Traditions
+            Just Traditions
 
         _ ->
-            NoSkill
+            Nothing

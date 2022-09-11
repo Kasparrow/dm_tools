@@ -15,7 +15,6 @@ type BackgroundKind
     | Sailor
     | Soldier
     | Urchin
-    | NoBackground
 
 
 type alias BackgroundKinds =
@@ -24,8 +23,7 @@ type alias BackgroundKinds =
 
 all : BackgroundKinds
 all =
-    [ NoBackground
-    , Acolyte
+    [ Acolyte
     , Charlatan
     , Criminal
     , Entertainer
@@ -41,47 +39,47 @@ all =
     ]
 
 
-fromString : String -> BackgroundKind
+fromString : String -> Maybe BackgroundKind
 fromString string =
     case string of
         "Acolyte" ->
-            Acolyte
+            Just Acolyte
 
         "Charlatan" ->
-            Charlatan
+            Just Charlatan
 
         "Criminal" ->
-            Criminal
+            Just Criminal
 
         "Entertainer" ->
-            Entertainer
+            Just Entertainer
 
         "FolkHero" ->
-            FolkHero
+            Just FolkHero
 
         "GuildArtisan" ->
-            GuildArtisan
+            Just GuildArtisan
 
         "Hermit" ->
-            Hermit
+            Just Hermit
 
         "Noble" ->
-            Noble
+            Just Noble
 
         "Outlander" ->
-            Outlander
+            Just Outlander
 
         "Sage" ->
-            Sage
+            Just Sage
 
         "Sailor" ->
-            Sailor
+            Just Sailor
 
         "Soldier" ->
-            Soldier
+            Just Soldier
 
         "Urchin" ->
-            Urchin
+            Just Urchin
 
         _ ->
-            NoBackground
+            Nothing

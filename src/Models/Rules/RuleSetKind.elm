@@ -4,7 +4,6 @@ module Models.Rules.RuleSetKind exposing (RuleSetKind(..), RuleSetKinds, all, fr
 type RuleSetKind
     = DnD5
     | AiME
-    | Laelith
 
 
 type alias RuleSetKinds =
@@ -13,7 +12,7 @@ type alias RuleSetKinds =
 
 all : RuleSetKinds
 all =
-    [ DnD5, AiME, Laelith ]
+    [ DnD5, AiME]
 
 
 fromString : String -> RuleSetKind
@@ -24,9 +23,6 @@ fromString string =
 
         "AiME" ->
             AiME
-
-        "Laelith" ->
-            Laelith
 
         _ ->
             DnD5

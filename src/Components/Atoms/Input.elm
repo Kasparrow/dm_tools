@@ -20,30 +20,28 @@ statInput name value onIncrement onDecrease =
         ]
 
 
-entitySelector : String -> List a -> a -> a -> (String -> Msg) -> (a -> { b | asString : String }) -> Html Msg
-entitySelector entityName entityKinds selectedKind noKind handler getter =
+entitySelector : String -> List entityKind -> Maybe entityKind -> (String -> Msg) -> (entityKind -> { entity | asString : String }) -> Html Msg
+entitySelector entityName entityKinds selectedKind handler getter =
     if List.length entityKinds > 0 then
         div [ class "content" ]
             [ h3 [] [ text entityName ]
             , select [ onInput handler ]
-                (List.map (\entityKind -> viewEntityOption entityName entityKind selectedKind noKind getter) entityKinds)
+                (option [ value "", selected True, disabled True, hidden True ] [ text ("Select a " ++ entityName) ]
+                    :: List.map (\entityKind -> viewEntityOption entityKind getter) entityKinds
+                )
             ]
 
     else
         Html.text ""
 
 
-viewEntityOption : String -> a -> a -> a -> (a -> { b | asString : String }) -> Html Msg
-viewEntityOption entityName kind selectedKind noKind getter =
+viewEntityOption : entityKind -> (entityKind -> { entity | asString : String }) -> Html Msg
+viewEntityOption kind getter =
     let
         label =
             (getter kind).asString
     in
-    if kind == noKind then
-        option [ value "", selected (selectedKind == noKind) ] [ text ("Select a " ++ entityName) ]
-
-    else
-        option [ value (stringToId label) ] [ text label ]
+    option [ value (stringToId label) ] [ text label ]
 
 
 stringToId : String -> String

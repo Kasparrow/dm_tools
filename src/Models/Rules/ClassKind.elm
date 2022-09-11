@@ -20,7 +20,6 @@ type ClassKind
     | Wanderer
     | Warden
     | Warrior
-    | NoClass
 
 
 type alias ClassKinds =
@@ -29,8 +28,7 @@ type alias ClassKinds =
 
 all : ClassKinds
 all =
-    [ NoClass
-    , Barbarian
+    [ Barbarian
     , Bard
     , Cleric
     , Druid
@@ -51,62 +49,62 @@ all =
     ]
 
 
-fromString : String -> ClassKind
+fromString : String -> Maybe ClassKind
 fromString string =
     case string of
         "Barbarian" ->
-            Barbarian
+            Just Barbarian
 
         "Bard" ->
-            Bard
+            Just Bard
 
         "Cleric" ->
-            Cleric
+            Just Cleric
 
         "Druid" ->
-            Druid
+            Just Druid
 
         "Fighter" ->
-            Fighter
+            Just Fighter
 
         "Monk" ->
-            Monk
+            Just Monk
 
         "Paladin" ->
-            Paladin
+            Just Paladin
 
         "Ranger" ->
-            Ranger
+            Just Ranger
 
         "Rogue" ->
-            Rogue
+            Just Rogue
 
         "Sorcerer" ->
-            Rogue
+            Just Rogue
 
         "Warlock" ->
-            Warlock
+            Just Warlock
 
         "Wizard" ->
-            Wizard
+            Just Wizard
 
         "Scholar" ->
-            Scholar
+            Just Scholar
 
         "Slayer" ->
-            Slayer
+            Just Slayer
 
         "TreasureHunter" ->
-            TreasureHunter
+            Just TreasureHunter
 
         "Wanderer" ->
-            Wanderer
+            Just Wanderer
 
         "Warden" ->
-            Warden
+            Just Warden
 
         "Warrior" ->
-            Warrior
+            Just Warrior
 
         _ ->
-            NoClass
+            Nothing

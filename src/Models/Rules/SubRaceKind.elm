@@ -21,7 +21,6 @@ type SubRaceKind
     | RockGnome
     | LightfootHalfling
     | StoutHalfling
-    | NoSubRace
 
 
 type alias SubRaceKinds =
@@ -30,8 +29,7 @@ type alias SubRaceKinds =
 
 all : SubRaceKinds
 all =
-    [ NoSubRace
-    , BlackDragonborn
+    [ BlackDragonborn
     , BlueDragonborn
     , BrassDragonborn
     , BronzeDragonborn
@@ -53,65 +51,65 @@ all =
     ]
 
 
-fromString : String -> SubRaceKind
+fromString : String -> Maybe SubRaceKind
 fromString string =
     case string of
         "BlackDragonborn" ->
-            BlackDragonborn
+            Just BlackDragonborn
 
         "BlueDragonborn" ->
-            BlueDragonborn
+            Just BlueDragonborn
 
         "BrassDragonborn" ->
-            BrassDragonborn
+            Just BrassDragonborn
 
         "BronzeDragonborn" ->
-            BronzeDragonborn
+            Just BronzeDragonborn
 
         "CopperDragonborn" ->
-            CopperDragonborn
+            Just CopperDragonborn
 
         "GoldDragonborn" ->
-            GoldDragonborn
+            Just GoldDragonborn
 
         "GreenDragonborn" ->
-            GreenDragonborn
+            Just GreenDragonborn
 
         "RedDragonborn" ->
-            RedDragonborn
+            Just RedDragonborn
 
         "SilverDragonborn" ->
-            SilverDragonborn
+            Just SilverDragonborn
 
         "WhiteDragonborn" ->
-            WhiteDragonborn
+            Just WhiteDragonborn
 
         "HillsDwarf" ->
-            HillsDwarf
+            Just HillsDwarf
 
         "MountainsDwarf" ->
-            MountainsDwarf
+            Just MountainsDwarf
 
         "Drow" ->
-            Drow
+            Just Drow
 
         "HighElf" ->
-            HighElf
+            Just HighElf
 
         "WoodElf" ->
-            WoodElf
+            Just WoodElf
 
         "DeepGnome" ->
-            DeepGnome
+            Just DeepGnome
 
         "RockGnome" ->
-            RockGnome
+            Just RockGnome
 
         "LightfootHalfling" ->
-            LightfootHalfling
+            Just LightfootHalfling
 
         "StoutHalfling" ->
-            StoutHalfling
+            Just StoutHalfling
 
         _ ->
-            NoSubRace
+            Nothing

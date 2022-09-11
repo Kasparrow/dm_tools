@@ -11,16 +11,17 @@ import Models.Character as Character exposing (Character)
 import Models.Msg as Msg exposing (Msg(..))
 import Models.Rules.Background as Background exposing (Background, Backgrounds, get)
 import Models.Rules.BackgroundKind as BackgroundKind exposing (BackgroundKind(..), BackgroundKinds, all, fromString)
-import Models.Rules.Class as Class exposing (Class, Classes, get)
+import Models.Rules.Class as Class exposing (Class, Classes, get, none)
 import Models.Rules.ClassKind as ClassKind exposing (ClassKind(..), ClassKinds, all, fromString)
-import Models.Rules.Race as Race exposing (Race, Races, get)
+import Models.Rules.Race as Race exposing (Race, Races, get, none)
 import Models.Rules.RaceKind as RaceKind exposing (RaceKind(..), RaceKinds, all, fromString)
+import Models.Rules.RuleSet as RuleSet exposing (RuleSet, RuleSets, get)
 import Models.Rules.RuleSetKind as RuleSetKind exposing (RuleSetKind(..), RuleSetKinds, all, fromString)
 import Models.Rules.Skill as Skill exposing (Skill, Skills, get)
 import Models.Rules.SkillKind as SkillKind exposing (SkillKind(..), SkillKinds, all, fromString)
 import Models.Rules.Stat as Stat exposing (Stat, Stats)
 import Models.Rules.StatKind as StatKind exposing (StatKind(..), StatKinds, all, toString)
-import Models.Rules.SubRace as SubRace exposing (SubRace, SubRaces, get)
+import Models.Rules.SubRace as SubRace exposing (SubRace, SubRaces, get, none)
 import Models.Rules.SubRaceKind as SubRaceKind exposing (SubRaceKind(..), SubRaceKinds, all, fromString)
 import Models.Settings as Settings exposing (Settings)
 
@@ -46,10 +47,10 @@ init =
             , ( Wisdom, 8 )
             , ( Charisma, 8 )
             ]
-        , race = Race.get NoRace
-        , subRace = SubRace.get NoSubRace
-        , class = Class.get NoClass
-        , background = Background.get NoBackground
+        , raceKind = Nothing
+        , subRaceKind = Nothing
+        , classKind = Nothing
+        , backgroundKind = Nothing
         , remainingPoints = 27
         , level = 1
         , selectedProficiencySkills = []
@@ -68,41 +69,61 @@ init =
 view : Model -> Html Msg
 view model =
     let
-        finalStats =
-            computeFinalStats model.character
+        currentRace =
+            case model.character.raceKind of
+                Just raceKind ->
+                    Race.get raceKind
 
-        proficiencyBonus =
+                Nothing ->
+                    Race.none
+
+        currentSubRace =
+            case model.character.subRaceKind of
+                Just subRaceKind ->
+                    SubRace.get subRaceKind
+
+                Nothing ->
+                    SubRace.none
+
+        currentClass =
+            case model.character.classKind of
+                Just classKind ->
+                    Class.get classKind
+
+                Nothing ->
+                    Class.none
+
+        currentBackground =
+            case model.character.backgroundKind of
+                Just backgroundKind ->
+                    Background.get backgroundKind
+
+                Nothing ->
+                    Background.none
+
+        currentProficiencyBonus =
             computeProficiency model.character.level
 
+        finalStats =
+            computeFinalStats model.character.rolledStats currentRace currentSubRace
+
         characterBaseLife =
-            model.character.class.lifeDice + (getStatScore finalStats Constitution |> computeModifier)
+            currentClass.lifeDice + (getStatScore finalStats Constitution |> computeModifier)
 
         availableRaces =
             getRuleSetRaces model.settings.ruleSetKind
 
-        selectedRace =
-            model.character.race.raceKind
-
         availableSubRaces =
-            model.character.race.subRaces
-
-        selectedSubRace =
-            model.character.subRace.subRaceKind
+            currentRace.subRaces
 
         availableClasses =
             getRuleSetClasses model.settings.ruleSetKind
-
-        selectedClass =
-            model.character.class.classKind
 
         availableSkills =
             getRuleSetSkills model.settings.ruleSetKind
 
         availableBackgrounds =
             getRuleSetBackgrounds model.settings.ruleSetKind
-
-        selectedBackground =
-            model.character.background.backgroundKind
     in
     div [ class "main-container" ]
         [ nav []
@@ -112,10 +133,10 @@ view model =
         , div [ class "content" ]
             [ h3 [] [ text "Game Version" ]
             , viewRuleSetSelector model.settings.ruleSetKind
-            , Input.entitySelector "Race" availableRaces selectedRace NoRace UpdateRace Race.get
-            , Input.entitySelector "SubRace" availableSubRaces selectedSubRace NoSubRace UpdateSubRace SubRace.get
-            , Input.entitySelector "Class" availableClasses selectedClass NoClass UpdateClass Class.get
-            , Input.entitySelector "Background" availableBackgrounds selectedBackground NoBackground UpdateBackground Background.get
+            , Input.entitySelector "Race" availableRaces model.character.raceKind UpdateRace Race.get
+            , Input.entitySelector "SubRace" availableSubRaces model.character.subRaceKind UpdateSubRace SubRace.get
+            , Input.entitySelector "Class" availableClasses model.character.classKind UpdateClass Class.get
+            , Input.entitySelector "Background" availableBackgrounds model.character.backgroundKind UpdateBackground Background.get
             , h3 [] [ text "Level" ]
             , viewLevelSelector
             , h3 [] [ text "Rolled stats" ]
@@ -138,13 +159,13 @@ view model =
             , div [ class "flex-row" ]
                 (List.append
                     (List.map (\statKind -> viewStatReader finalStats statKind) StatKind.all)
-                    [ DataDisplay.valueBox "PRO" (printWithSign proficiencyBonus) ]
+                    [ DataDisplay.valueBox "PRO" (printWithSign currentProficiencyBonus) ]
                 )
             , div [ class "flex-row" ]
-                [ viewCharacterBaseLife model.character.class.classKind characterBaseLife ]
+                [ viewCharacterBaseLife model.character.classKind characterBaseLife ]
             , div [ class "flex-row" ]
-                [ viewSavingThrows finalStats model.character.class.proficiencySaves proficiencyBonus
-                , viewSkills model.character model.settings.ruleSetKind
+                [ viewSavingThrows finalStats currentClass.proficiencySaves currentProficiencyBonus
+                , viewSkills finalStats currentClass currentRace currentBackground currentProficiencyBonus model.character.selectedProficiencySkills model.settings.ruleSetKind
                 ]
             ]
         , footer []
@@ -203,13 +224,14 @@ viewStatReader stats statKind =
     DataDisplay.statReader statName statModifier (String.fromInt statValue)
 
 
-viewCharacterBaseLife : ClassKind -> Int -> Html Msg
+viewCharacterBaseLife : Maybe ClassKind -> Int -> Html Msg
 viewCharacterBaseLife classKind baseLife =
-    if classKind /= NoClass then
-        DataDisplay.valueBox "LIFE" (String.fromInt baseLife)
+    case classKind of
+        Just kind ->
+            DataDisplay.valueBox "LIFE" (String.fromInt baseLife)
 
-    else
-        Html.text ""
+        Nothing ->
+            Html.text ""
 
 
 viewSavingThrows : Stats -> StatKinds -> Int -> Html Msg
@@ -249,26 +271,27 @@ viewSavingThrow statKind proficiencySaves statModifier proficiencyBonus =
     li [] [ text (StatKind.toString statKind ++ " : " ++ modifier) ]
 
 
-viewSkills : Character -> RuleSetKind -> Html Msg
-viewSkills character ruleSetKind =
+viewSkills : Stats -> Class -> Race -> Background -> Int -> SkillKinds -> RuleSetKind -> Html Msg
+viewSkills finalStats currentClass currentRace currentBackground currentProficiencyBonus currentProficiencySkills ruleSetKind =
     let
         optionalProficiencySkillsLimitReached =
-            List.length character.selectedProficiencySkills >= character.class.optionalProficiencySkillsLimit
+            List.length currentProficiencySkills >= currentClass.optionalProficiencySkillsLimit
     in
-    div [ class "margin-right" ]
+    div
+        [ class "margin-right" ]
         [ h4 [] [ text "Skills" ]
         , ul []
             (List.map
                 (\skillKind ->
-                    viewSkill character skillKind optionalProficiencySkillsLimitReached
+                    viewSkill skillKind finalStats currentClass currentRace currentBackground currentProficiencyBonus currentProficiencySkills optionalProficiencySkillsLimitReached
                 )
                 (getRuleSetSkills ruleSetKind)
             )
         ]
 
 
-viewSkill : Character -> SkillKind -> Bool -> Html Msg
-viewSkill character skillKind optionalProficiencySkillsLimitReached =
+viewSkill : SkillKind -> Stats -> Class -> Race -> Background -> Int -> SkillKinds -> Bool -> Html Msg
+viewSkill skillKind finalStats currentClass currentRace currentBackground currentProficiencyBonus currentProficiencySkills optionalProficiencySkillsLimitReached =
     let
         skill =
             Skill.get skillKind
@@ -277,23 +300,23 @@ viewSkill character skillKind optionalProficiencySkillsLimitReached =
             skill.statKind
 
         statScore =
-            getStatScore (computeFinalStats character) statKind
+            getStatScore finalStats statKind
 
         hasBaseProficiencySkill =
-            List.member skillKind (List.concat [ character.class.baseProficiencySkills, character.race.baseProficiencySkills ])
+            List.member skillKind (List.concat [ currentClass.baseProficiencySkills, currentRace.baseProficiencySkills ])
 
         hasClassProficiencySkill =
-            List.member skillKind character.class.optionalProficiencySkills
+            List.member skillKind currentClass.optionalProficiencySkills
 
         hasBackgroundProficiencySkill =
-            List.member skillKind character.background.baseProficiencySkills
+            List.member skillKind currentBackground.baseProficiencySkills
 
         hasSelectedProficiencySkill =
-            List.member skillKind character.selectedProficiencySkills
+            List.member skillKind currentProficiencySkills
 
         proficiencyBonus =
             if hasSelectedProficiencySkill || hasBaseProficiencySkill || hasBackgroundProficiencySkill then
-                computeProficiency character.level
+                currentProficiencyBonus
 
             else
                 0
@@ -301,8 +324,17 @@ viewSkill character skillKind optionalProficiencySkillsLimitReached =
         modifier =
             printWithSign (computeModifier statScore + proficiencyBonus)
 
+        isSkillAutomaticallySelected =
+            hasBaseProficiencySkill || hasBackgroundProficiencySkill
+
+        isSkillUnavailableForClass =
+            not hasClassProficiencySkill
+
+        hasReachedLimitAndNotSelectedByUser =
+            optionalProficiencySkillsLimitReached && not hasSelectedProficiencySkill
+
         disableCheckbox =
-            hasBaseProficiencySkill || hasBackgroundProficiencySkill || not hasSelectedProficiencySkill && (not hasClassProficiencySkill || optionalProficiencySkillsLimitReached)
+            isSkillAutomaticallySelected || isSkillUnavailableForClass || hasReachedLimitAndNotSelectedByUser
     in
     li []
         [ input [ type_ "checkbox", disabled disableCheckbox, onCheck (CheckProficiencySkill skillKind), checked (hasBaseProficiencySkill || hasSelectedProficiencySkill || hasBackgroundProficiencySkill) ] []
@@ -351,31 +383,31 @@ update msg ({ settings, character } as model) =
             { model
                 | settings =
                     { settings | ruleSetKind = RuleSetKind.fromString string }
-                , character = { character | race = Race.get NoRace, subRace = SubRace.get NoSubRace, class = Class.get NoClass }
+                , character = { character | raceKind = Nothing, subRaceKind = Nothing, classKind = Nothing }
             }
 
         UpdateRace string ->
             { model
                 | character =
-                    { character | race = Race.get (RaceKind.fromString string), subRace = SubRace.get NoSubRace }
+                    { character | raceKind = RaceKind.fromString string, subRaceKind = Nothing }
             }
 
         UpdateSubRace string ->
             { model
                 | character =
-                    { character | subRace = SubRace.get (SubRaceKind.fromString string) }
+                    { character | subRaceKind = SubRaceKind.fromString string }
             }
 
         UpdateClass string ->
             { model
                 | character =
-                    { character | class = Class.get (ClassKind.fromString string), selectedProficiencySkills = [] }
+                    { character | classKind = ClassKind.fromString string, selectedProficiencySkills = [] }
             }
 
         UpdateBackground string ->
             { model
                 | character =
-                    { character | background = Background.get (BackgroundKind.fromString string), selectedProficiencySkills = [] }
+                    { character | backgroundKind = BackgroundKind.fromString string, selectedProficiencySkills = [] }
             }
 
         UpdateLevel level ->
@@ -475,15 +507,15 @@ computeStatCost value =
             0
 
 
-computeFinalStats : Character -> Stats
-computeFinalStats character =
+computeFinalStats : Stats -> Race -> SubRace -> Stats
+computeFinalStats rolledStats race subRace =
     List.map
         (\statKind ->
             let
                 finalScore =
-                    getStatScore character.rolledStats statKind
-                        + getStatScore character.race.statBonus statKind
-                        + getStatScore character.subRace.statBonus statKind
+                    getStatScore rolledStats statKind
+                        + getStatScore race.statBonus statKind
+                        + getStatScore subRace.statBonus statKind
             in
             ( statKind, finalScore )
         )
@@ -502,26 +534,22 @@ computeProficiency level =
 
 getRuleSetRaces : RuleSetKind -> RaceKinds
 getRuleSetRaces ruleSetKind =
-    List.map (\race -> race.raceKind)
-        (List.filter (\race -> List.member ruleSetKind race.ruleSetKinds) (List.map Race.get RaceKind.all))
+    (RuleSet.get ruleSetKind).raceKinds
 
 
 getRuleSetClasses : RuleSetKind -> ClassKinds
 getRuleSetClasses ruleSetKind =
-    List.map (\class -> class.classKind)
-        (List.filter (\class -> List.member ruleSetKind class.ruleSetKinds) (List.map Class.get ClassKind.all))
+    (RuleSet.get ruleSetKind).classKinds
 
 
 getRuleSetSkills : RuleSetKind -> SkillKinds
 getRuleSetSkills ruleSetKind =
-    List.map (\skill -> skill.skillKind)
-        (List.filter (\skill -> List.member ruleSetKind skill.ruleSetKinds) (List.map Skill.get SkillKind.all))
+    (RuleSet.get ruleSetKind).skillKinds
 
 
 getRuleSetBackgrounds : RuleSetKind -> BackgroundKinds
 getRuleSetBackgrounds ruleSetKind =
-    List.map (\background -> background.backgroundKind)
-        (List.filter (\background -> List.member ruleSetKind background.ruleSetKinds) (List.map Background.get BackgroundKind.all))
+    BackgroundKind.all
 
 
 getStatScore : Stats -> StatKind -> Int

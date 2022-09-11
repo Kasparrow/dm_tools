@@ -22,7 +22,6 @@ type RaceKind
     | MinasTirithMen
     | RohanRider
     | WilderlandWoodmen
-    | NoRace
 
 
 type alias RaceKinds =
@@ -31,8 +30,7 @@ type alias RaceKinds =
 
 all : RaceKinds
 all =
-    [ NoRace
-    , Dragonborn
+    [ Dragonborn
     , Dwarf
     , Elf
     , Gnome
@@ -55,68 +53,68 @@ all =
     ]
 
 
-fromString : String -> RaceKind
+fromString : String -> Maybe RaceKind
 fromString string =
     case string of
         "Dragonborn" ->
-            Dragonborn
+            Just Dragonborn
 
         "Dwarf" ->
-            Dwarf
+            Just Dwarf
 
         "Elf" ->
-            Elf
+            Just Elf
 
         "Gnome" ->
-            Gnome
+            Just Gnome
 
         "HalfElf" ->
-            HalfElf
+            Just HalfElf
 
         "Halfling" ->
-            Halfling
+            Just Halfling
 
         "HalfOrc" ->
-            HalfOrc
+            Just HalfOrc
 
         "Human" ->
-            Human
+            Just Human
 
         "Tiefling" ->
-            Tiefling
+            Just Tiefling
 
         "Barding" ->
-            Barding
+            Just Barding
 
         "Beorning" ->
-            Beorning
+            Just Beorning
 
         "Dunedain" ->
-            Dunedain
+            Just Dunedain
 
         "LonelyMountainDwarf" ->
-            LonelyMountainDwarf
+            Just LonelyMountainDwarf
 
         "MirkwoodElf" ->
-            MirkwoodElf
+            Just MirkwoodElf
 
         "ShireHobbit" ->
-            ShireHobbit
+            Just ShireHobbit
 
         "BreeMen" ->
-            BreeMen
+            Just BreeMen
 
         "LakeMen" ->
-            LakeMen
+            Just LakeMen
 
         "MinasTirithMen" ->
-            MinasTirithMen
+            Just MinasTirithMen
 
         "RohanRider" ->
-            RohanRider
+            Just RohanRider
 
         "WilderlandWoodmen" ->
-            WilderlandWoodmen
+            Just WilderlandWoodmen
 
         _ ->
-            NoRace
+            Nothing
